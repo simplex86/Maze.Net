@@ -10,7 +10,7 @@ namespace SimpleX.Maze
     {
         static void Main(string[] args)
         {
-            var test = new Test1();
+            var test = new Test2();
             test.Run();
 
             Console.ReadKey();
