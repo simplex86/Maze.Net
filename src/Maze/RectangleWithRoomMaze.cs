@@ -201,7 +201,7 @@ namespace SimpleX.Maze
         private bool CanCarve(RectangleMazeField field, Tile tile, Vector vector)
         {
             var a = Find(tile, vector, 3);
-            if (a.x < 0 || a.x >= field.width || a.y < 0 || a.y >= field.width) return false;
+            if (a.x < 0 || a.x >= field.width || a.y < 0 || a.y >= field.height) return false;
 
             var b = Find(tile, vector, 2);
             return IsWall(field, b.x, b.y);

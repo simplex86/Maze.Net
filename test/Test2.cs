@@ -5,7 +5,7 @@ class Test2
 {
     public void Run()
     {
-        var field = MazeProvider.CreateRectangleWithRoomMaze(25, 25, 3, 5, 3, 5, 5);
+        var field = MazeProvider.CreateRectangleWithRoomMaze(50, 30, 3, 7, 3, 7, 10);
         Show(field);
     }
 
