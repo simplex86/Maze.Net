@@ -23,7 +23,7 @@ class Test2
                 }
                 else
                 {
-                    text += "*";
+                    text += "#";
                 }
             }
             text += "\n";
