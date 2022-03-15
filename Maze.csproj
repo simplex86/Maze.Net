@@ -48,8 +48,9 @@
     <Compile Include="src\MazeConst.cs" />
     <Compile Include="src\MazeProvider.cs" />
     <Compile Include="src\MazeField\RectangleMazeField.cs" />
+    <Compile Include="src\Maze\IRectangleMaze.cs" />
     <Compile Include="src\Maze\RectangleMaze.cs" />
-    <Compile Include="src\Maze\RectangleWithRoomMaze.cs" />
+    <Compile Include="src\Maze\RectangleDungeon.cs" />
     <Compile Include="test\Test1.cs" />
     <Compile Include="test\Test2.cs" />
   </ItemGroup>

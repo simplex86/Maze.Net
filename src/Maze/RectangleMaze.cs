@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SimpleX.Maze
 {
-    public class RectangleMaze
+    public class RectangleMaze : IRectangleMaze
     {
         // 格子
         private class Tile
@@ -30,24 +30,27 @@ namespace SimpleX.Maze
 
         // 随机数
         private Random random = new Random();
-        // 
+        // 开链表
         private List<Tile> openlist = new List<Tile>();
 
-        // 创建迷宫
-        public RectangleMazeField Create(int width, int height)
-        {
-            width  = (width  / 2) * 2 + 1;
-            height = (height / 2) * 2 + 1;
+        public int width { get; set; } = 25;
+        public int height { get; set; } = 25;
 
+        public RectangleMaze(int width, int height)
+        {
+            this.width = Odd(width);
+            this.height = Odd(height);
+        }
+
+        // 创建迷宫
+        public override RectangleMazeField Create()
+        {
             RectangleMazeField field = new RectangleMazeField(width, height);
 
             // 随机起点
             int x = random.Next(1, field.width - 1); 
             int y = random.Next(1, field.height - 1);
             field[x, y] = TileType.Path;
-
-            // string text = "";
-            // text = AppendFrame(text, field);
 
             // 从起点开始探索
             SearchNeighbours(field, x, y);
@@ -74,7 +77,6 @@ namespace SimpleX.Maze
                     x = x + 1;
                     break;
                 }
-                // text = AppendFrameDelta(text, cur.x, cur.y, cur.d, x, y);
 
                 if (IsWall(field, x, y))
                 {
@@ -86,9 +88,7 @@ namespace SimpleX.Maze
                     }
                 }
                 openlist.RemoveAt(idx);
-                // text = AppendFrame(text, field);
             }
-            // PrintFrames(text);
 
             return field;
         }
@@ -104,43 +104,6 @@ namespace SimpleX.Maze
             if (!IsBorder(field, x - 1, y) && IsWall(field, x - 1, y)) openlist.Add(new Tile(x - 1, y, Dir.Left));
             // 右
             if (!IsBorder(field, x + 1, y) && IsWall(field, x + 1, y)) openlist.Add(new Tile(x + 1, y, Dir.Right));
-        }
-
-        // 是否为墙
-        private bool IsWall(RectangleMazeField field, int x, int y)
-        {
-            return field[x, y] == TileType.Wall;
-        }
-
-        // 是否为迷宫的边界
-        private bool IsBorder(RectangleMazeField field, int x, int y)
-        {
-            return (x <= 0 || x >= field.width-1 || y <= 0 || y >= field.height-1);
-        }
-
-        private string AppendFrame(string text, RectangleMazeField field)
-        {
-            for (int y=0; y<field.height; y++)
-            {
-                for (int x=0; x<field.width; x++)
-                {
-                    text += $"{field[x, y]} ";
-                }
-                text += "\n";
-            }
-
-            return text;
-        }
-
-        private string AppendFrameDelta(string text, int cx, int cy, int cd, int nx, int ny)
-        {
-            text += $"\n{cx}, {cy}, {cd} | {nx}, {ny}\n\n";
-            return text;
-        }
-
-        private void PrintFrames(string text)
-        {
-            System.IO.File.WriteAllText("D:/maze.txt", text);
         }
     }
 }
