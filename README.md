@@ -1,5 +1,5 @@
 # Maze
-纯C#实现，一句话创建随机的（矩形）迷宫和地牢
+纯C#实现，一行代码就可以创建出随机的（矩形）迷宫和地牢
 
 迷宫：MazeProvider.CreateRectangleMaze(50, 30);
 
