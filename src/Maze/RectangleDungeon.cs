@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SimpleX.Maze
 {
-    public class RectangleWithRoomMaze
+    public class RectangleDungeon : IRectangleMaze
     {
         // 格子
         private class Tile
@@ -71,15 +71,29 @@ namespace SimpleX.Maze
             new Vector( 1,  0), //右
         };
 
-        // 创建迷宫
-        public RectangleMazeField Create(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount)
+        public int width { get; set; } = 25;
+        public int height { get; set; } = 25;
+        public int minRoomWidth { get; set; } = 3;
+        public int maxRoomWidth { get; set; } = 7;
+        public int minRoomHeight { get; set; } = 3;
+        public int maxRoomHeight { get; set; } = 7;
+        public int maxRoomCount { get; set; } = 5;
+
+
+        public RectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount)
         {
-            width         = Odd(width);
-            height        = Odd(height);
-            minRoomWidth  = Odd(minRoomWidth);
-            maxRoomWidth  = Odd(maxRoomWidth);
-            minRoomHeight = Odd(minRoomHeight);
-            maxRoomHeight = Odd(maxRoomHeight);
+            this.width = Odd(width);
+            this.height = Odd(height);
+            this.minRoomWidth = Odd(minRoomWidth);
+            this.maxRoomWidth = Odd(maxRoomWidth);
+            this.minRoomHeight = Odd(minRoomHeight);
+            this.maxRoomHeight = Odd(maxRoomHeight);
+            this.maxRoomCount = maxRoomCount;
+        }
+
+        // 创建迷宫
+        public override RectangleMazeField Create()
+        {
             currentRegion = -1;
 
             regions = new int[width, height];
@@ -93,7 +107,7 @@ namespace SimpleX.Maze
 
             RectangleMazeField field = new RectangleMazeField(width, height);
 
-            CreateRooms(field, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount);
+            CreateRooms(field);
             CreateMaze(field);
             ConnectRegions(field);
             RemoveDeadEnds(field);
@@ -101,7 +115,8 @@ namespace SimpleX.Maze
             return field;
         }
 
-        private void CreateRooms(RectangleMazeField field, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount)
+        // 创建房间
+        private void CreateRooms(RectangleMazeField field)
         {
             List<Room> rooms = new List<Room>();
 
@@ -138,6 +153,7 @@ namespace SimpleX.Maze
             }
         }
 
+        // 创建空地上迷宫
         private void CreateMaze(RectangleMazeField field)
         {
             for (int y = 1; y < field.height; y += 2)
@@ -150,6 +166,7 @@ namespace SimpleX.Maze
             }
         }
 
+        // 
         private void GrowMaze(RectangleMazeField field, int x, int y)
         {
             List<Tile> tiles = new List<Tile>();
@@ -327,24 +344,6 @@ namespace SimpleX.Maze
                     }
                 }
             }
-        }
-
-        // 奇数
-        private int Odd(int value)
-        {
-            return (value / 2) * 2 + 1;
-        }
-
-        // 是否为墙
-        private bool IsWall(RectangleMazeField field, int x, int y)
-        {
-            return field[x, y] == TileType.Wall;
-        }
-
-        // 是否为迷宫的边界
-        private bool IsBorder(RectangleMazeField field, int x, int y)
-        {
-            return (x <= 0 || x >= field.width-1 || y <= 0 || y >= field.height-1);
         }
     }
 }
