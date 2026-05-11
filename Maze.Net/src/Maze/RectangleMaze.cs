@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-
-namespace SimpleX.Maze
+namespace SimplexLab.Maze
 {
+    /// <summary>
+    /// 矩形迷宫
+    /// </summary>
     public class RectangleMaze : IRectangleMaze
     {
         // 格子
-        private class Tile
+        private struct Tile
         {
             public int x = 0;
             public int y = 0;
-            public int d = 0;
+            public Dir d = 0;
 
-            public Tile(int x, int y, int d)
+            public Tile(int x, int y, Dir d)
             {
                 this.x = x;
                 this.y = y;
@@ -20,43 +20,47 @@ namespace SimpleX.Maze
             }
         }
         // 方向
-        private static class Dir
+        private enum Dir
         {
-            public const int Up    = 1; //上
-            public const int Down  = 2; //下
-            public const int Left  = 4; //左
-            public const int Right = 8; //右
+            Up    = 1, //上
+            Down  = 2, //下
+            Left  = 4, //左
+            Right = 8, //右
         }
 
         // 随机数
         private Random random = new Random();
         // 开链表
         private List<Tile> openlist = new List<Tile>();
-
-        public int width { get; set; } = 25;
-        public int height { get; set; } = 25;
+        // 
+        private int width = 25;
+        // 
+        private int height = 25;
 
         public RectangleMaze(int width, int height)
         {
-            this.width = Odd(width);
+            this.width  = Odd(width);
             this.height = Odd(height);
         }
 
-        // 创建迷宫
+        /// <summary>
+        /// 创建迷宫
+        /// </summary>
+        /// <returns></returns>
         public override RectangleMazeField Create()
         {
-            RectangleMazeField field = new RectangleMazeField(width, height);
+            var field = new RectangleMazeField(width, height);
 
             // 随机起点
-            int x = random.Next(1, field.width - 1); 
-            int y = random.Next(1, field.height - 1);
+            var x = random.Next(1, field.width - 1); 
+            var y = random.Next(1, field.height - 1);
             field[x, y] = TileType.Path;
 
             // 从起点开始探索
             SearchNeighbours(field, x, y);
             while (openlist.Count > 0)
             {
-                int idx = random.Next(0, openlist.Count);
+                var idx = random.Next(0, openlist.Count);
                 var cur = openlist[idx];
 
                 x = cur.x;
@@ -93,7 +97,12 @@ namespace SimpleX.Maze
             return field;
         }
 
-        // 获取邻居
+        /// <summary>
+        /// 获取邻居
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         private void SearchNeighbours(RectangleMazeField field, int x, int y)
         {
             // 上

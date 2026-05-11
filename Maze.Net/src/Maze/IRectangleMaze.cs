@@ -1,4 +1,4 @@
-﻿namespace SimpleX.Maze
+﻿namespace SimplexLab.Maze
 {
     public abstract class IRectangleMaze
     {

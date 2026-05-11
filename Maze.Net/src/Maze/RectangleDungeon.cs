@@ -1,13 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace SimpleX.Maze
+namespace SimplexLab.Maze
 {
+    /// <summary>
+    /// 矩形地牢
+    /// </summary>
     public class RectangleDungeon : IRectangleMaze
     {
-        // 格子
-        private class Tile
+        /// <summary>
+        /// 格子
+        /// </summary>
+        private struct Tile
         {
             public int x = 0;
             public int y = 0;
@@ -18,14 +19,18 @@ namespace SimpleX.Maze
                 this.y = y;
             }
         }
-        // 房间
-        private class Room
+
+        /// <summary>
+        /// 房间
+        /// </summary>
+        private struct Room
         {
             public int x = 0;
             public int y = 0;
             public int w = 0;
             public int h = 0;
             public bool open = false;
+
             public Room(int x, int y, int w, int h)
             {
                 this.x = x;
@@ -40,8 +45,10 @@ namespace SimpleX.Maze
                        Math.Max(y, other.y) < Math.Min(y + h, other.y + other.h);
             }
         }
-        // 向量
-        private class Vector
+        /// <summary>
+        /// 向量
+        /// </summary>
+        private struct Vector
         {
             public int x = 0;
             public int y = 0;
@@ -60,10 +67,14 @@ namespace SimpleX.Maze
         
         // 随机数
         private Random random = new Random();
+        // 
         private int currentRegion = -1;
+        // 
         private int[,] regions = null;
 
-        // 邻居的方位
+        /// <summary>
+        /// 邻居的方位
+        /// </summary>
         private static readonly Vector[] CARDINAL_DIR = new Vector[] {
             new Vector( 0, -1), //上
             new Vector( 0,  1), //下
@@ -71,13 +82,20 @@ namespace SimpleX.Maze
             new Vector( 1,  0), //右
         };
 
-        public int width { get; set; } = 25;
-        public int height { get; set; } = 25;
-        public int minRoomWidth { get; set; } = 3;
-        public int maxRoomWidth { get; set; } = 7;
-        public int minRoomHeight { get; set; } = 3;
-        public int maxRoomHeight { get; set; } = 7;
-        public int maxRoomCount { get; set; } = 5;
+        //
+        private int width = 25;
+        //
+        private int height = 25;
+        //
+        private int minRoomWidth = 3;
+        //
+        private int maxRoomWidth = 7;
+        //
+        private int minRoomHeight = 3;
+        //
+        private int maxRoomHeight = 7;
+        //
+        private int maxRoomCount = 5;
 
 
         public RectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount)
@@ -91,45 +109,83 @@ namespace SimpleX.Maze
             this.maxRoomCount = maxRoomCount;
         }
 
-        // 创建迷宫
+        /// <summary>
+        /// 创建迷宫
+        /// </summary>
+        /// <returns></returns>
         public override RectangleMazeField Create()
         {
             currentRegion = -1;
 
             regions = new int[width, height];
-            for (int y=0; y<height; y++)
+            for (var y=0; y<height; y++)
             {
-                for (int x=0; x<width; x++)
+                for (var x=0; x<width; x++)
                 {
                     regions[x, y] = -1;
                 }
             }
 
-            RectangleMazeField field = new RectangleMazeField(width, height);
+            var field = new RectangleMazeField(width, height);
 
-            CreateRooms(field);
-            CreateMaze(field);
-            ConnectRegions(field);
-            RemoveDeadEnds(field);
+            CreateRooms(ref field);
+            CreateMaze(ref field);
+            ConnectRegions(ref field);
+            //RemoveDeadEnds(ref field);
 
             return field;
         }
 
-        // 创建房间
-        private void CreateRooms(RectangleMazeField field)
+        /// <summary>
+        /// 创建房间
+        /// </summary>
+        /// <param name="field"></param>
+        private void CreateRooms(ref RectangleMazeField field)
         {
-            List<Room> rooms = new List<Room>();
+            var rooms = new List<Room>();
 
-            for (int i = 0; i < maxRoomCount; i++)
+            for (var i = 0; i < maxRoomCount; i++)
             {
-                int w = Odd(random.Next(minRoomWidth,  maxRoomWidth + 1));
-                int h = Odd(random.Next(minRoomHeight, maxRoomHeight + 1));
-                int x = Odd(random.Next(1, field.width  - w));
-                int y = Odd(random.Next(1, field.height - h));
+                if (TryCreateRoom(field.width, field.height, rooms, out var room))
+                {
+                    rooms.Add(room);
 
-                Room room = new Room(x, y, w, h);
+                    StartRegion();
+                    for (var ry = room.y; ry < room.y + room.h; ry++)
+                    {
+                        for (var rx = room.x; rx < room.x + room.w; rx++)
+                        {
+                            Carve(ref field, rx, ry);
+                        }
+                    }
+                }
+            }
+        }
 
-                bool overlaps = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rooms"></param>
+        /// <param name="room"></param>
+        /// <returns></returns>
+        private bool TryCreateRoom(int width, int height, List<Room> rooms, out Room room)
+        {
+            var times = 5;
+
+            while (times > 0)
+            {
+                times--;
+
+                var w = Odd(random.Next(minRoomWidth, maxRoomWidth + 1));
+                var h = Odd(random.Next(minRoomHeight, maxRoomHeight + 1));
+                var x = Odd(random.Next(1, width - w));
+                var y = Odd(random.Next(1, height - h));
+
+                room = new Room(x, y, w, h);
+
+                var overlaps = false;
                 foreach (var other in rooms)
                 {
                     if (room.IsOverlapsWith(other))
@@ -139,41 +195,42 @@ namespace SimpleX.Maze
                     }
                 }
 
-                if (overlaps) continue;
-                rooms.Add(room);
-
-                StartRegion();
-                for (int ry = room.y; ry < room.y + room.h; ry++)
-                {
-                    for (int rx = room.x; rx < room.x + room.w; rx++)
-                    {
-                        Carve(field, rx, ry);
-                    }
-                }
+                if (!overlaps) return true;
             }
+
+            room = new Room();
+            return false;
         }
 
-        // 创建空地上迷宫
-        private void CreateMaze(RectangleMazeField field)
+        /// <summary>
+        /// 创建空地上迷宫
+        /// </summary>
+        /// <param name="field"></param>
+        private void CreateMaze(ref RectangleMazeField field)
         {
-            for (int y = 1; y < field.height; y += 2)
+            for (var y = 1; y < field.height; y += 2)
             {
-                for (int x = 1; x < field.width; x += 2)
+                for (var x = 1; x < field.width; x += 2)
                 {
                     if (!IsWall(field, x, y)) continue;
-                    GrowMaze(field, x, y);
+                    GrowMaze(ref field, x, y);
                 }
             }
         }
 
-        // 
-        private void GrowMaze(RectangleMazeField field, int x, int y)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        private void GrowMaze(ref RectangleMazeField field, int x, int y)
         {
-            List<Tile> tiles = new List<Tile>();
-            Vector lastDir = new Vector();
+            var tiles = new List<Tile>();
+            var lastDir = new Vector();
 
             StartRegion();
-            Carve(field, x, y);
+            Carve(ref field, x, y);
 
             tiles.Add(new Tile(x, y));
 
@@ -181,7 +238,7 @@ namespace SimpleX.Maze
             {
                 var tile = tiles[tiles.Count - 1];
 
-                List<Vector> uncarves = new List<Vector>();
+                var uncarves = new List<Vector>();
                 foreach (var dir in CARDINAL_DIR)
                 {
                     if (CanCarve(field, tile, dir)) uncarves.Add(dir);
@@ -192,9 +249,9 @@ namespace SimpleX.Maze
                     var dir = uncarves.Contains(lastDir) ? lastDir : uncarves[random.Next(0, uncarves.Count)];
 
                     var a = Find(tile, dir, 1);
-                    Carve(field, a.x, a.y);
+                    Carve(ref field, a.x, a.y);
                     var b = Find(tile, dir, 2);
-                    Carve(field, b.x, b.y);
+                    Carve(ref field, b.x, b.y);
 
                     tiles.Add(b);
                     lastDir = dir;
@@ -207,44 +264,68 @@ namespace SimpleX.Maze
             }
         }
 
-        // 雕刻
-        private void Carve(RectangleMazeField field, int x, int y)
+        /// <summary>
+        /// 雕刻
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        private void Carve(ref RectangleMazeField field, int x, int y)
         {
             field[x, y] = TileType.Path;
             regions[x, y] = currentRegion;
         }
 
-        // 判断是否可雕刻
-        private bool CanCarve(RectangleMazeField field, Tile tile, Vector vector)
+        /// <summary>
+        /// 判断是否可雕刻
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="tile"></param>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        private bool CanCarve(in RectangleMazeField field, Tile tile, Vector dir)
         {
-            var a = Find(tile, vector, 3);
+            var a = Find(tile, dir, 3);
             if (a.x < 0 || a.x >= field.width || a.y < 0 || a.y >= field.height) return false;
 
-            var b = Find(tile, vector, 2);
+            var b = Find(tile, dir, 2);
             return IsWall(field, b.x, b.y);
         }
 
-        //
+        /// <summary>
+        /// 
+        /// </summary>
         private void StartRegion()
         {
             currentRegion++;
         }
 
-        private Tile Find(Tile tile, Vector vector, int length)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <param name="dir"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private Tile Find(Tile tile, Vector dir, int length)
         {
-            int x = tile.x + vector.x * length;
-            int y = tile.y + vector.y * length;
+            var x = tile.x + dir.x * length;
+            var y = tile.y + dir.y * length;
 
             return new Tile(x, y);
         }
 
-        private void ConnectRegions(RectangleMazeField field)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        private void ConnectRegions(ref RectangleMazeField field)
         {
-            Dictionary<Tile, HashSet<int>> connectorRegions = new Dictionary<Tile, HashSet<int>>();
+            var connectorRegions = new Dictionary<Tile, HashSet<int>>();
 
-            for (int y = 1; y < field.height - 1; y++)
+            for (var y = 1; y < field.height - 1; y++)
             {
-                for (int x = 1; x < field.width - 1; x++)
+                for (var x = 1; x < field.width - 1; x++)
                 {
                     var pos = new Tile(x, y);
                     if (!IsWall(field, x, y)) continue;
@@ -269,7 +350,7 @@ namespace SimpleX.Maze
             var merged = new Dictionary<int, int>();
             var opened = new HashSet<int>();
 
-            for (int i = 0; i <= currentRegion; i++)
+            for (var i = 0; i <= currentRegion; i++)
             {
                 merged[i] = i;
                 opened.Add(i);
@@ -278,7 +359,7 @@ namespace SimpleX.Maze
             while (opened.Count > 1)
             {
                 var connector = connectors[random.Next(0, connectors.Count)];
-                AddJunction(field, connector.x, connector.y);
+                AddJunction(ref field, connector.x, connector.y);
 
                 var list = connectorRegions[connector].Select((region) => merged[region]);
                 var dest = list.First();
@@ -307,29 +388,37 @@ namespace SimpleX.Maze
             }
         }
 
-        // 添加连接点
-        private void AddJunction(RectangleMazeField field, int x, int y)
+        /// <summary>
+        /// 添加连接点
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        private void AddJunction(ref RectangleMazeField field, int x, int y)
         {
             field[x, y] = TileType.Path;
         }
 
-        // 删除死胡同
-        private void RemoveDeadEnds(RectangleMazeField field)
+        /// <summary>
+        /// 删除死胡同
+        /// </summary>
+        /// <param name="field"></param>
+        private void RemoveDeadEnds(ref RectangleMazeField field)
         {
-            bool done = false;
+            var done = false;
 
             while (!done)
             {
                 done = true;
 
-                for (int y = 1; y < field.height-1; y++)
+                for (var y = 1; y < field.height-1; y++)
                 {
-                    for (int x = 1; x <field.width-1; x++)
+                    for (var x = 1; x <field.width-1; x++)
                     {
                         Tile pos = new Tile(x, y);
                         if (IsWall(field, x, y)) continue;
 
-                        int exits = 0;
+                        var exits = 0;
                         foreach (var dir in CARDINAL_DIR)
                         {
                             var t = Find(pos, dir, 1);
