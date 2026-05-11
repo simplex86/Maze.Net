@@ -24,10 +24,11 @@ namespace SimplexLab.Maze
         /// <param name="minRoomHeight"></param>
         /// <param name="maxRoomHeight"></param>
         /// <param name="maxRoomCount"></param>
+        /// <param name="tortuosity"></param>
         /// <returns></returns>
-        public static RectangleMazeField CreateRectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount)
+        public static RectangleMazeField CreateRectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount, int tortuosity = 50)
         {
-            RectangleDungeon dungeon = new RectangleDungeon(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount);
+            RectangleDungeon dungeon = new RectangleDungeon(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, tortuosity);
             return dungeon.Create();
         }
     }

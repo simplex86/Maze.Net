@@ -96,8 +96,19 @@ namespace SimplexLab.Maze
         private int maxRoomHeight = 7;
         //
         private int maxRoomCount = 5;
+        // 曲折度
+        private int tortuosity = 50;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="minRoomWidth"></param>
+        /// <param name="maxRoomWidth"></param>
+        /// <param name="minRoomHeight"></param>
+        /// <param name="maxRoomHeight"></param>
+        /// <param name="maxRoomCount"></param>
         public RectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount)
         {
             this.width = Odd(width);
@@ -107,6 +118,29 @@ namespace SimplexLab.Maze
             this.minRoomHeight = Odd(minRoomHeight);
             this.maxRoomHeight = Odd(maxRoomHeight);
             this.maxRoomCount = maxRoomCount;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="minRoomWidth"></param>
+        /// <param name="maxRoomWidth"></param>
+        /// <param name="minRoomHeight"></param>
+        /// <param name="maxRoomHeight"></param>
+        /// <param name="maxRoomCount"></param>
+        /// <param name="tortuosity"></param>
+        public RectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount, int tortuosity)
+        {
+            this.width = Odd(width);
+            this.height = Odd(height);
+            this.minRoomWidth = Odd(minRoomWidth);
+            this.maxRoomWidth = Odd(maxRoomWidth);
+            this.minRoomHeight = Odd(minRoomHeight);
+            this.maxRoomHeight = Odd(maxRoomHeight);
+            this.maxRoomCount = maxRoomCount;
+            this.tortuosity = Math.Clamp(tortuosity, 0, 100);
         }
 
         /// <summary>
@@ -131,7 +165,7 @@ namespace SimplexLab.Maze
             CreateRooms(ref field);
             CreateMaze(ref field);
             ConnectRegions(ref field);
-            //RemoveDeadEnds(ref field);
+            RemoveDeadEnds(ref field);
 
             return field;
         }
@@ -227,7 +261,7 @@ namespace SimplexLab.Maze
         private void GrowMaze(ref RectangleMazeField field, int x, int y)
         {
             var tiles = new List<Tile>();
-            var lastDir = new Vector();
+            var prevdir = new Vector();
 
             StartRegion();
             Carve(ref field, x, y);
@@ -246,7 +280,9 @@ namespace SimplexLab.Maze
 
                 if (uncarves.Count > 0)
                 {
-                    var dir = uncarves.Contains(lastDir) ? lastDir : uncarves[random.Next(0, uncarves.Count)];
+                    var pct = random.Next(0, 100);
+                    var dir = uncarves.Contains(prevdir) && pct >= tortuosity ? prevdir 
+                                                                              : uncarves[random.Next(0, uncarves.Count)];
 
                     var a = Find(tile, dir, 1);
                     Carve(ref field, a.x, a.y);
@@ -254,12 +290,12 @@ namespace SimplexLab.Maze
                     Carve(ref field, b.x, b.y);
 
                     tiles.Add(b);
-                    lastDir = dir;
+                    prevdir = dir;
                 }
                 else
                 {
                     tiles.RemoveAt(tiles.Count - 1);
-                    lastDir = new Vector();
+                    prevdir = new Vector();
                 }
             }
         }
@@ -286,7 +322,11 @@ namespace SimplexLab.Maze
         private bool CanCarve(in RectangleMazeField field, Tile tile, Vector dir)
         {
             var a = Find(tile, dir, 3);
-            if (a.x < 0 || a.x >= field.width || a.y < 0 || a.y >= field.height) return false;
+            if (a.x < 0 || a.x >= field.width ||
+                a.y < 0 || a.y >= field.height)
+            {
+                return false;
+            }
 
             var b = Find(tile, dir, 2);
             return IsWall(field, b.x, b.y);
