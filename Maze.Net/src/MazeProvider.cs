@@ -8,10 +8,10 @@ namespace SimplexLab.Maze
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static RectangleMazeField CreateRectangleMaze(int width, int height)
+        public static async Task<RectangleMazeField> CreateRectangleMaze(int width, int height)
         {
-            RectangleMaze maze = new RectangleMaze(width, height);
-            return maze.Create();
+            var maze = new RectangleMaze(width, height);
+            return await maze.CreateAsync();
         }
 
         /// <summary>
@@ -26,10 +26,10 @@ namespace SimplexLab.Maze
         /// <param name="maxRoomCount"></param>
         /// <param name="tortuosity"></param>
         /// <returns></returns>
-        public static RectangleMazeField CreateRectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount, int tortuosity = 50)
+        public static async Task<RectangleMazeField> CreateRectangleDungeon(int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, int maxRoomCount, int tortuosity = 50)
         {
-            RectangleDungeon dungeon = new RectangleDungeon(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, tortuosity);
-            return dungeon.Create();
+            var dungeon = new RectangleDungeon(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, tortuosity);
+            return await dungeon.CreateAsync();
         }
     }
 }

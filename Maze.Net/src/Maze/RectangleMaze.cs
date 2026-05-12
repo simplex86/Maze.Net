@@ -52,7 +52,7 @@ namespace SimplexLab.Maze
             var field = new RectangleMazeField(width, height);
 
             // 随机起点
-            var x = random.Next(1, field.width - 1); 
+            var x = random.Next(1, field.width - 1);
             var y = random.Next(1, field.height - 1);
             field[x, y] = TileType.Path;
 
@@ -68,18 +68,18 @@ namespace SimplexLab.Maze
 
                 switch (cur.d)
                 {
-                case Dir.Up:
-                    y = y - 1;
-                    break;
-                case Dir.Down:
-                    y = y + 1;
-                    break;
-                case Dir.Left:
-                    x = x - 1;
-                    break;
-                case Dir.Right:
-                    x = x + 1;
-                    break;
+                    case Dir.Up:
+                        y = y - 1;
+                        break;
+                    case Dir.Down:
+                        y = y + 1;
+                        break;
+                    case Dir.Left:
+                        x = x - 1;
+                        break;
+                    case Dir.Right:
+                        x = x + 1;
+                        break;
                 }
 
                 if (IsWall(field, x, y))
@@ -95,6 +95,15 @@ namespace SimplexLab.Maze
             }
 
             return field;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override async Task<RectangleMazeField> CreateAsync()
+        {
+            return await Task.Run(Create);
         }
 
         /// <summary>

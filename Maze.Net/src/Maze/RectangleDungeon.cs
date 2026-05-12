@@ -144,7 +144,7 @@ namespace SimplexLab.Maze
         }
 
         /// <summary>
-        /// 创建迷宫
+        /// 创建地牢
         /// </summary>
         /// <returns></returns>
         public override RectangleMazeField Create()
@@ -168,6 +168,15 @@ namespace SimplexLab.Maze
             RemoveDeadEnds(ref field);
 
             return field;
+        }
+
+        /// <summary>
+        /// 创建地牢
+        /// </summary>
+        /// <returns></returns>
+        public override async Task<RectangleMazeField> CreateAsync()
+        {
+            return await Task.Run(Create);
         }
 
         /// <summary>
