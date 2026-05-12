@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 
     /// </summary>
-    public struct RectangleMazeField
+    public struct RectangleField
     {
         /// <summary>
         /// 迷宫场地的数据
@@ -19,7 +19,7 @@ namespace SimplexLab.Maze
         /// </summary>
         public int height { get; private set; } = 9;
 
-        public RectangleMazeField(int w, int h)
+        public RectangleField(int w, int h)
         {
             width  = Odd(w);
             height = Odd(h);
