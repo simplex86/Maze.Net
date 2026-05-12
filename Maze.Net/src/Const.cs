@@ -14,6 +14,7 @@ namespace SimplexLab.Maze
     public enum RectangleDungeonAlgorithm
     {
         Nystroms = 1,
+        OverlapR = 2,
     }
 
     /// <summary>

@@ -17,6 +17,7 @@ namespace SimplexLab.Maze
         /// <param name="minRoomHeight"></param>
         /// <param name="maxRoomHeight"></param>
         /// <param name="maxRoomCount"></param>
+        /// <param name="mulConnector"></param>
         /// <param name="tortuosity"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
@@ -27,6 +28,7 @@ namespace SimplexLab.Maze
                                      int minRoomHeight, 
                                      int maxRoomHeight, 
                                      int maxRoomCount, 
+                                     int mulConnector,
                                      int tortuosity,
                                      RectangleDungeonAlgorithm algorithm = RectangleDungeonAlgorithm.Nystroms)
         {
@@ -36,7 +38,7 @@ namespace SimplexLab.Maze
             }
 
             return provider == null ? new RectangleField()
-                                    : provider.Create(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, tortuosity);
+                                    : provider.Create(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, mulConnector, tortuosity);
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace SimplexLab.Maze
         /// <param name="minRoomHeight"></param>
         /// <param name="maxRoomHeight"></param>
         /// <param name="maxRoomCount"></param>
+        /// <param name="mulConnector"></param>
         /// <param name="tortuosity"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
@@ -59,10 +62,11 @@ namespace SimplexLab.Maze
                                                       int minRoomHeight, 
                                                       int maxRoomHeight, 
                                                       int maxRoomCount, 
+                                                      int mulConnector,
                                                       int tortuosity,
                                                       RectangleDungeonAlgorithm algorithm = RectangleDungeonAlgorithm.Nystroms)
         {
-            return await Task.Run(() => Create(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, tortuosity, algorithm));
+            return await Task.Run(() => Create(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, mulConnector, tortuosity, algorithm));
         }
         /// <summary>
         /// 
@@ -75,6 +79,8 @@ namespace SimplexLab.Maze
             {
                 case RectangleDungeonAlgorithm.Nystroms:
                     return new RectangleDungeonNystromsProvider();
+                case RectangleDungeonAlgorithm.OverlapR:
+                    return new RectangleDungeonOverlaprProvider();
                 default:
                     break;
             }
