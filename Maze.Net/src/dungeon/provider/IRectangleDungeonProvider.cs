@@ -20,6 +20,7 @@
         /// <param name="minRoomHeight"></param>
         /// <param name="maxRoomHeight"></param>
         /// <param name="maxRoomCount"></param>
+        /// <param name="mulConnector"></param>
         /// <param name="tortuosity"></param>
         /// <returns></returns>
         RectangleField Create(int width,
@@ -29,6 +30,7 @@
                               int minRoomHeight,
                               int maxRoomHeight,
                               int maxRoomCount,
+                              int mulConnector,
                               int tortuosity);
     }
 
@@ -41,7 +43,6 @@
         public int y = 0;
         public int w = 0;
         public int h = 0;
-        public bool open = false;
 
         public Room(int x, int y, int w, int h)
         {
