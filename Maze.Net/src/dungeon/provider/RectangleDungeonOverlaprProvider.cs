@@ -40,7 +40,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 
         /// </summary>
-        public RectangleDungeonAlgorithm algorithm { get; } = RectangleDungeonAlgorithm.Nystroms;
+        public RectangleDungeonAlgorithm algorithm { get; } = RectangleDungeonAlgorithm.OverlapR;
 
         /// <summary>
         /// 创建地牢
