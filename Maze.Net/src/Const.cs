@@ -5,7 +5,18 @@ namespace SimplexLab.Maze
     /// </summary>
     public enum RectangleMazeAlgorithm
     {
-        Prim = 1,
+        /// <summary>
+        /// 深度优先
+        /// </summary>
+        DFS     = 1,
+        /// <summary>
+        /// 
+        /// </summary>
+        Prim    = 2,
+        /// <summary>
+        /// 
+        /// </summary>
+        Kruskal = 3,
     }
 
     /// <summary>
@@ -13,7 +24,13 @@ namespace SimplexLab.Maze
     /// </summary>
     public enum RectangleDungeonAlgorithm
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Nystroms = 1,
+        /// <summary>
+        /// 由 Nystroms 改进的算法，生成异形房间
+        /// </summary>
         OverlapR = 2,
     }
 
@@ -22,9 +39,21 @@ namespace SimplexLab.Maze
     /// </summary>
     public static class TileType
     {
-        public const int Wall  = 0;         // 墙
-        public const int Path  = 1;         // 通路
-        public const int Entry = 10 + Path; // 入口
-        public const int Exit  = 20 + Path; // 出口
+        /// <summary>
+        /// 墙
+        /// </summary>
+        public const int Wall  = 0;        
+        /// <summary>
+        /// 通路
+        /// </summary>
+        public const int Path  = 1;        
+        /// <summary>
+        /// 入口
+        /// </summary>
+        public const int Entry = 10 + Path;
+        /// <summary>
+        /// 出口
+        /// </summary>
+        public const int Exit  = 20 + Path;
     }
 }

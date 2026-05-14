@@ -95,21 +95,10 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         private void CreateRooms(RectangleField field)
         {
-            var rooms = new List<Room>();
-
             for (var i = 0; i < maxRoomCount; i++)
             {
-                var room = CreateRoom(field.width, field.height);
-                rooms.Add(room);
-
+                CreateRoom(field);
                 StartRegion();
-                for (var ry = room.y; ry < room.y + room.h; ry++)
-                {
-                    for (var rx = room.x; rx < room.x + room.w; rx++)
-                    {
-                        Carve(field, rx, ry);
-                    }
-                }
             }
         }
 
@@ -121,14 +110,20 @@ namespace SimplexLab.Maze
         /// <param name="rooms"></param>
         /// <param name="room"></param>
         /// <returns></returns>
-        private Room CreateRoom(int width, int height)
+        private void CreateRoom(RectangleField field)
         {
             var w = Utils.Odd(random.Next(minRoomWidth, maxRoomWidth + 1));
             var h = Utils.Odd(random.Next(minRoomHeight, maxRoomHeight + 1));
-            var x = Utils.Odd(random.Next(1, width - w));
-            var y = Utils.Odd(random.Next(1, height - h));
+            var x = Utils.Odd(random.Next(1, field.width - w));
+            var y = Utils.Odd(random.Next(1, field.height - h));
 
-            return new Room(x, y, w, h);
+            for (var ry = y; ry < y + h; ry++)
+            {
+                for (var rx = x; rx < x + w; rx++)
+                {
+                    Carve(field, rx, ry);
+                }
+            }
         }
 
         /// <summary>
