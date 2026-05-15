@@ -62,6 +62,8 @@ namespace SimplexLab.Maze
                     return new RectangleMazeDfsProvider();
                 case RectangleMazeAlgorithm.Prim:
                     return new RectangleMazePrimProvider();
+                case RectangleMazeAlgorithm.Kruskal:
+                    return new RectangleMazeKruskalProvider();
                 default:
                     break;
             }

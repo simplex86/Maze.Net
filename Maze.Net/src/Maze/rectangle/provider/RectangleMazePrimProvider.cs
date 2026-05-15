@@ -1,7 +1,8 @@
 ﻿namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 矩形迷宫
+    /// 矩形迷宫生成器
+    /// 基于PRIM算法
     /// </summary>
     public class RectangleMazePrimProvider : IRectangleMazeProvider
     {
@@ -35,6 +36,7 @@
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
+            openlist.Clear();
 
             var field = new RectangleField(width, height);
 
@@ -43,7 +45,6 @@
             var y = random.Next(1, field.height - 1);
             field[x, y] = TileType.Path;
 
-            openlist.Clear();
             // 从起点开始探索
             SearchNeighbours(field, x, y);
 
