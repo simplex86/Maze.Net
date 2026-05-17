@@ -1,15 +1,43 @@
-# Maze
-纯C#实现，一行代码就可以创建出随机的（矩形）迷宫和地牢
+# 随机迷宫和地牢生成器
 
-迷宫
-```
-MazeProvider.CreateRectangleMaze(50, 30);
-```
-![迷宫](https://github.com/simplex86/Maze/blob/main/doc/imgs/maze.png)
+纯C#实现创建随机迷宫和地牢
 
-地牢
+## 迷宫
+
+### 矩形迷宫
+
+提供了三种生成矩形迷宫的算法
+
+- DFS
+- Prim
+- Kruskal
+
+``` csharp
+var maze = new RectangleMaze();
+maze.Create(width, height, RectangleMazeAlgorithm.Kruskal);
 ```
-MazeProvider.CreateRectangleDungeon(50, 30, 3, 7, 3, 7, 10);
+![迷宫](./doc/imgs/maze.png)
+
+## 地牢
+
+### 矩形地牢
+
+提供了两种生成矩形地牢的算法
+
+- Nystroms
+- OverlapR
+
+``` csharp
+dungeon.CreateAsync(width,
+                    height,
+                    roomMinWidth,
+                    roomMaxWidth,
+                    roomMinHeight,
+                    roomMaxHeight,
+                    roomCount,
+                    mulconnector,
+                    tortuosity,
+                    RectangleDungeonAlgorithm.Nystroms);
 ```
 
-![地牢](https://github.com/simplex86/Maze/blob/main/doc/imgs/dungeon.png)
+![地牢](./doc/imgs/dungeon.png)
