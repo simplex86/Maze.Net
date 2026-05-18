@@ -29,5 +29,5 @@
 
     ![地牢](./doc/imgs/dungeon.png)
 
-> [TIP]  
+> [!TIP]  
 > 详细用法和示例，请见 [测试工程](https://github.com/simplex86/Maze.Net-Test)
