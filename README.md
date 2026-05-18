@@ -2,42 +2,29 @@
 
 纯C#实现创建随机迷宫和地牢
 
-## 迷宫
+- [迷宫生成器](./doc/maze.md)
 
-### 矩形迷宫
+    ``` csharp
+    var maze = new RectangleMaze();
+    maze.Create(width, height, RectangleMazeAlgorithm.Kruskal);
+    ```
 
-提供了三种生成矩形迷宫的算法
+    ![地牢](./doc/imgs/maze.png)
 
-- DFS
-- Prim
-- Kruskal
+- [地牢生成器](./doc/dungeon.md)
 
-``` csharp
-var maze = new RectangleMaze();
-maze.Create(width, height, RectangleMazeAlgorithm.Kruskal);
-```
-![迷宫](./doc/imgs/maze.png)
+    ``` csharp
+    var dungeon = new RectangleDungeon();
+    dungeon.Create(width,
+                   height,
+                   roomMinWidth,
+                   roomMaxWidth,
+                   roomMinHeight,
+                   roomMaxHeight,
+                   roomCount,
+                   mulconnector,
+                   tortuosity,
+                   RectangleDungeonAlgorithm.Nystroms);
+    ```
 
-## 地牢
-
-### 矩形地牢
-
-提供了两种生成矩形地牢的算法
-
-- Nystroms
-- OverlapR
-
-``` csharp
-dungeon.CreateAsync(width,
-                    height,
-                    roomMinWidth,
-                    roomMaxWidth,
-                    roomMinHeight,
-                    roomMaxHeight,
-                    roomCount,
-                    mulconnector,
-                    tortuosity,
-                    RectangleDungeonAlgorithm.Nystroms);
-```
-
-![地牢](./doc/imgs/dungeon.png)
+    ![地牢](./doc/imgs/dungeon.png)
