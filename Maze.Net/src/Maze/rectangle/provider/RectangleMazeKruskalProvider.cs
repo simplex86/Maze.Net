@@ -44,34 +44,23 @@ namespace SimplexLab.Maze
         /// <returns>生成的迷宫场地</returns>
         public RectangleField Create(int width, int height)
         {
-            // 确保尺寸为奇数（墙-路径交替结构要求）
             width = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            // 创建迷宫场地，初始化为全墙
             var field = new RectangleField(width, height);
 
-            // 计算路径格子的数量（奇数坐标位置）
-            int pathCount = (width / 2) * (height / 2);
-            
-            // 初始化并查集，每个路径格子是一个独立的集合
-            var dsu = new DisjointSet(pathCount);
-
-            // 收集所有可能打通的内部墙
             var walls = CollectInternalWalls(width, height);
-
-            // 随机打乱墙的顺序（Kruskal算法的关键）
             ShuffleWalls(walls);
 
-            // Kruskal算法主循环：遍历所有墙，尝试打通
+            var dsu = new DisjointSet((width / 2) * (height / 2));
             foreach (var wall in walls)
             {
                 // 获取墙两侧的路径格子在并查集中的索引
-                int cell1 = GetCellIndex(wall.x1, wall.y1, width);
-                int cell2 = GetCellIndex(wall.x2, wall.y2, width);
+                int a = GetCellIndex(wall.x1, wall.y1, width);
+                int b = GetCellIndex(wall.x2, wall.y2, width);
 
                 // 如果两个格子不在同一连通分量，则打通这堵墙
-                if (dsu.Union(cell1, cell2))
+                if (dsu.Union(a, b))
                 {
                     // 标记两个路径格子
                     field[wall.x1, wall.y1] = TileType.Path;
@@ -80,9 +69,8 @@ namespace SimplexLab.Maze
                     field[wall.wx, wall.wy] = TileType.Path;
                 }
 
-                // 优化：所有格子已连通时提前退出
-                if (dsu.Count == 1)
-                    break;
+                // 所有格子已连通时提前退出
+                if (dsu.Count == 1) break;
             }
 
             return field;

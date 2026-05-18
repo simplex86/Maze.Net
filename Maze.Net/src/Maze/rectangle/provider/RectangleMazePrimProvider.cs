@@ -21,7 +21,7 @@
         // 随机数
         private Random random = new Random();
         // 开链表
-        private List<Tile> openlist = new List<Tile>();
+        private List<RectangleTile> openlist = new List<RectangleTile>();
 
         /// <summary>
         /// 
@@ -96,13 +96,13 @@
         private void SearchNeighbours(RectangleField field, int x, int y)
         {
             // 上
-            if (!Utils.IsBorder(field, x, y - 1) && Utils.IsWall(field, x, y - 1)) openlist.Add(new Tile(x, y - 1, (int)Dir.Up));
+            if (!Utils.IsBorder(field, x, y - 1) && Utils.IsWall(field, x, y - 1)) openlist.Add(new RectangleTile(x, y - 1, (int)Dir.Up));
             // 下
-            if (!Utils.IsBorder(field, x, y + 1) && Utils.IsWall(field, x, y + 1)) openlist.Add(new Tile(x, y + 1, (int)Dir.Down));
+            if (!Utils.IsBorder(field, x, y + 1) && Utils.IsWall(field, x, y + 1)) openlist.Add(new RectangleTile(x, y + 1, (int)Dir.Down));
             // 左
-            if (!Utils.IsBorder(field, x - 1, y) && Utils.IsWall(field, x - 1, y)) openlist.Add(new Tile(x - 1, y, (int)Dir.Left));
+            if (!Utils.IsBorder(field, x - 1, y) && Utils.IsWall(field, x - 1, y)) openlist.Add(new RectangleTile(x - 1, y, (int)Dir.Left));
             // 右
-            if (!Utils.IsBorder(field, x + 1, y) && Utils.IsWall(field, x + 1, y)) openlist.Add(new Tile(x + 1, y, (int)Dir.Right));
+            if (!Utils.IsBorder(field, x + 1, y) && Utils.IsWall(field, x + 1, y)) openlist.Add(new RectangleTile(x + 1, y, (int)Dir.Right));
         }
     }
 }

@@ -24,11 +24,9 @@ namespace SimplexLab.Maze
         /// <returns>生成的迷宫场地</returns>
         public RectangleField Create(int width, int height)
         {
-            // 确保尺寸为奇数（墙-路径交替结构要求）
             width  = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            // 创建迷宫场地，初始化为全墙
             var field = new RectangleField(width, height);
 
             // 随机选择起点（必须是奇数坐标）
@@ -37,10 +35,9 @@ namespace SimplexLab.Maze
             field[x, y] = TileType.Path;
 
             // 使用栈实现深度优先搜索
-            var stack = new Stack<Tile>();
-            stack.Push(new Tile(x, y));
+            var stack = new Stack<RectangleTile>();
+            stack.Push(new RectangleTile(x, y));
 
-            // DFS主循环
             while (stack.Count > 0)
             {
                 // 获取当前位置
@@ -68,7 +65,7 @@ namespace SimplexLab.Maze
                     field[nx, ny] = TileType.Path;
 
                     // 压入栈继续探索
-                    stack.Push(new Tile(nx, ny));
+                    stack.Push(new RectangleTile(nx, ny));
                 }
                 else
                 {
@@ -80,7 +77,7 @@ namespace SimplexLab.Maze
             return field;
         }
 
-        private List<Tile> neighbors = new List<Tile>();
+        private List<RectangleTile> neighbors = new List<RectangleTile>();
 
         /// <summary>
         /// 获取指定位置的未访问邻居
@@ -95,13 +92,13 @@ namespace SimplexLab.Maze
             neighbors.Clear();
 
             // 上（隔一格）
-            if (y - 2 > 0 && Utils.IsWall(field, x, y - 2)) neighbors.Add(new Tile(x, y - 2));
+            if (!Utils.IsBorder(field, x, y - 2) && Utils.IsWall(field, x, y - 2)) neighbors.Add(new RectangleTile(x, y - 2));
             // 下（隔一格）
-            if (y + 2 < field.height - 1 && Utils.IsWall(field, x, y + 2)) neighbors.Add(new Tile(x, y + 2));
+            if (!Utils.IsBorder(field, x, y + 2) && Utils.IsWall(field, x, y + 2)) neighbors.Add(new RectangleTile(x, y + 2));
             // 左（隔一格）
-            if (x - 2 > 0 && Utils.IsWall(field, x - 2, y)) neighbors.Add(new Tile(x - 2, y));
+            if (!Utils.IsBorder(field, x - 2, y) && Utils.IsWall(field, x - 2, y)) neighbors.Add(new RectangleTile(x - 2, y));
             // 右（隔一格）
-            if (x + 2 < field.width - 1 && Utils.IsWall(field, x + 2, y)) neighbors.Add(new Tile(x + 2, y));
+            if (!Utils.IsBorder(field, x + 2, y) && Utils.IsWall(field, x + 2, y)) neighbors.Add(new RectangleTile(x + 2, y));
         }
     }
 }

@@ -179,13 +179,13 @@ namespace SimplexLab.Maze
         /// <param name="y"></param>
         private void GrowMaze(RectangleField field, int x, int y)
         {
-            var tiles = new List<Tile>();
+            var tiles = new List<RectangleTile>();
             var prevdir = new Vector();
 
             StartRegion();
             Carve(field, x, y);
 
-            tiles.Add(new Tile(x, y));
+            tiles.Add(new RectangleTile(x, y));
 
             while (tiles.Count > 0)
             {
@@ -238,7 +238,7 @@ namespace SimplexLab.Maze
         /// <param name="tile"></param>
         /// <param name="dir"></param>
         /// <returns></returns>
-        private bool CanCarve(in RectangleField field, Tile tile, Vector dir)
+        private bool CanCarve(in RectangleField field, RectangleTile tile, Vector dir)
         {
             var a = Find(tile, dir, 3);
             if (a.x < 0 || a.x >= field.width ||
@@ -266,12 +266,12 @@ namespace SimplexLab.Maze
         /// <param name="dir"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private Tile Find(Tile tile, Vector dir, int length)
+        private RectangleTile Find(RectangleTile tile, Vector dir, int length)
         {
             var x = tile.x + dir.x * length;
             var y = tile.y + dir.y * length;
 
-            return new Tile(x, y);
+            return new RectangleTile(x, y);
         }
 
         /// <summary>
@@ -280,13 +280,13 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         private void ConnectRegions(RectangleField field)
         {
-            var connectorRegions = new Dictionary<Tile, HashSet<int>>();
+            var connectorRegions = new Dictionary<RectangleTile, HashSet<int>>();
 
             for (var y = 1; y < field.height - 1; y++)
             {
                 for (var x = 1; x < field.width - 1; x++)
                 {
-                    var pos = new Tile(x, y);
+                    var pos = new RectangleTile(x, y);
                     if (!Utils.IsWall(field, x, y)) continue;
 
                     var sets = new HashSet<int>();
@@ -338,7 +338,7 @@ namespace SimplexLab.Maze
                 {
                     // 在原始算法中有这个判断，但是这里会造成connectors的数量锐减，导致最终索引越界
                     // 所以这里先注释掉了
-                     //if (connector.x - pos.x < 2 || connector.y - pos.y < 2) return true;
+                    // if (connector.x - pos.x < 2 || connector.y - pos.y < 2) return true;
 
                     var sets = new HashSet<int>(connectorRegions[pos].Select((region) => merged[region]));
                     if (sets.Count > 1) return false;
@@ -380,7 +380,7 @@ namespace SimplexLab.Maze
                 {
                     for (var x = 1; x <field.width-1; x++)
                     {
-                        Tile pos = new Tile(x, y);
+                        RectangleTile pos = new RectangleTile(x, y);
                         if (Utils.IsWall(field, x, y)) continue;
 
                         var exits = 0;
