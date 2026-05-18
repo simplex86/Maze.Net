@@ -1,6 +1,6 @@
 # 随机迷宫和地牢生成器
 
-纯C#实现创建随机迷宫和地牢
+基于 .Net 纯 C# 实现的随机迷宫和地牢生成器库
 
 - [迷宫生成器](./doc/maze.md)
 
@@ -28,3 +28,6 @@
     ```
 
     ![地牢](./doc/imgs/dungeon.png)
+
+> [TIPS]
+> 详细用法和示例，请见 [测试工程](https://github.com/simplex86/Maze.Net-Test)
