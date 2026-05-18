@@ -1,9 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace SimplexLab.Maze
 {
     /// <summary>
     /// 矩形地牢
     /// </summary>
-    internal class RectangleDungeonNystromsProvider : IRectangleDungeonProvider
+    internal class RectangularDungeonOverlaprProvider : IRectangularDungeonProvider
     {
         // 随机数
         private Random random = null;
@@ -40,7 +44,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 
         /// </summary>
-        public RectangleDungeonAlgorithm algorithm { get; } = RectangleDungeonAlgorithm.Nystroms;
+        public RectangularDungeonAlgorithm algorithm { get; } = RectangularDungeonAlgorithm.Nystroms;
 
         /// <summary>
         /// 创建地牢
@@ -95,23 +99,10 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         private void CreateRooms(RectangleField field)
         {
-            var rooms = new List<Room>();
-
             for (var i = 0; i < maxRoomCount; i++)
             {
-                if (TryCreateRoom(field.width, field.height, rooms, out var room))
-                {
-                    rooms.Add(room);
-
-                    StartRegion();
-                    for (var ry = room.y; ry < room.y + room.h; ry++)
-                    {
-                        for (var rx = room.x; rx < room.x + room.w; rx++)
-                        {
-                            Carve(field, rx, ry);
-                        }
-                    }
-                }
+                CreateRoom(field);
+                StartRegion();
             }
         }
 
@@ -123,36 +114,20 @@ namespace SimplexLab.Maze
         /// <param name="rooms"></param>
         /// <param name="room"></param>
         /// <returns></returns>
-        private bool TryCreateRoom(int width, int height, List<Room> rooms, out Room room)
+        private void CreateRoom(RectangleField field)
         {
-            var times = 5;
+            var w = Utils.Odd(random.Next(minRoomWidth, maxRoomWidth + 1));
+            var h = Utils.Odd(random.Next(minRoomHeight, maxRoomHeight + 1));
+            var x = Utils.Odd(random.Next(1, field.width - w));
+            var y = Utils.Odd(random.Next(1, field.height - h));
 
-            while (times > 0)
+            for (var ry = y; ry < y + h; ry++)
             {
-                times--;
-
-                var w = Utils.Odd(random.Next(minRoomWidth, maxRoomWidth + 1));
-                var h = Utils.Odd(random.Next(minRoomHeight, maxRoomHeight + 1));
-                var x = Utils.Odd(random.Next(1, width - w));
-                var y = Utils.Odd(random.Next(1, height - h));
-
-                room = new Room(x, y, w, h);
-
-                var overlaps = false;
-                foreach (var other in rooms)
+                for (var rx = x; rx < x + w; rx++)
                 {
-                    if (room.IsOverlapsWith(other))
-                    {
-                        overlaps = true;
-                        break;
-                    }
+                    Carve(field, rx, ry);
                 }
-
-                if (!overlaps) return true;
             }
-
-            room = new Room();
-            return false;
         }
 
         /// <summary>
@@ -179,13 +154,13 @@ namespace SimplexLab.Maze
         /// <param name="y"></param>
         private void GrowMaze(RectangleField field, int x, int y)
         {
-            var tiles = new List<RectangleTile>();
+            var tiles = new List<RectangularTile>();
             var prevdir = new Vector();
 
             StartRegion();
             Carve(field, x, y);
 
-            tiles.Add(new RectangleTile(x, y));
+            tiles.Add(new RectangularTile(x, y));
 
             while (tiles.Count > 0)
             {
@@ -238,7 +213,7 @@ namespace SimplexLab.Maze
         /// <param name="tile"></param>
         /// <param name="dir"></param>
         /// <returns></returns>
-        private bool CanCarve(in RectangleField field, RectangleTile tile, Vector dir)
+        private bool CanCarve(in RectangleField field, RectangularTile tile, Vector dir)
         {
             var a = Find(tile, dir, 3);
             if (a.x < 0 || a.x >= field.width ||
@@ -266,12 +241,12 @@ namespace SimplexLab.Maze
         /// <param name="dir"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private RectangleTile Find(RectangleTile tile, Vector dir, int length)
+        private RectangularTile Find(RectangularTile tile, Vector dir, int length)
         {
             var x = tile.x + dir.x * length;
             var y = tile.y + dir.y * length;
 
-            return new RectangleTile(x, y);
+            return new RectangularTile(x, y);
         }
 
         /// <summary>
@@ -280,13 +255,13 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         private void ConnectRegions(RectangleField field)
         {
-            var connectorRegions = new Dictionary<RectangleTile, HashSet<int>>();
+            var connectorRegions = new Dictionary<RectangularTile, HashSet<int>>();
 
             for (var y = 1; y < field.height - 1; y++)
             {
                 for (var x = 1; x < field.width - 1; x++)
                 {
-                    var pos = new RectangleTile(x, y);
+                    var pos = new RectangularTile(x, y);
                     if (!Utils.IsWall(field, x, y)) continue;
 
                     var sets = new HashSet<int>();
@@ -350,6 +325,8 @@ namespace SimplexLab.Maze
 
                     return true;
                 });
+
+                if (connectors.Count == 0) break;
             }
         }
 
@@ -380,7 +357,7 @@ namespace SimplexLab.Maze
                 {
                     for (var x = 1; x <field.width-1; x++)
                     {
-                        RectangleTile pos = new RectangleTile(x, y);
+                        RectangularTile pos = new RectangularTile(x, y);
                         if (Utils.IsWall(field, x, y)) continue;
 
                         var exits = 0;

@@ -1,22 +1,22 @@
 ﻿namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 格子
+    /// 矩形格子
     /// </summary>
-    internal struct RectangleTile
+    internal struct RectangularTile
     {
         public int x = 0;
         public int y = 0;
         public int d = 0;
 
-        public RectangleTile(int x, int y)
+        public RectangularTile(int x, int y)
         {
             this.x = x;
             this.y = y;
             this.d = 0;
         }
 
-        public RectangleTile(int x, int y, int d)
+        public RectangularTile(int x, int y, int d)
         {
             this.x = x;
             this.y = y;

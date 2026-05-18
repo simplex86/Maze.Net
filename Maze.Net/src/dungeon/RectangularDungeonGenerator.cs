@@ -1,11 +1,13 @@
+using System.Threading.Tasks;
+
 namespace SimplexLab.Maze
 {
     /// <summary>
     /// 矩形地牢
     /// </summary>
-    public class RectangleDungeon
+    public class RectangularDungeonGenerator
     {
-        private IRectangleDungeonProvider provider;
+        private IRectangularDungeonProvider provider;
 
         /// <summary>
         /// 创建地牢
@@ -30,7 +32,7 @@ namespace SimplexLab.Maze
                                      int maxRoomCount, 
                                      int mulConnector,
                                      int tortuosity,
-                                     RectangleDungeonAlgorithm algorithm = RectangleDungeonAlgorithm.Nystroms)
+                                     RectangularDungeonAlgorithm algorithm = RectangularDungeonAlgorithm.Nystroms)
         {
             if (provider == null || provider.algorithm != algorithm)
             {
@@ -64,7 +66,7 @@ namespace SimplexLab.Maze
                                                       int maxRoomCount, 
                                                       int mulConnector,
                                                       int tortuosity,
-                                                      RectangleDungeonAlgorithm algorithm = RectangleDungeonAlgorithm.Nystroms)
+                                                      RectangularDungeonAlgorithm algorithm = RectangularDungeonAlgorithm.Nystroms)
         {
             return await Task.Run(() => Create(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, mulConnector, tortuosity, algorithm));
         }
@@ -73,14 +75,14 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        private IRectangleDungeonProvider CreateProvider(RectangleDungeonAlgorithm algorithm)
+        private IRectangularDungeonProvider CreateProvider(RectangularDungeonAlgorithm algorithm)
         {
             switch (algorithm)
             {
-                case RectangleDungeonAlgorithm.Nystroms:
-                    return new RectangleDungeonNystromsProvider();
-                case RectangleDungeonAlgorithm.OverlapR:
-                    return new RectangleDungeonOverlaprProvider();
+                case RectangularDungeonAlgorithm.Nystroms:
+                    return new RectangularDungeonNystromsProvider();
+                case RectangularDungeonAlgorithm.OverlapR:
+                    return new RectangularDungeonOverlaprProvider();
                 default:
                     break;
             }

@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 矩形迷宫算法
     /// </summary>
-    public enum RectangleMazeAlgorithm
+    public enum RectangularMazeAlgorithm
     {
         /// <summary>
         /// 深度优先
@@ -22,7 +22,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 矩形地牢算法
     /// </summary>
-    public enum RectangleDungeonAlgorithm
+    public enum RectangularDungeonAlgorithm
     {
         /// <summary>
         /// 

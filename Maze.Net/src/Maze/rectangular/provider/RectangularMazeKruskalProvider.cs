@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
+
 namespace SimplexLab.Maze
 {
     /// <summary>
     /// 矩形迷宫生成器
     /// 基于Kruskal最小生成树算法生成随机迷宫
     /// </summary>
-    public class RectangleMazeKruskalProvider : IRectangleMazeProvider
+    public class RectangularMazeKruskalProvider : IRectangularMazeProvider
     {
         /// <summary>
         /// 墙及其两侧的路径格子
@@ -34,7 +37,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 当前算法类型
         /// </summary>
-        public RectangleMazeAlgorithm algorithm { get; } = RectangleMazeAlgorithm.Kruskal;
+        public RectangularMazeAlgorithm algorithm { get; } = RectangularMazeAlgorithm.Kruskal;
 
         /// <summary>
         /// 创建迷宫

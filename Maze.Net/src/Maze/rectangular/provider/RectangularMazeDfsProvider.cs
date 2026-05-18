@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
+
 namespace SimplexLab.Maze
 {
     /// <summary>
     /// 矩形迷宫生成器
     /// 基于深度优先搜索算法生成随机迷宫
     /// </summary>
-    public class RectangleMazeDfsProvider : IRectangleMazeProvider
+    public class RectangularMazeDfsProvider : IRectangularMazeProvider
     {
         /// <summary>
         /// 随机数生成器
@@ -14,7 +17,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 当前算法类型
         /// </summary>
-        public RectangleMazeAlgorithm algorithm { get; } = RectangleMazeAlgorithm.DFS;
+        public RectangularMazeAlgorithm algorithm { get; } = RectangularMazeAlgorithm.DFS;
 
         /// <summary>
         /// 创建迷宫
@@ -35,8 +38,8 @@ namespace SimplexLab.Maze
             field[x, y] = TileType.Path;
 
             // 使用栈实现深度优先搜索
-            var stack = new Stack<RectangleTile>();
-            stack.Push(new RectangleTile(x, y));
+            var stack = new Stack<RectangularTile>();
+            stack.Push(new RectangularTile(x, y));
 
             while (stack.Count > 0)
             {
@@ -65,7 +68,7 @@ namespace SimplexLab.Maze
                     field[nx, ny] = TileType.Path;
 
                     // 压入栈继续探索
-                    stack.Push(new RectangleTile(nx, ny));
+                    stack.Push(new RectangularTile(nx, ny));
                 }
                 else
                 {
@@ -77,7 +80,7 @@ namespace SimplexLab.Maze
             return field;
         }
 
-        private List<RectangleTile> neighbors = new List<RectangleTile>();
+        private List<RectangularTile> neighbors = new List<RectangularTile>();
 
         /// <summary>
         /// 获取指定位置的未访问邻居
@@ -92,13 +95,13 @@ namespace SimplexLab.Maze
             neighbors.Clear();
 
             // 上（隔一格）
-            if (!Utils.IsBorder(field, x, y - 2) && Utils.IsWall(field, x, y - 2)) neighbors.Add(new RectangleTile(x, y - 2));
+            if (!Utils.IsBorder(field, x, y - 2) && Utils.IsWall(field, x, y - 2)) neighbors.Add(new RectangularTile(x, y - 2));
             // 下（隔一格）
-            if (!Utils.IsBorder(field, x, y + 2) && Utils.IsWall(field, x, y + 2)) neighbors.Add(new RectangleTile(x, y + 2));
+            if (!Utils.IsBorder(field, x, y + 2) && Utils.IsWall(field, x, y + 2)) neighbors.Add(new RectangularTile(x, y + 2));
             // 左（隔一格）
-            if (!Utils.IsBorder(field, x - 2, y) && Utils.IsWall(field, x - 2, y)) neighbors.Add(new RectangleTile(x - 2, y));
+            if (!Utils.IsBorder(field, x - 2, y) && Utils.IsWall(field, x - 2, y)) neighbors.Add(new RectangularTile(x - 2, y));
             // 右（隔一格）
-            if (!Utils.IsBorder(field, x + 2, y) && Utils.IsWall(field, x + 2, y)) neighbors.Add(new RectangleTile(x + 2, y));
+            if (!Utils.IsBorder(field, x + 2, y) && Utils.IsWall(field, x + 2, y)) neighbors.Add(new RectangularTile(x + 2, y));
         }
     }
 }

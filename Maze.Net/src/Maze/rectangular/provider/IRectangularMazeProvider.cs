@@ -3,12 +3,12 @@
     /// <summary>
     /// 
     /// </summary>
-    internal interface IRectangleMazeProvider
+    internal interface IRectangularMazeProvider
     {
         /// <summary>
         /// 
         /// </summary>
-        RectangleMazeAlgorithm algorithm { get; }
+        RectangularMazeAlgorithm algorithm { get; }
 
         /// <summary>
         /// 

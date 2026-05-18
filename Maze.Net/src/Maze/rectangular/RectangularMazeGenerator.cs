@@ -1,17 +1,19 @@
+using System.Threading.Tasks;
+
 namespace SimplexLab.Maze
 {
     /// <summary>
     /// 矩形迷宫
     /// </summary>
-    public class RectangleMaze
+    public class RectangularMazeGenerator
     {
-        private IRectangleMazeProvider provider = null;
+        private IRectangularMazeProvider provider = null;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="algorithm"></param>
-        public RectangleMaze()
+        public RectangularMazeGenerator()
         {
 
         }
@@ -23,7 +25,7 @@ namespace SimplexLab.Maze
         /// <param name="height"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        public RectangleField Create(int width, int height, RectangleMazeAlgorithm algorithm = RectangleMazeAlgorithm.Prim)
+        public RectangleField Create(int width, int height, RectangularMazeAlgorithm algorithm = RectangularMazeAlgorithm.Prim)
         {
             if (provider == null || provider.algorithm != algorithm)
             {
@@ -43,7 +45,7 @@ namespace SimplexLab.Maze
         /// <param name="height"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        public async Task<RectangleField> CreateAsync(int width, int height, RectangleMazeAlgorithm algorithm = RectangleMazeAlgorithm.Prim)
+        public async Task<RectangleField> CreateAsync(int width, int height, RectangularMazeAlgorithm algorithm = RectangularMazeAlgorithm.Prim)
         {
             return await Task.Run(() => Create(width, height, algorithm));
         }
@@ -53,16 +55,16 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        private IRectangleMazeProvider CreateProvider(RectangleMazeAlgorithm algorithm)
+        private IRectangularMazeProvider CreateProvider(RectangularMazeAlgorithm algorithm)
         {
             switch (algorithm)
             {
-                case RectangleMazeAlgorithm.DFS:
-                    return new RectangleMazeDfsProvider();
-                case RectangleMazeAlgorithm.Prim:
-                    return new RectangleMazePrimProvider();
-                case RectangleMazeAlgorithm.Kruskal:
-                    return new RectangleMazeKruskalProvider();
+                case RectangularMazeAlgorithm.DFS:
+                    return new RectangularMazeDfsProvider();
+                case RectangularMazeAlgorithm.Prim:
+                    return new RectangularMazePrimProvider();
+                case RectangularMazeAlgorithm.Kruskal:
+                    return new RectangularMazeKruskalProvider();
                 default:
                     break;
             }

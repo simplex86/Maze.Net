@@ -1,14 +1,16 @@
-﻿namespace SimplexLab.Maze
+﻿using System;
+
+namespace SimplexLab.Maze
 {
     /// <summary>
     /// 
     /// </summary>
-    internal interface IRectangleDungeonProvider
+    internal interface IRectangularDungeonProvider
     {
         /// <summary>
         /// 
         /// </summary>
-        RectangleDungeonAlgorithm algorithm { get; }
+        RectangularDungeonAlgorithm algorithm { get; }
 
         /// <summary>
         /// 
