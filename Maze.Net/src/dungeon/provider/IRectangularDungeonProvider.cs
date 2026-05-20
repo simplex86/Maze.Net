@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
@@ -10,7 +11,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 
         /// </summary>
-        RectangularDungeonAlgorithm algorithm { get; }
+        DungeonAlgorithm algorithm { get; }
 
         /// <summary>
         /// 
@@ -25,7 +26,7 @@ namespace SimplexLab.Maze
         /// <param name="mulConnector"></param>
         /// <param name="tortuosity"></param>
         /// <returns></returns>
-        RectangleField Create(int width,
+        RectangularField Create(int width,
                               int height,
                               int minRoomWidth,
                               int maxRoomWidth,
@@ -58,6 +59,49 @@ namespace SimplexLab.Maze
         {
             return Math.Max(x, other.x) < Math.Min(x + w, other.x + other.w) &&
                    Math.Max(y, other.y) < Math.Min(y + h, other.y + other.h);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    internal struct GrotesqueRoom
+    {
+        public int minx = int.MaxValue;
+        public int maxx = int.MinValue;
+        public int miny = int.MaxValue;
+        public int maxy = int.MaxValue;
+
+        public List<Room> rooms = new List<Room>();        
+
+        public GrotesqueRoom()
+        {
+
+        }
+
+        public void Add(Room room)
+        {
+            rooms.Add(room);
+        }
+
+        public bool IsOverlapsWith(GrotesqueRoom other)
+        {
+            foreach (var room in other.rooms)
+            {
+                if (IsOverlapsWith(room)) return true;
+            }
+
+            return false;
+        }
+
+        public bool IsOverlapsWith(Room other)
+        {
+            foreach (var room in rooms)
+            {
+                if (other.IsOverlapsWith(room)) return true;
+            }
+
+            return false;
         }
     }
 

@@ -1,37 +1,38 @@
+﻿using System;
 using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 矩形迷宫生成器
+    /// 圆形迷宫生成器
     /// </summary>
-    public class RectangularMazeGenerator
+    public class CircularMazeGenerator
     {
-        private IRectangularMazeProvider provider = null;
+        private ICircularMazeProvider provider = null;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public RectangularMazeGenerator()
+        public CircularMazeGenerator()
         {
         }
 
         /// <summary>
         /// 创建矩形迷宫
         /// </summary>
-        /// <param name="width">宽度</param>
-        /// <param name="height">高度</param>
+        /// <param name="rings">宽度</param>
+        /// <param name="sectors">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangularField Create(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public CircularField Create(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
         {
             if (provider == null || provider.algorithm != algorithm)
             {
                 provider = CreateProvider(algorithm);
             }
-            
-            var field = provider == null ? new RectangularField(width, height) 
-                                         : provider.Create(width, height);
+
+            var field = provider == null ? new CircularField(rings, sectors)
+                                         : provider.Create(rings, sectors, strategy);
 
             return field;
         }
@@ -39,13 +40,13 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 异步创建矩形迷宫
         /// </summary>
-        /// <param name="width">宽度</param>
-        /// <param name="height">高度</param>
+        /// <param name="rings">宽度</param>
+        /// <param name="sectors">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public async Task<RectangularField> CreateAsync(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public async Task<CircularField> CreateAsync(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
         {
-            return await Task.Run(() => Create(width, height, algorithm));
+            return await Task.Run(() => Create(rings, sectors, algorithm, strategy));
         }
 
         /// <summary>
@@ -53,22 +54,22 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="algorithm">算法类型</param>
         /// <returns>算法提供者</returns>
-        private IRectangularMazeProvider CreateProvider(MazeAlgorithm algorithm)
+        private ICircularMazeProvider CreateProvider(MazeAlgorithm algorithm)
         {
             switch (algorithm)
             {
                 case MazeAlgorithm.DFS:
-                    return new RectangularMazeDfsProvider();
+                    return new CircularMazeDfsProvider();
                 case MazeAlgorithm.Prim:
-                    return new RectangularMazePrimProvider();
+                    return new CircularMazePrimProvider();
                 case MazeAlgorithm.Kruskal:
-                    return new RectangularMazeKruskalProvider();
+                    return new CircularMazeKruskalProvider();
                 case MazeAlgorithm.Wilson:
-                    return new RectangularMazeWilsonProvider();
+                    return new CircularMazeWilsonProvider();
                 case MazeAlgorithm.Eller:
-                    return new RectangularMazeEllerProvider();
+                    return new CircularMazeEllerProvider();
                 case MazeAlgorithm.AldousBroder:
-                    return new RectangularMazeAldousBroderProvider();
+                    return new CircularMazeAldousBroderProvider();
                 default:
                     break;
             }

@@ -22,7 +22,7 @@
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool IsWall(RectangleField field, int x, int y)
+        public static bool IsWall(RectangularField field, int x, int y)
         {
             return field[x, y] == TileType.Wall;
         }
@@ -34,7 +34,7 @@
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool IsBorder(RectangleField field, int x, int y)
+        public static bool IsBorder(RectangularField field, int x, int y)
         {
             return (x <= 0 || x >= field.width - 1 || y <= 0 || y >= field.height - 1);
         }

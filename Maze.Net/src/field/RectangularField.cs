@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 
     /// </summary>
-    public struct RectangleField
+    public struct RectangularField
     {
         /// <summary>
         /// 迷宫场地的数据
@@ -19,10 +19,10 @@ namespace SimplexLab.Maze
         /// </summary>
         public int height { get; private set; } = 9;
 
-        public RectangleField(int w, int h)
+        public RectangularField(int w, int h)
         {
-            width  = Odd(w);
-            height = Odd(h);
+            width  = Utils.Odd(w);
+            height = Utils.Odd(h);
             
             field = new int[width * height];
             for (int i=0; i<field.Length; i++)
@@ -41,16 +41,6 @@ namespace SimplexLab.Maze
         {
             get { return field[y * width + x]; }
             internal set { field[y * width + x] = value; }
-        }
-
-        /// <summary>
-        /// 求奇数
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private int Odd(int value)
-        {
-            return (value / 2) * 2 + 1;
         }
     }
 }

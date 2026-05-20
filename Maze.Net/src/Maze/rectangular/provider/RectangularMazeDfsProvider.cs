@@ -17,7 +17,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 当前算法类型
         /// </summary>
-        public RectangularMazeAlgorithm algorithm { get; } = RectangularMazeAlgorithm.DFS;
+        public MazeAlgorithm algorithm { get; } = MazeAlgorithm.DFS;
 
         /// <summary>
         /// 创建迷宫
@@ -25,12 +25,12 @@ namespace SimplexLab.Maze
         /// <param name="width">迷宫宽度</param>
         /// <param name="height">迷宫高度</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangleField Create(int width, int height)
+        public RectangularField Create(int width, int height)
         {
             width  = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            var field = new RectangleField(width, height);
+            var field = new RectangularField(width, height);
 
             // 随机选择起点（必须是奇数坐标）
             int x = random.Next(1, width  / 2) * 2 + 1;
@@ -90,7 +90,7 @@ namespace SimplexLab.Maze
         /// <param name="x">当前X坐标</param>
         /// <param name="y">当前Y坐标</param>
         /// <returns>未访问邻居列表</returns>
-        private void SearchNeighbours(RectangleField field, int x, int y)
+        private void SearchNeighbours(RectangularField field, int x, int y)
         {
             neighbors.Clear();
 

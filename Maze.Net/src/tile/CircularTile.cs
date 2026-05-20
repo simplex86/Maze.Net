@@ -3,46 +3,28 @@
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 矩形格子
+    /// 极坐标格子
     /// </summary>
-    internal struct RectangularTile : IEquatable<RectangularTile>
+    internal struct CircularTile : IEquatable<CircularTile>
     {
         /// <summary>
-        /// 
+        /// 第几圈（从内到外）
         /// </summary>
-        public int x = 0;
+        public int ring;
         /// <summary>
-        /// 
+        /// 第几个扇形
         /// </summary>
-        public int y = 0;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int d = 0;
+        public int sector;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public RectangularTile(int x, int y)
+        /// <param name="ring"></param>
+        /// <param name="sector"></param>
+        public CircularTile(int ring, int sector)
         {
-            this.x = x;
-            this.y = y;
-            this.d = 0;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="d"></param>
-        public RectangularTile(int x, int y, int d)
-        {
-            this.x = x;
-            this.y = y;
-            this.d = d;
+            this.ring = ring;
+            this.sector = sector;
         }
 
         /// <summary>
@@ -50,9 +32,9 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(RectangularTile other)
+        public bool Equals(CircularTile other)
         {
-            return x == other.x && y == other.y && d == other.d;
+            return ring == other.ring && sector == other.sector;
         }
 
         /// <summary>
@@ -62,7 +44,7 @@ namespace SimplexLab.Maze
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            return obj is RectangularTile other && Equals(other);
+            return obj is CircularTile other && Equals(other);
         }
 
         /// <summary>
@@ -71,7 +53,7 @@ namespace SimplexLab.Maze
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return (x << 16) ^ y;
+            return (ring << 16) ^ sector;
         }
 
         /// <summary>
@@ -80,7 +62,7 @@ namespace SimplexLab.Maze
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(RectangularTile left, RectangularTile right)
+        public static bool operator ==(CircularTile left, CircularTile right)
         {
             return left.Equals(right);
         }
@@ -91,7 +73,7 @@ namespace SimplexLab.Maze
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(RectangularTile left, RectangularTile right)
+        public static bool operator !=(CircularTile left, CircularTile right)
         {
             return !left.Equals(right);
         }

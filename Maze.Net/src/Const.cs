@@ -3,26 +3,38 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 矩形迷宫算法
     /// </summary>
-    public enum RectangularMazeAlgorithm
+    public enum MazeAlgorithm
     {
         /// <summary>
         /// 深度优先
         /// </summary>
-        DFS     = 1,
+        DFS = 1,
         /// <summary>
         /// 
         /// </summary>
-        Prim    = 2,
+        Prim = 2,
         /// <summary>
         /// 
         /// </summary>
         Kruskal = 3,
+        /// <summary>
+        /// 
+        /// </summary>
+        Wilson = 4,
+        /// <summary>
+        /// 
+        /// </summary>
+        Eller = 5,
+        /// <summary>
+        /// 
+        /// </summary>
+        AldousBroder = 6,
     }
 
     /// <summary>
     /// 矩形地牢算法
     /// </summary>
-    public enum RectangularDungeonAlgorithm
+    public enum DungeonAlgorithm
     {
         /// <summary>
         /// 
@@ -35,6 +47,25 @@ namespace SimplexLab.Maze
     }
 
     /// <summary>
+    /// 扇形分割策略
+    /// </summary>
+    public enum SectorStrategy
+    {
+        /// <summary>
+        /// 每圈扇形数相同
+        /// </summary>
+        Each = 1,
+        /// <summary>
+        /// 弧长相同
+        /// </summary>
+        Arc = 2,
+        /// <summary>
+        /// 面积相同
+        /// </summary>
+        Area = 3,
+    }
+
+    /// <summary>
     /// 地块类型
     /// </summary>
     public static class TileType
@@ -42,18 +73,37 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 墙
         /// </summary>
-        public const int Wall  = 0;        
+        public const int Wall  = 0;
         /// <summary>
         /// 通路
         /// </summary>
-        public const int Path  = 1;        
+        public const int Path  = 1;
+    }
+
+    /// <summary>
+    /// 方向
+    /// </summary>
+    internal enum Dir : byte
+    {
         /// <summary>
-        /// 入口
+        /// 无
         /// </summary>
-        public const int Entry = 10 + Path;
+        None = 0,
         /// <summary>
-        /// 出口
+        /// 上
         /// </summary>
-        public const int Exit  = 20 + Path;
+        Up = 1,
+        /// <summary>
+        /// 下
+        /// </summary>
+        Down = 2,
+        /// <summary>
+        /// 左
+        /// </summary>
+        Left = 4,
+        /// <summary>
+        /// 右
+        /// </summary>
+        Right = 8,
     }
 }

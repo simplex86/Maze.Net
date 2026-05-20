@@ -44,13 +44,13 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 
         /// </summary>
-        public RectangularDungeonAlgorithm algorithm { get; } = RectangularDungeonAlgorithm.Nystroms;
+        public DungeonAlgorithm algorithm { get; } = DungeonAlgorithm.Nystroms;
 
         /// <summary>
         /// 创建地牢
         /// </summary>
         /// <returns></returns>
-        public RectangleField Create(int width, 
+        public RectangularField Create(int width, 
                                      int height, 
                                      int minRoomWidth, 
                                      int maxRoomWidth, 
@@ -83,7 +83,7 @@ namespace SimplexLab.Maze
                 }
             }
 
-            var field = new RectangleField(width, height);
+            var field = new RectangularField(width, height);
 
             CreateRooms(field);
             CreateMaze(field);
@@ -97,7 +97,7 @@ namespace SimplexLab.Maze
         /// 创建房间
         /// </summary>
         /// <param name="field"></param>
-        private void CreateRooms(RectangleField field)
+        private void CreateRooms(RectangularField field)
         {
             for (var i = 0; i < maxRoomCount; i++)
             {
@@ -114,18 +114,29 @@ namespace SimplexLab.Maze
         /// <param name="rooms"></param>
         /// <param name="room"></param>
         /// <returns></returns>
-        private void CreateRoom(RectangleField field)
+        private void CreateRoom(RectangularField field)
         {
             var w = Utils.Odd(random.Next(minRoomWidth, maxRoomWidth + 1));
             var h = Utils.Odd(random.Next(minRoomHeight, maxRoomHeight + 1));
             var x = Utils.Odd(random.Next(1, field.width - w));
             var y = Utils.Odd(random.Next(1, field.height - h));
 
-            for (var ry = y; ry < y + h; ry++)
+            var room = new Room(x, y, w, h);
+            CarveRoom(field, room);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="room"></param>
+        private void CarveRoom(RectangularField field, Room room)
+        {
+            for (var y = room.y; y < room.y + room.h; y++)
             {
-                for (var rx = x; rx < x + w; rx++)
+                for (var x = room.x; x < room.x + room.w; x++)
                 {
-                    Carve(field, rx, ry);
+                    Carve(field, x, y);
                 }
             }
         }
@@ -134,7 +145,7 @@ namespace SimplexLab.Maze
         /// 创建空地上迷宫
         /// </summary>
         /// <param name="field"></param>
-        private void CreateMaze(RectangleField field)
+        private void CreateMaze(RectangularField field)
         {
             for (var y = 1; y < field.height; y += 2)
             {
@@ -152,7 +163,7 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void GrowMaze(RectangleField field, int x, int y)
+        private void GrowMaze(RectangularField field, int x, int y)
         {
             var tiles = new List<RectangularTile>();
             var prevdir = new Vector();
@@ -200,7 +211,7 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void Carve(RectangleField field, int x, int y)
+        private void Carve(RectangularField field, int x, int y)
         {
             field[x, y] = TileType.Path;
             regions[x, y] = currentRegion;
@@ -213,7 +224,7 @@ namespace SimplexLab.Maze
         /// <param name="tile"></param>
         /// <param name="dir"></param>
         /// <returns></returns>
-        private bool CanCarve(in RectangleField field, RectangularTile tile, Vector dir)
+        private bool CanCarve(in RectangularField field, RectangularTile tile, Vector dir)
         {
             var a = Find(tile, dir, 3);
             if (a.x < 0 || a.x >= field.width ||
@@ -253,7 +264,7 @@ namespace SimplexLab.Maze
         /// 
         /// </summary>
         /// <param name="field"></param>
-        private void ConnectRegions(RectangleField field)
+        private void ConnectRegions(RectangularField field)
         {
             var connectorRegions = new Dictionary<RectangularTile, HashSet<int>>();
 
@@ -336,7 +347,7 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void AddJunction(RectangleField field, int x, int y)
+        private void AddJunction(RectangularField field, int x, int y)
         {
             field[x, y] = TileType.Path;
         }
@@ -345,7 +356,7 @@ namespace SimplexLab.Maze
         /// 删除死胡同
         /// </summary>
         /// <param name="field"></param>
-        private void RemoveDeadEnds(RectangleField field)
+        private void RemoveDeadEnds(RectangularField field)
         {
             var done = false;
 

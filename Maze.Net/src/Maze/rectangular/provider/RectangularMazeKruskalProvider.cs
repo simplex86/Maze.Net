@@ -37,7 +37,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 当前算法类型
         /// </summary>
-        public RectangularMazeAlgorithm algorithm { get; } = RectangularMazeAlgorithm.Kruskal;
+        public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Kruskal;
 
         /// <summary>
         /// 创建迷宫
@@ -45,12 +45,12 @@ namespace SimplexLab.Maze
         /// <param name="width">迷宫宽度</param>
         /// <param name="height">迷宫高度</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangleField Create(int width, int height)
+        public RectangularField Create(int width, int height)
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            var field = new RectangleField(width, height);
+            var field = new RectangularField(width, height);
 
             var walls = CollectInternalWalls(width, height);
             ShuffleWalls(walls);

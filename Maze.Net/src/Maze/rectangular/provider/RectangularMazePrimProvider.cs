@@ -29,19 +29,19 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 
         /// </summary>
-        public RectangularMazeAlgorithm algorithm { get; } = RectangularMazeAlgorithm.Prim;
+        public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Prim;
 
         /// <summary>
         /// 创建迷宫
         /// </summary>
         /// <returns></returns>
-        public RectangleField Create(int width, int height)
+        public RectangularField Create(int width, int height)
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
             openlist.Clear();
 
-            var field = new RectangleField(width, height);
+            var field = new RectangularField(width, height);
 
             // 随机起点
             var x = random.Next(1, field.width - 1);
@@ -96,7 +96,7 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void SearchNeighbours(RectangleField field, int x, int y)
+        private void SearchNeighbours(RectangularField field, int x, int y)
         {
             // 上
             if (!Utils.IsBorder(field, x, y - 1) && Utils.IsWall(field, x, y - 1)) openlist.Add(new RectangularTile(x, y - 1, (int)Dir.Up));
