@@ -16,6 +16,6 @@
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        RectangularField Create(int width, int height);
+        RectangularMazeField Create(int width, int height);
     }
 }

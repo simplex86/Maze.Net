@@ -23,7 +23,7 @@ namespace SimplexLab.Maze
         /// <param name="tortuosity"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        public RectangularField Create(int width, 
+        public RectangularDungeonField Create(int width, 
                                      int height, 
                                      int minRoomWidth, 
                                      int maxRoomWidth, 
@@ -39,7 +39,7 @@ namespace SimplexLab.Maze
                 provider = CreateProvider(algorithm);
             }
 
-            return provider == null ? new RectangularField()
+            return provider == null ? new RectangularDungeonField()
                                     : provider.Create(width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, maxRoomCount, mulConnector, tortuosity);
         }
 
@@ -57,7 +57,7 @@ namespace SimplexLab.Maze
         /// <param name="tortuosity"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        public async Task<RectangularField> CreateAsync(int width, 
+        public async Task<RectangularDungeonField> CreateAsync(int width, 
                                                       int height, 
                                                       int minRoomWidth, 
                                                       int maxRoomWidth, 

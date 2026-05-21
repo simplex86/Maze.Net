@@ -25,12 +25,12 @@ namespace SimplexLab.Maze
         /// <param name="width">迷宫宽度</param>
         /// <param name="height">迷宫高度</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangularField Create(int width, int height)
+        public RectangularMazeField Create(int width, int height)
         {
             width  = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            var field = new RectangularField(width, height);
+            var field = new RectangularMazeField(width, height);
 
             // 随机选择起点（必须是奇数坐标）
             int x = random.Next(1, width  / 2) * 2 + 1;
@@ -38,15 +38,15 @@ namespace SimplexLab.Maze
             field[x, y] = TileType.Path;
 
             // 使用栈实现深度优先搜索
-            var stack = new Stack<RectangularTile>();
-            stack.Push(new RectangularTile(x, y));
+            var stack = new Stack<Tile>();
+            stack.Push(new Tile(x, y));
 
             while (stack.Count > 0)
             {
                 // 获取当前位置
                 var current = stack.Peek();
-                int cx = current.x;
-                int cy = current.y;
+                int cx = current.lateral;
+                int cy = current.radial;
 
                 // 获取未访问的邻居列表
                 SearchNeighbours(field, cx, cy);
@@ -56,8 +56,8 @@ namespace SimplexLab.Maze
                     // 随机选择一个邻居
                     int idx = random.Next(neighbors.Count);
                     var neighbor = neighbors[idx];
-                    int nx = neighbor.x;
-                    int ny = neighbor.y;
+                    int nx = neighbor.lateral;
+                    int ny = neighbor.radial;
 
                     // 打通中间的墙（偶数坐标位置）
                     int wx = (cx + nx) / 2;
@@ -68,7 +68,7 @@ namespace SimplexLab.Maze
                     field[nx, ny] = TileType.Path;
 
                     // 压入栈继续探索
-                    stack.Push(new RectangularTile(nx, ny));
+                    stack.Push(new Tile(nx, ny));
                 }
                 else
                 {
@@ -80,7 +80,7 @@ namespace SimplexLab.Maze
             return field;
         }
 
-        private List<RectangularTile> neighbors = new List<RectangularTile>();
+        private List<Tile> neighbors = new List<Tile>();
 
         /// <summary>
         /// 获取指定位置的未访问邻居
@@ -90,18 +90,18 @@ namespace SimplexLab.Maze
         /// <param name="x">当前X坐标</param>
         /// <param name="y">当前Y坐标</param>
         /// <returns>未访问邻居列表</returns>
-        private void SearchNeighbours(RectangularField field, int x, int y)
+        private void SearchNeighbours(RectangularMazeField field, int x, int y)
         {
             neighbors.Clear();
 
             // 上（隔一格）
-            if (!Utils.IsBorder(field, x, y - 2) && Utils.IsWall(field, x, y - 2)) neighbors.Add(new RectangularTile(x, y - 2));
+            if (!Utils.IsBorder(field, x, y - 2) && Utils.IsWall(field, x, y - 2)) neighbors.Add(new Tile(x, y - 2));
             // 下（隔一格）
-            if (!Utils.IsBorder(field, x, y + 2) && Utils.IsWall(field, x, y + 2)) neighbors.Add(new RectangularTile(x, y + 2));
+            if (!Utils.IsBorder(field, x, y + 2) && Utils.IsWall(field, x, y + 2)) neighbors.Add(new Tile(x, y + 2));
             // 左（隔一格）
-            if (!Utils.IsBorder(field, x - 2, y) && Utils.IsWall(field, x - 2, y)) neighbors.Add(new RectangularTile(x - 2, y));
+            if (!Utils.IsBorder(field, x - 2, y) && Utils.IsWall(field, x - 2, y)) neighbors.Add(new Tile(x - 2, y));
             // 右（隔一格）
-            if (!Utils.IsBorder(field, x + 2, y) && Utils.IsWall(field, x + 2, y)) neighbors.Add(new RectangularTile(x + 2, y));
+            if (!Utils.IsBorder(field, x + 2, y) && Utils.IsWall(field, x + 2, y)) neighbors.Add(new Tile(x + 2, y));
         }
     }
 }

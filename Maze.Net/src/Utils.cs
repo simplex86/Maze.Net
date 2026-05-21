@@ -25,7 +25,7 @@ namespace SimplexLab.Maze
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool IsWall(RectangularField field, int x, int y)
+        public static bool IsWall(RectangularMazeField field, int x, int y)
         {
             return field[x, y] == TileType.Wall;
         }
@@ -37,7 +37,31 @@ namespace SimplexLab.Maze
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool IsBorder(RectangularField field, int x, int y)
+        public static bool IsBorder(RectangularMazeField field, int x, int y)
+        {
+            return (x <= 0 || x >= field.width - 1 || y <= 0 || y >= field.height - 1);
+        }
+
+        /// <summary>
+        /// 是否为墙
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static bool IsWall(RectangularDungeonField field, int x, int y)
+        {
+            return field[x, y] == TileType.Wall;
+        }
+
+        /// <summary>
+        /// 是否为迷宫的边界
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static bool IsBorder(RectangularDungeonField field, int x, int y)
         {
             return (x <= 0 || x >= field.width - 1 || y <= 0 || y >= field.height - 1);
         }

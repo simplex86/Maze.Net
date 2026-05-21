@@ -16,7 +16,7 @@
         /// <param name="rings"></param>
         /// <param name="sectors"></param>
         /// <returns></returns>
-        CircularField Create(int rings, int sectors);
+        CircularMazeField Create(int rings, int sectors);
 
         /// <summary>
         /// 
@@ -25,6 +25,6 @@
         /// <param name="sectors"></param>
         /// <param name="strategy"></param>
         /// <returns></returns>
-        CircularField Create(int rings, int sectors, SectorStrategy strategy);
+        CircularMazeField Create(int rings, int sectors, SectorStrategy strategy);
     }
 }

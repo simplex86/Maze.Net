@@ -7,7 +7,7 @@ namespace SimplexLab.Maze
     /// 使用极坐标系统：ring（圈数）和 sector（扇形数）
     /// 存储相邻格子之间的墙的状态
     /// </summary>
-    public struct CircularField
+    public struct CircularMazeField
     {
         /// <summary>
         /// 内圈墙（径向墙的内半径）- 分隔相邻圈的圆弧墙
@@ -44,7 +44,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 初始化圆形迷宫场地
         /// </summary>
-        public CircularField(int rings, int sectors)
+        public CircularMazeField(int rings, int sectors)
             : this(rings, sectors, SectorStrategy.Arc)
         {
 
@@ -55,7 +55,7 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="rings">圈数</param>
         /// <param name="maxSectors">最大扇形数（最外圈）</param>
-        public CircularField(int rings, int maxSectors, SectorStrategy strategy)
+        public CircularMazeField(int rings, int maxSectors, SectorStrategy strategy)
         {
             // 确保最小尺寸
             this.rings = Math.Max(1, rings);

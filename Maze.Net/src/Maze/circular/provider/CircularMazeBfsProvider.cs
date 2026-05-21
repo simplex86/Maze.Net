@@ -40,7 +40,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 创建迷宫（向后兼容）
         /// </summary>
-        public CircularField Create(int rings, int sectors)
+        public CircularMazeField Create(int rings, int sectors)
         {
             return Create(rings, sectors, SectorStrategy.Each);
         }
@@ -52,9 +52,9 @@ namespace SimplexLab.Maze
         /// <param name="sectors">扇形数</param>
         /// <param name="strategy">策略类型</param>
         /// <returns>生成的迷宫场地</returns>
-        public CircularField Create(int rings, int sectors, SectorStrategy strategy)
+        public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)
         {
-            var field = new CircularField(rings, sectors, strategy);
+            var field = new CircularMazeField(rings, sectors, strategy);
 
             // 初始化visited数组
             var visited = new bool[field.rings][];
@@ -69,8 +69,8 @@ namespace SimplexLab.Maze
             visited[startRing][startSector] = true;
 
             // 使用队列实现广度优先搜索
-            var currentLevel = new Queue<CircularTile>();
-            currentLevel.Enqueue(new CircularTile(startRing, startSector));
+            var currentLevel = new Queue<Tile>();
+            currentLevel.Enqueue(new Tile(startRing, startSector));
 
             while (currentLevel.Count > 0)
             {
@@ -79,7 +79,7 @@ namespace SimplexLab.Maze
 
                 foreach (var tile in currentLevel)
                 {
-                    var neighbors = GetUnvisitedNeighbors(field, visited, tile.ring, tile.sector);
+                    var neighbors = GetUnvisitedNeighbors(field, visited, tile.lateral, tile.radial);
                     nextLevel.AddRange(neighbors);
                 }
 
@@ -87,7 +87,7 @@ namespace SimplexLab.Maze
                 Shuffle(nextLevel);
 
                 // 处理下一层
-                var newCurrentLevel = new Queue<CircularTile>();
+                var newCurrentLevel = new Queue<Tile>();
                 foreach (var neighbor in nextLevel)
                 {
                     if (!visited[neighbor.ring][neighbor.sector])
@@ -99,7 +99,7 @@ namespace SimplexLab.Maze
                         visited[neighbor.ring][neighbor.sector] = true;
 
                         // 加入新的当前层
-                        newCurrentLevel.Enqueue(new CircularTile(neighbor.ring, neighbor.sector));
+                        newCurrentLevel.Enqueue(new Tile(neighbor.ring, neighbor.sector));
                     }
                 }
 
@@ -113,7 +113,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 获取未访问的邻居列表
         /// </summary>
-        private List<NeighborInfo> GetUnvisitedNeighbors(CircularField field, bool[][] visited, int ring, int sector)
+        private List<NeighborInfo> GetUnvisitedNeighbors(CircularMazeField field, bool[][] visited, int ring, int sector)
         {
             var neighbors = new List<NeighborInfo>();
 
@@ -161,7 +161,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 移除两个相邻格子之间的墙
         /// </summary>
-        private void RemoveWall(CircularField field, int ring1, int sector1, int ring2, int sector2)
+        private void RemoveWall(CircularMazeField field, int ring1, int sector1, int ring2, int sector2)
         {
             // 检查两个格子是否在同一圈
             if (ring1 == ring2)

@@ -50,7 +50,7 @@ namespace SimplexLab.Maze
         /// 创建地牢
         /// </summary>
         /// <returns></returns>
-        public RectangularField Create(int width, 
+        public RectangularDungeonField Create(int width, 
                                      int height, 
                                      int minRoomWidth, 
                                      int maxRoomWidth, 
@@ -83,7 +83,7 @@ namespace SimplexLab.Maze
                 }
             }
 
-            var field = new RectangularField(width, height);
+            var field = new RectangularDungeonField(width, height);
 
             CreateRooms(field);
             CreateMaze(field);
@@ -97,7 +97,7 @@ namespace SimplexLab.Maze
         /// 创建房间
         /// </summary>
         /// <param name="field"></param>
-        private void CreateRooms(RectangularField field)
+        private void CreateRooms(RectangularDungeonField field)
         {
             var rooms = new List<Room>();
 
@@ -118,7 +118,7 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="field"></param>
         /// <param name="room"></param>
-        private void CarveRoom(RectangularField field, Room room)
+        private void CarveRoom(RectangularDungeonField field, Room room)
         {
             for (var y = room.y; y < room.y + room.h; y++)
             {
@@ -173,7 +173,7 @@ namespace SimplexLab.Maze
         /// 创建空地上迷宫
         /// </summary>
         /// <param name="field"></param>
-        private void CreateMaze(RectangularField field)
+        private void CreateMaze(RectangularDungeonField field)
         {
             for (var y = 1; y < field.height; y += 2)
             {
@@ -191,15 +191,15 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void GrowMaze(RectangularField field, int x, int y)
+        private void GrowMaze(RectangularDungeonField field, int x, int y)
         {
-            var tiles = new List<RectangularTile>();
+            var tiles = new List<Tile>();
             var prevdir = new Vector();
 
             StartRegion();
             Carve(field, x, y);
 
-            tiles.Add(new RectangularTile(x, y));
+            tiles.Add(new Tile(x, y));
 
             while (tiles.Count > 0)
             {
@@ -218,9 +218,9 @@ namespace SimplexLab.Maze
                                                                               : uncarves[random.Next(0, uncarves.Count)];
 
                     var a = Find(tile, dir, 1);
-                    Carve(field, a.x, a.y);
+                    Carve(field, a.lateral, a.radial);
                     var b = Find(tile, dir, 2);
-                    Carve(field, b.x, b.y);
+                    Carve(field, b.lateral, b.radial);
 
                     tiles.Add(b);
                     prevdir = dir;
@@ -239,7 +239,7 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void Carve(RectangularField field, int x, int y)
+        private void Carve(RectangularDungeonField field, int x, int y)
         {
             field[x, y] = TileType.Path;
             regions[x, y] = currentRegion;
@@ -252,17 +252,17 @@ namespace SimplexLab.Maze
         /// <param name="tile"></param>
         /// <param name="dir"></param>
         /// <returns></returns>
-        private bool CanCarve(in RectangularField field, RectangularTile tile, Vector dir)
+        private bool CanCarve(in RectangularDungeonField field, Tile tile, Vector dir)
         {
             var a = Find(tile, dir, 3);
-            if (a.x < 0 || a.x >= field.width ||
-                a.y < 0 || a.y >= field.height)
+            if (a.lateral < 0 || a.lateral >= field.width ||
+                a.radial < 0 || a.radial >= field.height)
             {
                 return false;
             }
 
             var b = Find(tile, dir, 2);
-            return Utils.IsWall(field, b.x, b.y);
+            return Utils.IsWall(field, b.lateral, b.radial);
         }
 
         /// <summary>
@@ -280,27 +280,27 @@ namespace SimplexLab.Maze
         /// <param name="dir"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private RectangularTile Find(RectangularTile tile, Vector dir, int length)
+        private Tile Find(Tile tile, Vector dir, int length)
         {
-            var x = tile.x + dir.x * length;
-            var y = tile.y + dir.y * length;
+            var x = tile.lateral + dir.x * length;
+            var y = tile.radial + dir.y * length;
 
-            return new RectangularTile(x, y);
+            return new Tile(x, y);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="field"></param>
-        private void ConnectRegions(RectangularField field)
+        private void ConnectRegions(RectangularDungeonField field)
         {
-            var connectorRegions = new Dictionary<RectangularTile, HashSet<int>>();
+            var connectorRegions = new Dictionary<Tile, HashSet<int>>();
 
             for (var y = 1; y < field.height - 1; y++)
             {
                 for (var x = 1; x < field.width - 1; x++)
                 {
-                    var pos = new RectangularTile(x, y);
+                    var pos = new Tile(x, y);
                     if (!Utils.IsWall(field, x, y)) continue;
 
                     var sets = new HashSet<int>();
@@ -332,7 +332,7 @@ namespace SimplexLab.Maze
             while (opened.Count > 1)
             {
                 var connector = connectors[random.Next(0, connectors.Count)];
-                AddJunction(field, connector.x, connector.y);
+                AddJunction(field, connector.lateral, connector.radial);
 
                 var list = connectorRegions[connector].Select((region) => merged[region]);
                 var dest = list.First();
@@ -359,7 +359,7 @@ namespace SimplexLab.Maze
 
                     if (random.Next(0, 1000) < mulConnector) // 偶尔连接一下，避免地牢成为单一连通结构
                     {
-                        AddJunction(field, pos.x, pos.y);
+                        AddJunction(field, pos.lateral, pos.radial);
                     }
 
                     return true;
@@ -373,7 +373,7 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void AddJunction(RectangularField field, int x, int y)
+        private void AddJunction(RectangularDungeonField field, int x, int y)
         {
             field[x, y] = TileType.Path;
         }
@@ -382,7 +382,7 @@ namespace SimplexLab.Maze
         /// 删除死胡同
         /// </summary>
         /// <param name="field"></param>
-        private void RemoveDeadEnds(RectangularField field)
+        private void RemoveDeadEnds(RectangularDungeonField field)
         {
             var done = false;
 
@@ -394,20 +394,20 @@ namespace SimplexLab.Maze
                 {
                     for (var x = 1; x <field.width-1; x++)
                     {
-                        RectangularTile pos = new RectangularTile(x, y);
+                        Tile pos = new Tile(x, y);
                         if (Utils.IsWall(field, x, y)) continue;
 
                         var exits = 0;
                         foreach (var dir in CARDINAL_DIR)
                         {
                             var t = Find(pos, dir, 1);
-                            if (!Utils.IsWall(field, t.x, t.y)) exits++;
+                            if (!Utils.IsWall(field, t.lateral, t.radial)) exits++;
                         }
 
                         if (exits != 1) continue;
 
                         done = false;
-                        field[pos.x, pos.y] = TileType.Wall;
+                        field[pos.lateral, pos.radial] = TileType.Wall;
                         regions[x, y] = -1;
                     }
                 }

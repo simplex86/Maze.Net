@@ -22,7 +22,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 创建迷宫
         /// </summary>
-        public CircularField Create(int rings, int sectors)
+        public CircularMazeField Create(int rings, int sectors)
         {
             return Create(rings, sectors, SectorStrategy.Each);
         }
@@ -33,9 +33,9 @@ namespace SimplexLab.Maze
         /// <param name="rings">圈数</param>
         /// <param name="sectors">最大扇形数（最外圈）</param>
         /// <param name="strategy">扇形分割策略（可选）</param>
-        public CircularField Create(int rings, int sectors, SectorStrategy strategy)
+        public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)
         {
-            var field = new CircularField(rings, sectors, strategy);
+            var field = new CircularMazeField(rings, sectors, strategy);
 
             // 计算总格子数
             var totalCells = 0;
@@ -58,19 +58,19 @@ namespace SimplexLab.Maze
             var visitedCount = 1;
 
             // Aldous-Broder算法主循环
-            CircularTile currentTile = new CircularTile(currentRing, currentSector);
+            var currentTile = new Tile(currentRing, currentSector);
             while (visitedCount < totalCells)
             {
                 // 获取随机邻居
-                var neighbors = GetNeighbors(field, currentTile.ring, currentTile.sector);
+                var neighbors = GetNeighbors(field, currentTile.lateral, currentTile.radial);
                 var idx = random.Next(neighbors.Count);
-                CircularTile next = neighbors[idx];
+                var next = neighbors[idx];
 
                 // 如果邻居未访问，则打通墙并标记为已访问
-                if (!visited[next.ring][next.sector])
+                if (!visited[next.lateral][next.radial])
                 {
                     RemoveWall(field, currentTile, next);
-                    visited[next.ring][next.sector] = true;
+                    visited[next.lateral][next.radial] = true;
                     visitedCount++;
                 }
 
@@ -84,32 +84,32 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 获取指定格子的所有邻居
         /// </summary>
-        private List<CircularTile> GetNeighbors(CircularField field, int ring, int sector)
+        private List<Tile> GetNeighbors(CircularMazeField field, int ring, int sector)
         {
-            var neighbors = new List<CircularTile>();
+            var neighbors = new List<Tile>();
 
             // 内圈邻居
             if (ring > 0)
             {
                 var innerSector = field.MapSector(ring, sector, ring - 1);
-                neighbors.Add(new CircularTile(ring - 1, innerSector));
+                neighbors.Add(new Tile(ring - 1, innerSector));
             }
 
             // 外圈邻居
             if (ring < field.rings - 1)
             {
                 var outerSector = field.MapSector(ring, sector, ring + 1);
-                neighbors.Add(new CircularTile(ring + 1, outerSector));
+                neighbors.Add(new Tile(ring + 1, outerSector));
             }
 
             // 逆时针邻居
             var sectorsInRing = field.GetSectorsInRing(ring);
             var prevSector = (sector - 1 + sectorsInRing) % sectorsInRing;
-            neighbors.Add(new CircularTile(ring, prevSector));
+            neighbors.Add(new Tile(ring, prevSector));
 
             // 顺时针邻居
             var nextSector = (sector + 1) % sectorsInRing;
-            neighbors.Add(new CircularTile(ring, nextSector));
+            neighbors.Add(new Tile(ring, nextSector));
 
             return neighbors;
         }
@@ -117,15 +117,15 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 移除两个相邻格子之间的墙
         /// </summary>
-        private void RemoveWall(CircularField field, CircularTile tile1, CircularTile tile2)
+        private void RemoveWall(CircularMazeField field, Tile tile1, Tile tile2)
         {
-            if (tile1.ring == tile2.ring)
+            if (tile1.lateral == tile2.lateral)
             {
                 // 同圈：移除径向墙
-                var r = tile1.ring;
+                var r = tile1.lateral;
                 var sectorsInRing = field.GetSectorsInRing(r);
-                var s1 = Math.Min(tile1.sector, tile2.sector);
-                var s2 = Math.Max(tile1.sector, tile2.sector);
+                var s1 = Math.Min(tile1.radial, tile2.radial);
+                var s2 = Math.Max(tile1.radial, tile2.radial);
                 if (s2 - s1 == 1 || (s1 == 0 && s2 == sectorsInRing - 1))
                 {
                     if (s2 == sectorsInRing - 1 && s1 == 0)
@@ -141,8 +141,8 @@ namespace SimplexLab.Maze
             else
             {
                 // 不同圈：移除内圈墙
-                var innerRing = Math.Min(tile1.ring, tile2.ring);
-                var innerSector = tile1.ring == innerRing ? tile1.sector : tile2.sector;
+                var innerRing = Math.Min(tile1.lateral, tile2.lateral);
+                var innerSector = tile1.lateral == innerRing ? tile1.radial : tile2.radial;
                 field.SetInnerWall(innerRing, innerSector, false);
             }
         }

@@ -43,12 +43,12 @@ namespace SimplexLab.Maze
         /// <param name="width">迷宫宽度</param>
         /// <param name="height">迷宫高度</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangularField Create(int width, int height)
+        public RectangularMazeField Create(int width, int height)
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            var field = new RectangularField(width, height);
+            var field = new RectangularMazeField(width, height);
 
             // 随机选择起点（必须是奇数坐标）
             int x = random.Next(1, width / 2) * 2 + 1;
@@ -56,8 +56,8 @@ namespace SimplexLab.Maze
             field[x, y] = TileType.Path;
 
             // 使用队列实现广度优先搜索
-            var currentLevel = new Queue<RectangularTile>();
-            currentLevel.Enqueue(new RectangularTile(x, y));
+            var currentLevel = new Queue<Tile>();
+            currentLevel.Enqueue(new Tile(x, y));
 
             var visited = new bool[width, height];
             visited[x, y] = true;
@@ -69,7 +69,7 @@ namespace SimplexLab.Maze
 
                 foreach (var tile in currentLevel)
                 {
-                    var neighbors = GetUnvisitedNeighbors(field, visited, tile.x, tile.y);
+                    var neighbors = GetUnvisitedNeighbors(field, visited, tile.lateral, tile.radial);
                     nextLevel.AddRange(neighbors);
                 }
 
@@ -77,7 +77,7 @@ namespace SimplexLab.Maze
                 Shuffle(nextLevel);
 
                 // 处理下一层
-                var newCurrentLevel = new Queue<RectangularTile>();
+                var newCurrentLevel = new Queue<Tile>();
                 foreach (var neighbor in nextLevel)
                 {
                     if (!visited[neighbor.x, neighbor.y])
@@ -92,7 +92,7 @@ namespace SimplexLab.Maze
                         visited[neighbor.x, neighbor.y] = true;
 
                         // 加入新的当前层
-                        newCurrentLevel.Enqueue(new RectangularTile(neighbor.x, neighbor.y));
+                        newCurrentLevel.Enqueue(new Tile(neighbor.x, neighbor.y));
                     }
                 }
 
@@ -106,7 +106,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 获取未访问的邻居列表
         /// </summary>
-        private List<NeighborInfo> GetUnvisitedNeighbors(RectangularField field, bool[,] visited, int x, int y)
+        private List<NeighborInfo> GetUnvisitedNeighbors(RectangularMazeField field, bool[,] visited, int x, int y)
         {
             var neighbors = new List<NeighborInfo>();
 

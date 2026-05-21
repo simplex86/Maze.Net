@@ -1,30 +1,47 @@
-using System;
+﻿using System;
 
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 极坐标格子
+    /// 格子
     /// </summary>
-    public struct CircularTile : IEquatable<CircularTile>
+    public struct Tile : IEquatable<Tile>
     {
         /// <summary>
-        /// 第几圈（从内到外）
+        /// 
         /// </summary>
-        public int ring;
+        public int lateral = 0;
         /// <summary>
-        /// 第几个扇形
+        /// 
         /// </summary>
-        public int sector;
+        public int radial = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal int dir = 0;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ring"></param>
-        /// <param name="sector"></param>
-        public CircularTile(int ring, int sector)
+        /// <param name="lateral"></param>
+        /// <param name="radial"></param>
+        public Tile(int lateral, int radial)
+            : this(lateral, radial, 0)
         {
-            this.ring = ring;
-            this.sector = sector;
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="d"></param>
+        public Tile(int lateral, int radial, int dir)
+        {
+            this.lateral = lateral;
+            this.radial = radial;
+            this.dir = dir;
         }
 
         /// <summary>
@@ -32,9 +49,11 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(CircularTile other)
+        public bool Equals(Tile other)
         {
-            return ring == other.ring && sector == other.sector;
+            return lateral == other.lateral && 
+                   radial  == other.radial  && 
+                   dir     == other.dir;
         }
 
         /// <summary>
@@ -44,7 +63,7 @@ namespace SimplexLab.Maze
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            return obj is CircularTile other && Equals(other);
+            return obj is Tile other && Equals(other);
         }
 
         /// <summary>
@@ -53,7 +72,7 @@ namespace SimplexLab.Maze
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return (ring << 16) ^ sector;
+            return (lateral << 16) ^ radial;
         }
 
         /// <summary>
@@ -62,7 +81,7 @@ namespace SimplexLab.Maze
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(CircularTile left, CircularTile right)
+        public static bool operator ==(Tile left, Tile right)
         {
             return left.Equals(right);
         }
@@ -73,7 +92,7 @@ namespace SimplexLab.Maze
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(CircularTile left, CircularTile right)
+        public static bool operator !=(Tile left, Tile right)
         {
             return !left.Equals(right);
         }

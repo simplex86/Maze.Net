@@ -26,7 +26,7 @@ namespace SimplexLab.Maze
         /// <param name="mulConnector"></param>
         /// <param name="tortuosity"></param>
         /// <returns></returns>
-        RectangularField Create(int width,
+        RectangularDungeonField Create(int width,
                               int height,
                               int minRoomWidth,
                               int maxRoomWidth,

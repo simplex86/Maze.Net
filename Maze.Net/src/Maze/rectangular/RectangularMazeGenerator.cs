@@ -23,14 +23,14 @@ namespace SimplexLab.Maze
         /// <param name="height">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangularField Create(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public RectangularMazeField Create(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
         {
             if (provider == null || provider.algorithm != algorithm)
             {
                 provider = CreateProvider(algorithm);
             }
             
-            var field = provider == null ? new RectangularField(width, height) 
+            var field = provider == null ? new RectangularMazeField(width, height) 
                                          : provider.Create(width, height);
 
             return field;
@@ -43,7 +43,7 @@ namespace SimplexLab.Maze
         /// <param name="height">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public async Task<RectangularField> CreateAsync(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public async Task<RectangularMazeField> CreateAsync(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
         {
             return await Task.Run(() => Create(width, height, algorithm));
         }

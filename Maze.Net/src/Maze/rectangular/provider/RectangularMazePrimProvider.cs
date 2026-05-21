@@ -12,7 +12,7 @@ namespace SimplexLab.Maze
         // 随机数
         private Random random = new Random();
         // 开链表
-        private List<RectangularTile> openlist = new List<RectangularTile>();
+        private List<Tile> openlist = new List<Tile>();
 
         /// <summary>
         /// 
@@ -23,13 +23,13 @@ namespace SimplexLab.Maze
         /// 创建迷宫
         /// </summary>
         /// <returns></returns>
-        public RectangularField Create(int width, int height)
+        public RectangularMazeField Create(int width, int height)
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
             openlist.Clear();
 
-            var field = new RectangularField(width, height);
+            var field = new RectangularMazeField(width, height);
 
             // 随机起点
             var x = random.Next(1, field.width - 1);
@@ -44,10 +44,10 @@ namespace SimplexLab.Maze
                 var idx = random.Next(0, openlist.Count);
                 var cur = openlist[idx];
 
-                x = cur.x;
-                y = cur.y;
+                x = cur.lateral;
+                y = cur.radial;
 
-                switch (cur.d)
+                switch (cur.dir)
                 {
                     case (int)Dir.Up:
                         y = y - 1;
@@ -65,7 +65,7 @@ namespace SimplexLab.Maze
 
                 if (Utils.IsWall(field, x, y))
                 {
-                    field[cur.x, cur.y] = TileType.Path;
+                    field[cur.lateral, cur.radial] = TileType.Path;
                     if (!Utils.IsBorder(field, x, y))
                     {
                         field[x, y] = TileType.Path;
@@ -84,16 +84,16 @@ namespace SimplexLab.Maze
         /// <param name="field"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void SearchNeighbours(RectangularField field, int x, int y)
+        private void SearchNeighbours(RectangularMazeField field, int x, int y)
         {
             // 上
-            if (!Utils.IsBorder(field, x, y - 1) && Utils.IsWall(field, x, y - 1)) openlist.Add(new RectangularTile(x, y - 1, (int)Dir.Up));
+            if (!Utils.IsBorder(field, x, y - 1) && Utils.IsWall(field, x, y - 1)) openlist.Add(new Tile(x, y - 1, (int)Dir.Up));
             // 下
-            if (!Utils.IsBorder(field, x, y + 1) && Utils.IsWall(field, x, y + 1)) openlist.Add(new RectangularTile(x, y + 1, (int)Dir.Down));
+            if (!Utils.IsBorder(field, x, y + 1) && Utils.IsWall(field, x, y + 1)) openlist.Add(new Tile(x, y + 1, (int)Dir.Down));
             // 左
-            if (!Utils.IsBorder(field, x - 1, y) && Utils.IsWall(field, x - 1, y)) openlist.Add(new RectangularTile(x - 1, y, (int)Dir.Left));
+            if (!Utils.IsBorder(field, x - 1, y) && Utils.IsWall(field, x - 1, y)) openlist.Add(new Tile(x - 1, y, (int)Dir.Left));
             // 右
-            if (!Utils.IsBorder(field, x + 1, y) && Utils.IsWall(field, x + 1, y)) openlist.Add(new RectangularTile(x + 1, y, (int)Dir.Right));
+            if (!Utils.IsBorder(field, x + 1, y) && Utils.IsWall(field, x + 1, y)) openlist.Add(new Tile(x + 1, y, (int)Dir.Right));
         }
     }
 }

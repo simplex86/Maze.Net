@@ -13,12 +13,12 @@ namespace SimplexLab.Maze
         private Random random = new Random();
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Eller;
 
-        public RectangularField Create(int width, int height)
+        public RectangularMazeField Create(int width, int height)
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            var field = new RectangularField(width, height);
+            var field = new RectangularMazeField(width, height);
             int cols = width / 2;
             int rows = height / 2;
 

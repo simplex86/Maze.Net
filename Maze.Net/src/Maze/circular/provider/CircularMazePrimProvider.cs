@@ -22,7 +22,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 创建迷宫
         /// </summary>
-        public CircularField Create(int rings, int sectors)
+        public CircularMazeField Create(int rings, int sectors)
         {
             return Create(rings, sectors, SectorStrategy.Each);
         }
@@ -33,9 +33,9 @@ namespace SimplexLab.Maze
         /// <param name="rings">圈数</param>
         /// <param name="sectors">最大扇形数（最外圈）</param>
         /// <param name="strategy">扇形分割策略（可选）</param>
-        public CircularField Create(int rings, int sectors, SectorStrategy strategy)
+        public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)
         {
-            var field = new CircularField(rings, sectors, strategy);
+            var field = new CircularMazeField(rings, sectors, strategy);
             var visited = new bool[field.rings][];
             
             for (var r = 0; r < field.rings; r++)
@@ -49,7 +49,7 @@ namespace SimplexLab.Maze
             visited[startRing][startSector] = true;
 
             // 存储边缘（与已访问区域相邻的墙）
-            var edges = new List<Tuple<CircularTile, CircularTile>>();
+            var edges = new List<Tuple<Tile, Tile>>();
             AddEdges(field, visited, edges, startRing, startSector);
 
             while (edges.Count > 0)
@@ -63,16 +63,16 @@ namespace SimplexLab.Maze
                 var tile2 = edge.Item2;
 
                 // 如果另一边未访问，则打通
-                if (!visited[tile2.ring][tile2.sector])
+                if (!visited[tile2.lateral][tile2.radial])
                 {
                     // 移除墙
-                    RemoveWall(field, tile1.ring, tile1.sector, tile2.ring, tile2.sector);
+                    RemoveWall(field, tile1.lateral, tile1.radial, tile2.lateral, tile2.radial);
                     
                     // 标记为已访问
-                    visited[tile2.ring][tile2.sector] = true;
+                    visited[tile2.lateral][tile2.radial] = true;
                     
                     // 添加新格子的边缘
-                    AddEdges(field, visited, edges, tile2.ring, tile2.sector);
+                    AddEdges(field, visited, edges, tile2.lateral, tile2.radial);
                 }
             }
 
@@ -82,7 +82,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 添加指定格子的边缘
         /// </summary>
-        private void AddEdges(CircularField field, bool[][] visited, List<Tuple<CircularTile, CircularTile>> edges, int ring, int sector)
+        private void AddEdges(CircularMazeField field, bool[][] visited, List<Tuple<Tile, Tile>> edges, int ring, int sector)
         {
             // 内圈邻居
             if (ring > 0)
@@ -91,7 +91,7 @@ namespace SimplexLab.Maze
                 var innerSector = field.MapSector(ring, sector, innerRing);
                 if (!visited[innerRing][innerSector])
                 {
-                    edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(innerRing, innerSector)));
+                    edges.Add(Tuple.Create(new Tile(ring, sector), new Tile(innerRing, innerSector)));
                 }
             }
 
@@ -102,7 +102,7 @@ namespace SimplexLab.Maze
                 var outerSector = field.MapSector(ring, sector, outerRing);
                 if (!visited[outerRing][outerSector])
                 {
-                    edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(outerRing, outerSector)));
+                    edges.Add(Tuple.Create(new Tile(ring, sector), new Tile(outerRing, outerSector)));
                 }
             }
 
@@ -110,21 +110,21 @@ namespace SimplexLab.Maze
             var leftSector = field.GetPrevSector(ring, sector);
             if (!visited[ring][leftSector])
             {
-                edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(ring, leftSector)));
+                edges.Add(Tuple.Create(new Tile(ring, sector), new Tile(ring, leftSector)));
             }
 
             // 右邻居（顺时针）
             var rightSector = field.GetNextSector(ring, sector);
             if (!visited[ring][rightSector])
             {
-                edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(ring, rightSector)));
+                edges.Add(Tuple.Create(new Tile(ring, sector), new Tile(ring, rightSector)));
             }
         }
 
         /// <summary>
         /// 移除相邻格子之间的墙
         /// </summary>
-        private void RemoveWall(CircularField field, int r1, int s1, int r2, int s2)
+        private void RemoveWall(CircularMazeField field, int r1, int s1, int r2, int s2)
         {
             if (r1 == r2)
             {

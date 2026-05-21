@@ -24,14 +24,14 @@ namespace SimplexLab.Maze
         /// <param name="sectors">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public CircularField Create(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
+        public CircularMazeField Create(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
         {
             if (provider == null || provider.algorithm != algorithm)
             {
                 provider = CreateProvider(algorithm);
             }
 
-            var field = provider == null ? new CircularField(rings, sectors)
+            var field = provider == null ? new CircularMazeField(rings, sectors)
                                          : provider.Create(rings, sectors, strategy);
 
             return field;
@@ -44,7 +44,7 @@ namespace SimplexLab.Maze
         /// <param name="sectors">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public async Task<CircularField> CreateAsync(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
+        public async Task<CircularMazeField> CreateAsync(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
         {
             return await Task.Run(() => Create(rings, sectors, algorithm, strategy));
         }

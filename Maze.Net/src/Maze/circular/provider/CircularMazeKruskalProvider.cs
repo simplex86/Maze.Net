@@ -52,7 +52,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 创建迷宫
         /// </summary>
-        public CircularField Create(int rings, int sectors)
+        public CircularMazeField Create(int rings, int sectors)
         {
             return Create(rings, sectors, SectorStrategy.Each);
         }
@@ -63,9 +63,9 @@ namespace SimplexLab.Maze
         /// <param name="rings">圈数</param>
         /// <param name="sectors">最大扇形数（最外圈）</param>
         /// <param name="strategy">扇形分割策略（可选）</param>
-        public CircularField Create(int rings, int sectors, SectorStrategy strategy)
+        public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)
         {
-            var field = new CircularField(rings, sectors, strategy);
+            var field = new CircularMazeField(rings, sectors, strategy);
             var cells = field.GetTotalCells();
 
             // 收集所有墙，预先计算索引

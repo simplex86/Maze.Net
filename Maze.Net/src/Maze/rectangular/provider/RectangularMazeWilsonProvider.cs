@@ -26,12 +26,12 @@ namespace SimplexLab.Maze
         /// <param name="width">迷宫宽度</param>
         /// <param name="height">迷宫高度</param>
         /// <returns>生成的迷宫场地</returns>
-        public RectangularField Create(int width, int height)
+        public RectangularMazeField Create(int width, int height)
         {
             width = Utils.Odd(width);
             height = Utils.Odd(height);
 
-            var field = new RectangularField(width, height);
+            var field = new RectangularMazeField(width, height);
 
             // 计算路径格子数量
             int cols = width / 2;
