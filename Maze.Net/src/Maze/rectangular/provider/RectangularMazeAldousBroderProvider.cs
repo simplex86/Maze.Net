@@ -28,33 +28,25 @@ namespace SimplexLab.Maze
         /// <returns>生成的迷宫场地</returns>
         public RectangularMazeField Create(int width, int height)
         {
-            width = Utils.Odd(width);
-            height = Utils.Odd(height);
-
             var field = new RectangularMazeField(width, height);
 
-            // 计算路径格子数量（奇数坐标）
-            int cols = width / 2;
-            int rows = height / 2;
-            int totalCells = cols * rows;
+            int totalCells = width * height;
 
             // 标记单元格是否已访问
-            bool[,] visited = new bool[cols, rows];
+            bool[][] visited = new bool[height][];
+            for (int i = 0; i < height; i++)
+            {
+                visited[i] = new bool[width];
+            }
 
             // 方向数组：上、下、左、右
-            // 每个方向包含：dx, dy, wallOffsetX, wallOffsetY
-            var directions = new List<(int dx, int dy, int wallX, int wallY)>
-            {
-                (0, -1, 0, -1),   // 上：墙在当前格子上方
-                (0, 1, 0, 1),     // 下：墙在当前格子下方
-                (-1, 0, -1, 0),   // 左：墙在当前格子左侧
-                (1, 0, 1, 0)      // 右：墙在当前格子右侧
-            };
+            int[] dx = { 0, 0, -1, 1 };
+            int[] dy = { -1, 1, 0, 0 };
 
-            // 随机选择起点（在路径格子坐标系统中）
-            int currentCol = random.Next(cols);
-            int currentRow = random.Next(rows);
-            visited[currentCol, currentRow] = true;
+            // 随机选择起点
+            int currentX = random.Next(width);
+            int currentY = random.Next(height);
+            visited[currentY][currentX] = true;
 
             // 统计已访问的单元格数量
             int visitedCount = 1;
@@ -64,41 +56,28 @@ namespace SimplexLab.Maze
             {
                 // 随机选择一个方向
                 int dirIdx = random.Next(4);
-                var dir = directions[dirIdx];
 
                 // 计算新位置
-                int newCol = currentCol + dir.dx;
-                int newRow = currentRow + dir.dy;
+                int newX = currentX + dx[dirIdx];
+                int newY = currentY + dy[dirIdx];
 
                 // 检查新位置是否在边界内
-                if (newCol >= 0 && newCol < cols && newRow >= 0 && newRow < rows)
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height)
                 {
                     // 如果新位置未访问
-                    if (!visited[newCol, newRow])
+                    if (!visited[newY][newX])
                     {
                         // 标记新位置为已访问
-                        visited[newCol, newRow] = true;
+                        visited[newY][newX] = true;
                         visitedCount++;
 
-                        // 计算路径格子坐标（奇数坐标）
-                        int currentPathX = currentCol * 2 + 1;
-                        int currentPathY = currentRow * 2 + 1;
-                        int newPathX = newCol * 2 + 1;
-                        int newPathY = newRow * 2 + 1;
-
-                        // 标记路径格子
-                        field[currentPathX, currentPathY] = TileType.Path;
-                        field[newPathX, newPathY] = TileType.Path;
-
-                        // 计算墙的位置并打通
-                        int wallX = currentPathX + dir.wallX;
-                        int wallY = currentPathY + dir.wallY;
-                        field[wallX, wallY] = TileType.Path;
+                        // 打通墙
+                        field.RemoveWallBetween(currentX, currentY, newX, newY);
                     }
 
                     // 移动到新位置（无论是否已访问）
-                    currentCol = newCol;
-                    currentRow = newRow;
+                    currentX = newX;
+                    currentY = newY;
                 }
             }
 

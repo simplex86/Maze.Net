@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SimplexLab.Maze
@@ -12,7 +12,21 @@ namespace SimplexLab.Maze
         // 随机数
         private Random random = new Random();
         // 开链表
-        private List<Tile> openlist = new List<Tile>();
+        private List<Edge> openlist = new List<Edge>();
+
+        private struct Edge
+        {
+            public int x, y; // 当前格子
+            public int nx, ny; // 邻居格子
+
+            public Edge(int x, int y, int nx, int ny)
+            {
+                this.x = x;
+                this.y = y;
+                this.nx = nx;
+                this.ny = ny;
+            }
+        }
 
         /// <summary>
         /// 
@@ -25,54 +39,37 @@ namespace SimplexLab.Maze
         /// <returns></returns>
         public RectangularMazeField Create(int width, int height)
         {
-            width = Utils.Odd(width);
-            height = Utils.Odd(height);
             openlist.Clear();
 
             var field = new RectangularMazeField(width, height);
 
+            var visited = new bool[height][];
+            for (int i = 0; i < height; i++)
+            {
+                visited[i] = new bool[width];
+            }
+
             // 随机起点
-            var x = random.Next(1, field.width - 1);
-            var y = random.Next(1, field.height - 1);
-            field[x, y] = TileType.Path;
+            var x = random.Next(width);
+            var y = random.Next(height);
+            visited[y][x] = true;
 
             // 从起点开始探索
-            SearchNeighbours(field, x, y);
+            SearchNeighbours(x, y, width, height, visited);
 
             while (openlist.Count > 0)
             {
                 var idx = random.Next(0, openlist.Count);
                 var cur = openlist[idx];
-
-                x = cur.lateral;
-                y = cur.radial;
-
-                switch (cur.dir)
-                {
-                    case (int)Dir.Up:
-                        y = y - 1;
-                        break;
-                    case (int)Dir.Down:
-                        y = y + 1;
-                        break;
-                    case (int)Dir.Left:
-                        x = x - 1;
-                        break;
-                    case (int)Dir.Right:
-                        x = x + 1;
-                        break;
-                }
-
-                if (Utils.IsWall(field, x, y))
-                {
-                    field[cur.lateral, cur.radial] = TileType.Path;
-                    if (!Utils.IsBorder(field, x, y))
-                    {
-                        field[x, y] = TileType.Path;
-                        SearchNeighbours(field, x, y);
-                    }
-                }
                 openlist.RemoveAt(idx);
+
+                if (!visited[cur.ny][cur.nx])
+                {
+                    // 打通墙
+                    field.RemoveWallBetween(cur.x, cur.y, cur.nx, cur.ny);
+                    visited[cur.ny][cur.nx] = true;
+                    SearchNeighbours(cur.nx, cur.ny, width, height, visited);
+                }
             }
 
             return field;
@@ -81,19 +78,16 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 获取邻居
         /// </summary>
-        /// <param name="field"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        private void SearchNeighbours(RectangularMazeField field, int x, int y)
+        private void SearchNeighbours(int x, int y, int width, int height, bool[][] visited)
         {
             // 上
-            if (!Utils.IsBorder(field, x, y - 1) && Utils.IsWall(field, x, y - 1)) openlist.Add(new Tile(x, y - 1, (int)Dir.Up));
+            if (y > 0 && !visited[y - 1][x]) openlist.Add(new Edge(x, y, x, y - 1));
             // 下
-            if (!Utils.IsBorder(field, x, y + 1) && Utils.IsWall(field, x, y + 1)) openlist.Add(new Tile(x, y + 1, (int)Dir.Down));
+            if (y < height - 1 && !visited[y + 1][x]) openlist.Add(new Edge(x, y, x, y + 1));
             // 左
-            if (!Utils.IsBorder(field, x - 1, y) && Utils.IsWall(field, x - 1, y)) openlist.Add(new Tile(x - 1, y, (int)Dir.Left));
+            if (x > 0 && !visited[y][x - 1]) openlist.Add(new Edge(x, y, x - 1, y));
             // 右
-            if (!Utils.IsBorder(field, x + 1, y) && Utils.IsWall(field, x + 1, y)) openlist.Add(new Tile(x + 1, y, (int)Dir.Right));
+            if (x < width - 1 && !visited[y][x + 1]) openlist.Add(new Edge(x, y, x + 1, y));
         }
     }
 }

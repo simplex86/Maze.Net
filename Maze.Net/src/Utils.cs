@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 
 namespace SimplexLab.Maze
@@ -25,10 +25,10 @@ namespace SimplexLab.Maze
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool IsWall(RectangularMazeField field, int x, int y)
-        {
-            return field[x, y] == TileType.Wall;
-        }
+        //public static bool IsWall(RectangularMazeField field, int x, int y)
+        //{
+        //    return field[x, y] == TileType.Wall;
+        //}
 
         /// <summary>
         /// 是否为迷宫的边界
@@ -37,10 +37,10 @@ namespace SimplexLab.Maze
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static bool IsBorder(RectangularMazeField field, int x, int y)
-        {
-            return (x <= 0 || x >= field.width - 1 || y <= 0 || y >= field.height - 1);
-        }
+        //public static bool IsBorder(RectangularMazeField field, int x, int y)
+        //{
+        //    return (x <= 0 || x >= field.width - 1 || y <= 0 || y >= field.height - 1);
+        //}
 
         /// <summary>
         /// 是否为墙

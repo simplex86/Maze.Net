@@ -20,6 +20,10 @@ namespace SimplexLab.Maze
         /// </summary>
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Wilson;
 
+        // 方向数组：上、下、左、右
+        private int[] dx = { 0, 0, -1, 1 };
+        private int[] dy = { -1, 1, 0, 0 };
+
         /// <summary>
         /// 创建迷宫
         /// </summary>
@@ -28,137 +32,110 @@ namespace SimplexLab.Maze
         /// <returns>生成的迷宫场地</returns>
         public RectangularMazeField Create(int width, int height)
         {
-            width = Utils.Odd(width);
-            height = Utils.Odd(height);
-
             var field = new RectangularMazeField(width, height);
 
-            // 计算路径格子数量
-            int cols = width / 2;
-            int rows = height / 2;
-            int totalCells = cols * rows;
-
             // 标记单元格是否已访问
-            bool[,] visited = new bool[cols, rows];
-            // 记录随机游走路径的方向（用于回退）
-            int[,] pathDir = new int[cols, rows];  // 0:无, 1:上, 2:下, 4:左, 8:右
+            bool[][] visited = new bool[height][];
+            for (int i = 0; i < height; i++)
+            {
+                visited[i] = new bool[width];
+            }
 
-            // 随机选择一个起点并标记为已访问
-            int startCol = random.Next(cols);
-            int startRow = random.Next(rows);
-            visited[startCol, startRow] = true;
+            // 随机选择起点
+            int startX = random.Next(width);
+            int startY = random.Next(height);
+            visited[startY][startX] = true;
 
             // 统计已访问的单元格数量
             int visitedCount = 1;
 
-            // 方向数组：上、下、左、右
-            int[] dx = { 0, 0, -1, 1 };
-            int[] dy = { -1, 1, 0, 0 };
-            int[] dirValues = { 1, 2, 4, 8 };  // 对应 Dir 枚举值
-
             // 继续直到所有单元格都被访问
-            while (visitedCount < totalCells)
+            while (visitedCount < width * height)
             {
-                // 随机选择一个未访问的单元格开始随机游走
-                int currentCol, currentRow;
+                // 随机选择一个未访问的单元格开始
+                int x, y;
                 do
                 {
-                    currentCol = random.Next(cols);
-                    currentRow = random.Next(rows);
-                } while (visited[currentCol, currentRow]);
+                    x = random.Next(width);
+                    y = random.Next(height);
+                } while (visited[y][x]);
 
-                // 开始随机游走，直到碰到已访问的单元格
-                List<(int col, int row)> path = new List<(int, int)>();
-                path.Add((currentCol, currentRow));
+                // 开始随机游走，记录路径
+                List<(int, int)> path = new List<(int, int)>();
+                path.Add((x, y));
 
-                while (!visited[currentCol, currentRow])
+                // 记录每个位置在路径中的索引，用于检测环路
+                int[][] pathIndex = new int[height][];
+                for (int i = 0; i < height; i++)
+                {
+                    pathIndex[i] = new int[width];
+                    for (int j = 0; j < width; j++)
+                    {
+                        pathIndex[i][j] = -1;
+                    }
+                }
+                pathIndex[y][x] = 0;
+
+                while (true)
                 {
                     // 随机选择一个方向
                     int dirIdx = random.Next(4);
-                    int newCol = currentCol + dx[dirIdx];
-                    int newRow = currentRow + dy[dirIdx];
+                    int nx = x + dx[dirIdx];
+                    int ny = y + dy[dirIdx];
 
-                    // 确保新位置在边界内
-                    if (newCol >= 0 && newCol < cols && newRow >= 0 && newRow < rows)
+                    // 确保在边界内
+                    if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+
+                    // 检查是否撞到已访问的单元格（成功！）
+                    if (visited[ny][nx])
                     {
-                        // 记录路径方向
-                        pathDir[currentCol, currentRow] = dirValues[dirIdx];
+                        // 添加当前位置到路径
+                        path.Add((nx, ny));
 
-                        // 检查是否形成环路（碰到路径中的单元格）
-                        bool isLoop = false;
+                        // 将整个路径加入迷宫
                         for (int i = 0; i < path.Count - 1; i++)
                         {
-                            if (path[i].col == newCol && path[i].row == newRow)
+                            var (px, py) = path[i];
+                            var (p2x, p2y) = path[i + 1];
+                            field.RemoveWallBetween(px, py, p2x, p2y);
+                            if (!visited[py][px])
                             {
-                                // 截断环路：从环路开始位置到当前位置的路径被丢弃
-                                path.RemoveRange(i + 1, path.Count - i - 1);
-                                currentCol = path[path.Count - 1].col;
-                                currentRow = path[path.Count - 1].row;
-                                isLoop = true;
-                                break;
+                                visited[py][px] = true;
+                                visitedCount++;
                             }
                         }
-
-                        if (!isLoop)
+                        if (!visited[ny][nx])
                         {
-                            // 移动到新位置
-                            currentCol = newCol;
-                            currentRow = newRow;
-                            path.Add((currentCol, currentRow));
+                            visited[ny][nx] = true;
+                            visitedCount++;
                         }
+
+                        break;
                     }
-                }
 
-                // 将路径添加到迷宫中
-                for (int i = 0; i < path.Count - 1; i++)
-                {
-                    int col = path[i].col;
-                    int row = path[i].row;
-
-                    // 标记为已访问
-                    visited[col, row] = true;
-                    visitedCount++;
-
-                    // 标记路径格子（奇数坐标）
-                    int pathX = col * 2 + 1;
-                    int pathY = row * 2 + 1;
-                    field[pathX, pathY] = TileType.Path;
-
-                    // 根据方向打通中间的墙
-                    int dir = pathDir[col, row];
-                    int wallX = pathX;
-                    int wallY = pathY;
-
-                    switch (dir)
+                    // 检查是否在当前路径中（环路！）
+                    int idx = pathIndex[ny][nx];
+                    if (idx != -1)
                     {
-                        case 1: // 上
-                            wallY -= 1;
-                            break;
-                        case 2: // 下
-                            wallY += 1;
-                            break;
-                        case 4: // 左
-                            wallX -= 1;
-                            break;
-                        case 8: // 右
-                            wallX += 1;
-                            break;
+                        // 截断路径到idx位置
+                        while (path.Count > idx + 1)
+                        {
+                            var (rx, ry) = path[path.Count - 1];
+                            pathIndex[ry][rx] = -1;
+                            path.RemoveAt(path.Count - 1);
+                        }
+                        x = nx;
+                        y = ny;
+                        continue;
                     }
 
-                    // 打通墙
-                    field[wallX, wallY] = TileType.Path;
-                }
-
-                // 标记最后一个单元格（已访问的单元格）
-                if (!visited[path[path.Count - 1].col, path[path.Count - 1].row])
-                {
-                    visited[path[path.Count - 1].col, path[path.Count - 1].row] = true;
-                    visitedCount++;
+                    // 继续游走
+                    path.Add((nx, ny));
+                    pathIndex[ny][nx] = path.Count - 1;
+                    x = nx;
+                    y = ny;
                 }
             }
-
-            // 标记起点为路径
-            field[startCol * 2 + 1, startRow * 2 + 1] = TileType.Path;
 
             return field;
         }
