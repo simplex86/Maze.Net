@@ -69,6 +69,8 @@ namespace SimplexLab.Maze
                     return new RectangularMazeEllerProvider();
                 case MazeAlgorithm.AldousBroder:
                     return new RectangularMazeAldousBroderProvider();
+                case MazeAlgorithm.BFS:
+                    return new RectangularMazeBfsProvider();
                 default:
                     break;
             }

@@ -5,7 +5,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 矩形格子
     /// </summary>
-    internal struct RectangularTile : IEquatable<RectangularTile>
+    public struct RectangularTile : IEquatable<RectangularTile>
     {
         /// <summary>
         /// 

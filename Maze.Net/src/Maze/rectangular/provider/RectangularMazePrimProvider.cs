@@ -9,18 +9,6 @@ namespace SimplexLab.Maze
     /// </summary>
     public class RectangularMazePrimProvider : IRectangularMazeProvider
     {
-        /// <summary>
-        /// 方向
-        /// </summary>
-        private enum Dir : byte
-        {
-            None  = 0, // 无
-            Up    = 1, // 上
-            Down  = 2, // 下
-            Left  = 4, // 左
-            Right = 8, // 右
-        }
-
         // 随机数
         private Random random = new Random();
         // 开链表

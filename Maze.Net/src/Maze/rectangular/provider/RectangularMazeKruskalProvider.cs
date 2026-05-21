@@ -53,7 +53,7 @@ namespace SimplexLab.Maze
             var field = new RectangularField(width, height);
 
             var walls = CollectInternalWalls(width, height);
-            ShuffleWalls(walls);
+            walls.Shuffle(random);
 
             var dsu = new DisjointSet((width / 2) * (height / 2));
             foreach (var wall in walls)
@@ -112,23 +112,6 @@ namespace SimplexLab.Maze
             }
 
             return walls;
-        }
-
-        /// <summary>
-        /// Fisher-Yates 洗牌算法：随机打乱墙的顺序
-        /// </summary>
-        /// <param name="walls">墙的列表</param>
-        private void ShuffleWalls(List<Wall> walls)
-        {
-            int n = walls.Count;
-            for (int i = n - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-                // 交换 i 和 j 位置的墙
-                var temp = walls[i];
-                walls[i] = walls[j];
-                walls[j] = temp;
-            }
         }
 
         /// <summary>
