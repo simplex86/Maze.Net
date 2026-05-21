@@ -39,42 +39,15 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 扇形分割策略
         /// </summary>
-        public SectorStrategy strategy { get; private set; } = SectorStrategy.Each;
+        public SectorStrategy strategy { get; } = SectorStrategy.Arc;
 
         /// <summary>
         /// 初始化圆形迷宫场地（向后兼容）
         /// </summary>
         public CircularField(int rings, int sectors)
+            : this(rings, sectors, SectorStrategy.Arc)
         {
-            // 确保最小尺寸
-            this.rings = Math.Max(1, rings);
-            this.maxSectors = Math.Max(3, sectors);
-            this.strategy = SectorStrategy.Each;
 
-            // 计算每圈的扇形数量
-            this.sectorsPerRing = new int[this.rings];
-            for (int r = 0; r < this.rings; r++)
-            {
-                this.sectorsPerRing[r] = CalculateSectors(r);
-            }
-
-            // 创建墙数组
-            innerWalls = new bool[this.rings][];
-            radialWalls = new bool[this.rings][];
-
-            // 初始化所有墙为"存在"状态
-            for (int r = 0; r < this.rings; r++)
-            {
-                int sectorsInRing = this.sectorsPerRing[r];
-                innerWalls[r] = new bool[sectorsInRing];
-                radialWalls[r] = new bool[sectorsInRing];
-
-                for (int s = 0; s < sectorsInRing; s++)
-                {
-                    innerWalls[r][s] = true;  // 内圈墙存在
-                    radialWalls[r][s] = true;  // 径向墙存在
-                }
-            }
         }
 
         /// <summary>
@@ -124,7 +97,6 @@ namespace SimplexLab.Maze
             {
                 case SectorStrategy.Each:
                     return maxSectors;
-
                 case SectorStrategy.Arc:
                     // 弧长均匀策略：扇形数与半径成正比
                     // 最内圈最少3个扇形
@@ -132,7 +104,6 @@ namespace SimplexLab.Maze
                     double minRadiusArc = 1;
                     int sectorsArc = (int)(3 * radiusArc / minRadiusArc);
                     return Math.Max(3, Math.Min(maxSectors, sectorsArc));
-
                 case SectorStrategy.Area:
                     // 面积均匀策略：扇形面积大致相等
                     // 面积 = π((R+1)² - R²)/N = π(2R+1)/N
@@ -142,7 +113,6 @@ namespace SimplexLab.Maze
                     double minFactorArea = 2 * 1 + 1;
                     int sectorsArea = (int)(3 * factorArea / minFactorArea);
                     return Math.Max(3, Math.Min(maxSectors, sectorsArea));
-
                 default:
                     return maxSectors;
             }
