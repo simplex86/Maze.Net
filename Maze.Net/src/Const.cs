@@ -10,25 +10,30 @@ namespace SimplexLab.Maze
         /// </summary>
         DFS = 1,
         /// <summary>
-        /// 
+        /// 广度优先
         /// </summary>
-        Prim = 2,
+        BFS = 2,
         /// <summary>
         /// 
         /// </summary>
-        Kruskal = 3,
+        Prim = 3,
         /// <summary>
         /// 
         /// </summary>
-        Wilson = 4,
+        Kruskal = 4,
         /// <summary>
         /// 
         /// </summary>
-        Eller = 5,
+        Wilson = 5,
         /// <summary>
         /// 
         /// </summary>
-        AldousBroder = 6,
+        Eller = 6,
+        /// <summary>
+        /// 
+        /// </summary>
+        AldousBroder = 7,
+        
     }
 
     /// <summary>

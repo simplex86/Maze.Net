@@ -6,7 +6,6 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫生成器
     /// 基于Kruskal算法生成随机迷宫
-    /// 设计B正宗做法：打通格子之间的墙
     /// </summary>
     public class CircularMazeKruskalProvider : ICircularMazeProvider
     {
@@ -30,24 +29,28 @@ namespace SimplexLab.Maze
         }
 
         /// <summary>
-        /// 墙信息
+        /// 墙
         /// </summary>
         private struct Wall
         {
             public WallType type;
             public int ring;
             public int sector;
+            public int tile1Index;
+            public int tile2Index;
 
-            public Wall(WallType t, int r, int s)
+            public Wall(WallType t, int r, int s, int idx1, int idx2)
             {
                 type = t;
                 ring = r;
                 sector = s;
+                tile1Index = idx1;
+                tile2Index = idx2;
             }
         }
 
         /// <summary>
-        /// 创建迷宫（向后兼容）
+        /// 创建迷宫
         /// </summary>
         public CircularField Create(int rings, int sectors)
         {
@@ -63,75 +66,55 @@ namespace SimplexLab.Maze
         public CircularField Create(int rings, int sectors, SectorStrategy strategy)
         {
             var field = new CircularField(rings, sectors, strategy);
+            var cells = field.GetTotalCells();
 
-            // 收集所有墙
+            // 收集所有墙，预先计算索引
             var walls = new List<Wall>();
 
             // 收集径向墙（同圈相邻扇形之间的墙）
-            for (int r = 0; r < field.rings; r++)
+            for (var r = 0; r < field.rings; r++)
             {
-                int sectorsInRing = field.GetSectorsInRing(r);
-                for (int s = 0; s < sectorsInRing; s++)
+                var sectorsInRing = field.GetSectorsInRing(r);
+                for (var s = 0; s < sectorsInRing; s++)
                 {
-                    walls.Add(new Wall(WallType.Radial, r, s));
+                    var idx1 = field.GetTileIndex(r, s);
+                    var idx2 = field.GetTileIndex(r, (s + 1) % sectorsInRing);
+                    walls.Add(new Wall(WallType.Radial, r, s, idx1, idx2));
                 }
             }
 
             // 收集内圈墙（相邻圈之间的墙）
-            for (int r = 0; r < field.rings - 1; r++)
+            for (var r = 0; r < field.rings - 1; r++)
             {
-                int sectorsInRing = field.GetSectorsInRing(r);
-                for (int s = 0; s < sectorsInRing; s++)
+                // 关键修复：使用外圈的扇形数，而不是内圈的
+                var sectorsInOuterRing = field.GetSectorsInRing(r + 1);
+                for (var s = 0; s < sectorsInOuterRing; s++)
                 {
-                    walls.Add(new Wall(WallType.Inner, r, s));
+                    var outerRing = r + 1;
+                    var outerSector = s;
+                    var innerRing = r;
+                    var innerSector = field.MapSector(outerRing, outerSector, innerRing);
+                    
+                    var idx1 = field.GetTileIndex(innerRing, innerSector);
+                    var idx2 = field.GetTileIndex(outerRing, outerSector);
+                    
+                    // 这里我们传递内圈的扇形位置，因为 innerWalls 是以内圈扇形索引存储的
+                    walls.Add(new Wall(WallType.Inner, r, innerSector, idx1, idx2));
                 }
             }
 
-            // 随机打乱墙的顺序
-            Shuffle(walls);
+            // 打乱墙的顺序
+            walls.Shuffle(random);
 
-            // 使用并查集管理连通性
-            var parent = new Dictionary<CircularTile, CircularTile>();
-            for (int r = 0; r < field.rings; r++)
-            {
-                int sectorsInRing = field.GetSectorsInRing(r);
-                for (int s = 0; s < sectorsInRing; s++)
-                {
-                    var tile = new CircularTile(r, s);
-                    parent[tile] = tile;
-                }
-            }
+            // 管理连通性
+            var dsu = new DisjointSet(cells);
 
-            // Kruskal主循环：逐个尝试打通墙
+            // 逐个尝试打通墙
             foreach (var wall in walls)
             {
-                CircularTile tile1, tile2;
-
-                if (wall.type == WallType.Radial)
+                // 如果两个格子不在同一连通分量，则打通墙
+                if (dsu.Union(wall.tile1Index, wall.tile2Index))
                 {
-                    // 径向墙：连接同圈的相邻扇形
-                    tile1 = new CircularTile(wall.ring, wall.sector);
-                    int sectorsInRing = field.GetSectorsInRing(wall.ring);
-                    int nextSector = (wall.sector + 1) % sectorsInRing;
-                    tile2 = new CircularTile(wall.ring, nextSector);
-                }
-                else
-                {
-                    // 内圈墙：连接内圈和外圈
-                    tile1 = new CircularTile(wall.ring, wall.sector);
-                    int outerRing = wall.ring + 1;
-                    int outerSector = field.MapSector(wall.ring, wall.sector, outerRing);
-                    tile2 = new CircularTile(outerRing, outerSector);
-                }
-
-                var root1 = Find(parent, tile1);
-                var root2 = Find(parent, tile2);
-
-                // 如果不在同一集合，则打通墙
-                if (!root1.Equals(root2))
-                {
-                    parent[root1] = root2;
-
                     // 打通对应的墙
                     if (wall.type == WallType.Radial)
                     {
@@ -141,41 +124,13 @@ namespace SimplexLab.Maze
                     {
                         field.SetInnerWall(wall.ring, wall.sector, false);
                     }
+
+                    // 所有格子已连通时提前退出
+                    if (dsu.Count == 1) break;
                 }
             }
 
             return field;
-        }
-
-        /// <summary>
-        /// 查找根节点（带路径压缩）
-        /// </summary>
-        private CircularTile Find(Dictionary<CircularTile, CircularTile> parent, CircularTile tile)
-        {
-            if (!parent.ContainsKey(tile))
-            {
-                parent[tile] = tile;
-            }
-
-            if (!parent[tile].Equals(tile))
-            {
-                parent[tile] = Find(parent, parent[tile]);
-            }
-            return parent[tile];
-        }
-
-        /// <summary>
-        /// Fisher-Yates 洗牌算法
-        /// </summary>
-        private void Shuffle<T>(List<T> list)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-                T temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
-            }
         }
     }
 }

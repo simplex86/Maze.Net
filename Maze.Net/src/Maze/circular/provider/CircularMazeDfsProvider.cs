@@ -6,7 +6,6 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫生成器
     /// 基于深度优先搜索算法生成随机迷宫
-    /// 设计B正宗做法：打通格子之间的墙
     /// </summary>
     public class CircularMazeDfsProvider : ICircularMazeProvider
     {
@@ -21,7 +20,7 @@ namespace SimplexLab.Maze
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.DFS;
 
         /// <summary>
-        /// 创建迷宫（向后兼容）
+        /// 创建迷宫
         /// </summary>
         public CircularField Create(int rings, int sectors)
         {
@@ -141,7 +140,7 @@ namespace SimplexLab.Maze
             if (r1 == r2)
             {
                 // 同一圈：移除径向墙
-                int sectorsInRing = field.GetSectorsInRing(r1);
+                //int sectorsInRing = field.GetSectorsInRing(r1);
                 int wallSector = Math.Min(s1, s2);
                 // 特殊情况：边界相邻（s1最大，s2最小）
                 if (Math.Abs(s1 - s2) > 1)
@@ -154,7 +153,7 @@ namespace SimplexLab.Maze
             {
                 // 不同圈：移除内圈墙
                 int wallRing = Math.Min(r1, r2);
-                int fromRing = r1 < r2 ? r1 : r2;
+                //int fromRing = r1 < r2 ? r1 : r2;
                 int fromSector = r1 < r2 ? s1 : s2;
                 field.SetInnerWall(wallRing, fromSector, false);
             }

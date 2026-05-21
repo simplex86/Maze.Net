@@ -6,10 +6,12 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫生成器
     /// 基于Prim算法生成随机迷宫
-    /// 设计B正宗做法：打通格子之间的墙
     /// </summary>
     public class CircularMazePrimProvider : ICircularMazeProvider
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private Random random = new Random();
 
         /// <summary>
@@ -18,7 +20,7 @@ namespace SimplexLab.Maze
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Prim;
 
         /// <summary>
-        /// 创建迷宫（向后兼容）
+        /// 创建迷宫
         /// </summary>
         public CircularField Create(int rings, int sectors)
         {
@@ -36,14 +38,14 @@ namespace SimplexLab.Maze
             var field = new CircularField(rings, sectors, strategy);
             var visited = new bool[field.rings][];
             
-            for (int r = 0; r < field.rings; r++)
+            for (var r = 0; r < field.rings; r++)
             {
                 visited[r] = new bool[field.GetSectorsInRing(r)];
             }
 
             // 从最内圈的任意扇形开始
-            int startRing = 0;
-            int startSector = random.Next(field.GetSectorsInRing(startRing));
+            var startRing = 0;
+            var startSector = random.Next(field.GetSectorsInRing(startRing));
             visited[startRing][startSector] = true;
 
             // 存储边缘（与已访问区域相邻的墙）
@@ -53,7 +55,7 @@ namespace SimplexLab.Maze
             while (edges.Count > 0)
             {
                 // 随机选择一条边缘
-                int idx = random.Next(edges.Count);
+                var idx = random.Next(edges.Count);
                 var edge = edges[idx];
                 edges.RemoveAt(idx);
 
@@ -85,8 +87,8 @@ namespace SimplexLab.Maze
             // 内圈邻居
             if (ring > 0)
             {
-                int innerRing = ring - 1;
-                int innerSector = field.MapSector(ring, sector, innerRing);
+                var innerRing = ring - 1;
+                var innerSector = field.MapSector(ring, sector, innerRing);
                 if (!visited[innerRing][innerSector])
                 {
                     edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(innerRing, innerSector)));
@@ -96,8 +98,8 @@ namespace SimplexLab.Maze
             // 外圈邻居
             if (ring < field.rings - 1)
             {
-                int outerRing = ring + 1;
-                int outerSector = field.MapSector(ring, sector, outerRing);
+                var outerRing = ring + 1;
+                var outerSector = field.MapSector(ring, sector, outerRing);
                 if (!visited[outerRing][outerSector])
                 {
                     edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(outerRing, outerSector)));
@@ -105,14 +107,14 @@ namespace SimplexLab.Maze
             }
 
             // 左邻居（逆时针）
-            int leftSector = field.GetPrevSector(ring, sector);
+            var leftSector = field.GetPrevSector(ring, sector);
             if (!visited[ring][leftSector])
             {
                 edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(ring, leftSector)));
             }
 
             // 右邻居（顺时针）
-            int rightSector = field.GetNextSector(ring, sector);
+            var rightSector = field.GetNextSector(ring, sector);
             if (!visited[ring][rightSector])
             {
                 edges.Add(Tuple.Create(new CircularTile(ring, sector), new CircularTile(ring, rightSector)));
@@ -127,8 +129,8 @@ namespace SimplexLab.Maze
             if (r1 == r2)
             {
                 // 同一圈：移除径向墙
-                int sectorsInRing = field.GetSectorsInRing(r1);
-                int wallSector = Math.Min(s1, s2);
+                //var sectorsInRing = field.GetSectorsInRing(r1);
+                var wallSector = Math.Min(s1, s2);
                 // 特殊情况：边界相邻（s1最大，s2最小）
                 if (Math.Abs(s1 - s2) > 1)
                 {
@@ -139,9 +141,9 @@ namespace SimplexLab.Maze
             else
             {
                 // 不同圈：移除内圈墙
-                int wallRing = Math.Min(r1, r2);
-                int fromRing = r1 < r2 ? r1 : r2;
-                int fromSector = r1 < r2 ? s1 : s2;
+                var wallRing = Math.Min(r1, r2);
+                //var fromRing = r1 < r2 ? r1 : r2;
+                var fromSector = r1 < r2 ? s1 : s2;
                 field.SetInnerWall(wallRing, fromSector, false);
             }
         }

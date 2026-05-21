@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 
 namespace SimplexLab.Maze
 {
     /// <summary>
     /// 极坐标格子
     /// </summary>
-    internal struct CircularTile : IEquatable<CircularTile>
+    public struct CircularTile : IEquatable<CircularTile>
     {
         /// <summary>
         /// 第几圈（从内到外）

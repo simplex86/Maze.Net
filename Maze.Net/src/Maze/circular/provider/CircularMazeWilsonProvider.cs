@@ -6,7 +6,6 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫生成器
     /// 基于Wilson算法生成随机迷宫：使用随机游走，生成的迷宫具有均匀的随机性
-    /// 设计B正宗做法：打通格子之间的墙
     /// </summary>
     public class CircularMazeWilsonProvider : ICircularMazeProvider
     {
@@ -21,7 +20,7 @@ namespace SimplexLab.Maze
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Wilson;
 
         /// <summary>
-        /// 创建迷宫（向后兼容）
+        /// 创建迷宫
         /// </summary>
         public CircularField Create(int rings, int sectors)
         {
@@ -70,8 +69,8 @@ namespace SimplexLab.Maze
                 } while (visited[currentRing][currentSector]);
 
                 // 开始随机游走，记录路径
-                Dictionary<CircularTile, CircularTile> path = new Dictionary<CircularTile, CircularTile>();
-                CircularTile current = new CircularTile(currentRing, currentSector);
+                var path = new Dictionary<CircularTile, CircularTile>();
+                var current = new CircularTile(currentRing, currentSector);
                 path[current] = current; // 起点指向自己
 
                 while (!visited[current.ring][current.sector])
@@ -79,13 +78,13 @@ namespace SimplexLab.Maze
                     // 获取随机邻居
                     var neighbors = GetNeighbors(field, current.ring, current.sector);
                     int idx = random.Next(neighbors.Count);
-                    CircularTile next = neighbors[idx];
+                    var next = neighbors[idx];
 
                     // 如果路径中已经包含这个邻居，移除环路
                     if (path.ContainsKey(next))
                     {
                         // 从路径中移除环路
-                        CircularTile temp = current;
+                        var temp = current;
                         while (!temp.Equals(next))
                         {
                             var prev = path[temp];
@@ -102,7 +101,7 @@ namespace SimplexLab.Maze
                 }
 
                 // 将路径打通并标记为已访问
-                CircularTile pos = path[current];
+                var pos = path[current];
                 while (!pos.Equals(current))
                 {
                     // 打通pos和next之间的墙

@@ -5,7 +5,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫场地
     /// 使用极坐标系统：ring（圈数）和 sector（扇形数）
-    /// 存储相邻格子之间的墙的状态（设计B正宗做法）
+    /// 存储相邻格子之间的墙的状态
     /// </summary>
     public struct CircularField
     {
@@ -29,12 +29,12 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 圈数（从中心向外的层数）
         /// </summary>
-        public int rings { get; private set; } = 3;
+        public int rings { get; } = 20;
 
         /// <summary>
         /// 最大扇形数（最外圈的扇形数量）
         /// </summary>
-        public int maxSectors { get; private set; } = 8;
+        public int sectors { get; } = 100;
 
         /// <summary>
         /// 扇形分割策略
@@ -42,7 +42,7 @@ namespace SimplexLab.Maze
         public SectorStrategy strategy { get; } = SectorStrategy.Arc;
 
         /// <summary>
-        /// 初始化圆形迷宫场地（向后兼容）
+        /// 初始化圆形迷宫场地
         /// </summary>
         public CircularField(int rings, int sectors)
             : this(rings, sectors, SectorStrategy.Arc)
@@ -59,14 +59,49 @@ namespace SimplexLab.Maze
         {
             // 确保最小尺寸
             this.rings = Math.Max(1, rings);
-            this.maxSectors = Math.Max(3, maxSectors);
+            this.sectors = Math.Max(3, maxSectors);
             this.strategy = strategy;
 
             // 计算每圈的扇形数量
             this.sectorsPerRing = new int[this.rings];
-            for (int r = 0; r < this.rings; r++)
+            if (strategy == SectorStrategy.Each)
             {
-                this.sectorsPerRing[r] = CalculateSectors(r);
+                for (int r = 0; r < this.rings; r++)
+                {
+                    this.sectorsPerRing[r] = maxSectors;
+                }
+            }
+            else
+            {
+                // 1. 从内圈开始，扇形数从较小的值开始
+                // 2. 逐圈向外，根据弧长判断是否需要翻倍
+                // 3. 保证不超过最大扇形数
+                
+                // 先找到最大的 2 的幂次，不超过 maxSectors
+                var normalizedMaxSectors = 3;
+                while (normalizedMaxSectors * 2 <= this.sectors)
+                {
+                    normalizedMaxSectors *= 2;
+                }
+
+                // 从内圈开始计算
+                this.sectorsPerRing[0] = 3;  // 最内圈至少 3 个扇形
+                for (var r = 1; r < this.rings; r++)
+                {
+                    this.sectorsPerRing[r] = this.sectorsPerRing[r - 1];
+                    // 计算弧长（半径 = r + 1，因为我们从 ring 0 开始）
+                    double arcLength = (2 * Math.PI * (r + 1)) / this.sectorsPerRing[r - 1];
+                    if (arcLength > 2.0 && this.sectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                    {
+                        this.sectorsPerRing[r] *= 2;
+                    }
+                }
+
+                // 确保最外圈至少达到 normalizedMaxSectors
+                if (this.sectorsPerRing[this.rings - 1] < normalizedMaxSectors)
+                {
+                    this.sectorsPerRing[this.rings - 1] = normalizedMaxSectors;
+                }
             }
 
             // 创建墙数组
@@ -74,47 +109,17 @@ namespace SimplexLab.Maze
             radialWalls = new bool[this.rings][];
 
             // 初始化所有墙为"存在"状态
-            for (int r = 0; r < this.rings; r++)
+            for (var r = 0; r < this.rings; r++)
             {
-                int sectorsInRing = this.sectorsPerRing[r];
+                var sectorsInRing = this.sectorsPerRing[r];
                 innerWalls[r] = new bool[sectorsInRing];
                 radialWalls[r] = new bool[sectorsInRing];
 
-                for (int s = 0; s < sectorsInRing; s++)
+                for (var s = 0; s < sectorsInRing; s++)
                 {
                     innerWalls[r][s] = true;  // 内圈墙存在
                     radialWalls[r][s] = true;  // 径向墙存在
                 }
-            }
-        }
-
-        /// <summary>
-        /// 根据策略计算某圈的扇形数量
-        /// </summary>
-        private int CalculateSectors(int ring)
-        {
-            switch (strategy)
-            {
-                case SectorStrategy.Each:
-                    return maxSectors;
-                case SectorStrategy.Arc:
-                    // 弧长均匀策略：扇形数与半径成正比
-                    // 最内圈最少3个扇形
-                    double radiusArc = ring + 1;
-                    double minRadiusArc = 1;
-                    int sectorsArc = (int)(3 * radiusArc / minRadiusArc);
-                    return Math.Max(3, Math.Min(maxSectors, sectorsArc));
-                case SectorStrategy.Area:
-                    // 面积均匀策略：扇形面积大致相等
-                    // 面积 = π((R+1)² - R²)/N = π(2R+1)/N
-                    // 保持 N 与 (2R+1) 成正比
-                    double radiusArea = ring + 1;
-                    double factorArea = 2 * radiusArea + 1;
-                    double minFactorArea = 2 * 1 + 1;
-                    int sectorsArea = (int)(3 * factorArea / minFactorArea);
-                    return Math.Max(3, Math.Min(maxSectors, sectorsArea));
-                default:
-                    return maxSectors;
             }
         }
 
@@ -133,8 +138,8 @@ namespace SimplexLab.Maze
         /// </summary>
         public int MapSector(int fromRing, int fromSector, int toRing)
         {
-            int fromSectors = GetSectorsInRing(fromRing);
-            int toSectors = GetSectorsInRing(toRing);
+            var fromSectors = GetSectorsInRing(fromRing);
+            var toSectors = GetSectorsInRing(toRing);
 
             // 比例映射
             return (fromSector * toSectors) / fromSectors;
@@ -145,7 +150,7 @@ namespace SimplexLab.Maze
         /// </summary>
         public int GetNextSector(int ring, int sector)
         {
-            int sectorsInRing = GetSectorsInRing(ring);
+            var sectorsInRing = GetSectorsInRing(ring);
             return (sector + 1) % sectorsInRing;
         }
 
@@ -154,24 +159,8 @@ namespace SimplexLab.Maze
         /// </summary>
         public int GetPrevSector(int ring, int sector)
         {
-            int sectorsInRing = GetSectorsInRing(ring);
+            var sectorsInRing = GetSectorsInRing(ring);
             return (sector - 1 + sectorsInRing) % sectorsInRing;
-        }
-
-        /// <summary>
-        /// 判断是否为最内圈
-        /// </summary>
-        public bool IsInnermostRing(int ring)
-        {
-            return ring == 0;
-        }
-
-        /// <summary>
-        /// 判断是否为最外圈
-        /// </summary>
-        public bool IsOutermostRing(int ring)
-        {
-            return ring == rings - 1;
         }
 
         /// <summary>
@@ -179,30 +168,12 @@ namespace SimplexLab.Maze
         /// </summary>
         public int GetTotalCells()
         {
-            int total = 0;
-            for (int r = 0; r < rings; r++)
+            var total = 0;
+            for (var r = 0; r < rings; r++)
             {
                 total += GetSectorsInRing(r);
             }
             return total;
-        }
-
-        /// <summary>
-        /// 获取或设置指定位置的格子类型（保持向后兼容，始终返回Path）
-        /// </summary>
-        /// <param name="ring">圈数</param>
-        /// <param name="sector">扇形索引</param>
-        /// <returns>始终返回Path</returns>
-        public int this[int ring, int sector]
-        {
-            get
-            {
-                return TileType.Path;
-            }
-            internal set
-            {
-                // 保持向后兼容，但忽略设置
-            }
         }
 
         /// <summary>
@@ -243,6 +214,23 @@ namespace SimplexLab.Maze
             if (ring < 0 || ring >= rings || sector < 0 || sector >= GetSectorsInRing(ring))
                 return;
             radialWalls[ring][sector] = exists;
+        }
+
+        /// <summary>
+        /// 将指定的(ring, sector)映射到唯一的整数索引
+        /// 用于DisjointSet等需要整数索引的场景
+        /// </summary>
+        public int GetTileIndex(int ring, int sector)
+        {
+            if (ring < 0 || ring >= rings || sector < 0 || sector >= GetSectorsInRing(ring))
+                throw new ArgumentOutOfRangeException();
+
+            var index = 0;
+            for (var r = 0; r < ring; r++)
+            {
+                index += sectorsPerRing[r];
+            }
+            return index + sector;
         }
     }
 }

@@ -6,10 +6,12 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫生成器
     /// 基于Eller算法生成随机迷宫：逐圈处理，内存效率高
-    /// 设计B正宗做法：打通格子之间的墙
     /// </summary>
     public class CircularMazeEllerProvider : ICircularMazeProvider
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private Random random = new Random();
 
         /// <summary>
@@ -18,7 +20,7 @@ namespace SimplexLab.Maze
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.Eller;
 
         /// <summary>
-        /// 创建迷宫（向后兼容）
+        /// 创建迷宫
         /// </summary>
         public CircularField Create(int rings, int sectors)
         {
@@ -36,16 +38,16 @@ namespace SimplexLab.Maze
             var field = new CircularField(rings, sectors, strategy);
 
             // 并查集字典（键：扇形编号，值：集合根）
-            Dictionary<int, int> parent = new Dictionary<int, int>();
-            int nextSetId = 0;
+            var parent = new Dictionary<int, int>();
+            var nextSetId = 0;
 
             // 处理每一圈（从内到外）
-            for (int r = 0; r < field.rings; r++)
+            for (var r = 0; r < field.rings; r++)
             {
-                int sectorsInRing = field.GetSectorsInRing(r);
+                var sectorsInRing = field.GetSectorsInRing(r);
 
                 // 初始化当前圈的集合（未连接到内圈的扇形分配新集合）
-                for (int s = 0; s < sectorsInRing; s++)
+                for (var s = 0; s < sectorsInRing; s++)
                 {
                     if (!parent.ContainsKey(s))
                     {
@@ -53,12 +55,12 @@ namespace SimplexLab.Maze
                     }
                 }
 
-                // ========== 水平连接阶段（同圈连接）==========
-                for (int s = 0; s < sectorsInRing; s++)
+                // 水平连接阶段（同圈连接）
+                for (var s = 0; s < sectorsInRing; s++)
                 {
-                    int nextS = (s + 1) % sectorsInRing;
-                    int root1 = Find(parent, s);
-                    int root2 = Find(parent, nextS);
+                    var nextS = (s + 1) % sectorsInRing;
+                    var root1 = Find(parent, s);
+                    var root2 = Find(parent, nextS);
 
                     // 随机决定是否连接（最后一圈强制不闭合环形，否则保证每个集合至少有一个垂直连接）
                     if (root1 != root2 && random.Next(2) == 0)
@@ -69,16 +71,16 @@ namespace SimplexLab.Maze
                     }
                 }
 
-                // ========== 垂直连接阶段（内圈到外圈）==========
+                // 垂直连接阶段（内圈到外圈）
                 if (r < field.rings - 1)
                 {
-                    int nextSectors = field.GetSectorsInRing(r + 1);
+                    var nextSectors = field.GetSectorsInRing(r + 1);
 
                     // 确保每个集合至少有一个垂直连接
-                    Dictionary<int, List<int>> sets = new Dictionary<int, List<int>>();
-                    for (int s = 0; s < sectorsInRing; s++)
+                    var sets = new Dictionary<int, List<int>>();
+                    for (var s = 0; s < sectorsInRing; s++)
                     {
-                        int root = Find(parent, s);
+                        var root = Find(parent, s);
                         if (!sets.ContainsKey(root))
                         {
                             sets[root] = new List<int>();
@@ -87,15 +89,15 @@ namespace SimplexLab.Maze
                     }
 
                     // 为每个集合选择至少一个垂直连接
-                    bool[] hasVertical = new bool[sectorsInRing];
+                    var hasVertical = new bool[sectorsInRing];
                     foreach (var set in sets.Values)
                     {
-                        int selected = set[random.Next(set.Count)];
+                        var selected = set[random.Next(set.Count)];
                         hasVertical[selected] = true;
                     }
 
                     // 随机添加额外的垂直连接
-                    for (int s = 0; s < sectorsInRing; s++)
+                    for (var s = 0; s < sectorsInRing; s++)
                     {
                         if (!hasVertical[s] && random.Next(2) == 0)
                         {
@@ -104,24 +106,24 @@ namespace SimplexLab.Maze
                     }
 
                     // 执行垂直连接：打通内圈墙
-                    Dictionary<int, int> nextParent = new Dictionary<int, int>();
-                    for (int s = 0; s < sectorsInRing; s++)
+                    var nextParent = new Dictionary<int, int>();
+                    for (var s = 0; s < sectorsInRing; s++)
                     {
                         if (hasVertical[s])
                         {
                             field.SetInnerWall(r, s, false);
 
                             // 计算对应的外圈扇形
-                            int outerS = field.MapSector(r, s, r + 1);
+                            var outerS = field.MapSector(r, s, r + 1);
 
                             // 继承集合关系
-                            int root = Find(parent, s);
+                            var root = Find(parent, s);
                             nextParent[outerS] = root;
                         }
                     }
 
                     // 为下一圈准备新的parent，未连接的扇形分配新集合
-                    for (int s = 0; s < nextSectors; s++)
+                    for (var s = 0; s < nextSectors; s++)
                     {
                         if (!nextParent.ContainsKey(s))
                         {

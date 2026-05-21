@@ -70,6 +70,8 @@ namespace SimplexLab.Maze
                     return new CircularMazeEllerProvider();
                 case MazeAlgorithm.AldousBroder:
                     return new CircularMazeAldousBroderProvider();
+                case MazeAlgorithm.BFS:
+                    return new CircularMazeBfsProvider();
                 default:
                     break;
             }
