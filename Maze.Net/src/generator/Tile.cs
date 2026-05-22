@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SimplexLab.Maze
+﻿namespace SimplexLab.Maze
 {
     /// <summary>
     /// 格子
@@ -15,10 +13,6 @@ namespace SimplexLab.Maze
         /// 
         /// </summary>
         public int radial = 0;
-        /// <summary>
-        /// 
-        /// </summary>
-        internal int dir = 0;
 
         /// <summary>
         /// 
@@ -26,22 +20,9 @@ namespace SimplexLab.Maze
         /// <param name="lateral"></param>
         /// <param name="radial"></param>
         public Tile(int lateral, int radial)
-            : this(lateral, radial, 0)
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="d"></param>
-        public Tile(int lateral, int radial, int dir)
         {
             this.lateral = lateral;
             this.radial = radial;
-            this.dir = dir;
         }
 
         /// <summary>
@@ -52,8 +33,7 @@ namespace SimplexLab.Maze
         public bool Equals(Tile other)
         {
             return lateral == other.lateral && 
-                   radial  == other.radial  && 
-                   dir     == other.dir;
+                   radial  == other.radial;
         }
 
         /// <summary>
