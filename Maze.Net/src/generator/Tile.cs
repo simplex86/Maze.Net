@@ -1,4 +1,6 @@
-﻿namespace SimplexLab.Maze
+﻿using System;
+
+namespace SimplexLab.Maze
 {
     /// <summary>
     /// 格子
