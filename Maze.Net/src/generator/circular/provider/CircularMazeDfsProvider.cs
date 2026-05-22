@@ -91,9 +91,7 @@ namespace SimplexLab.Maze
         private List<Tile> GetUnvisitedNeighbors(CircularMazeField field, bool[][] visited, int ring, int sector)
         {
             var neighbors = new List<Tile>();
-            int sectorsInRing = field.GetSectorsInRing(ring);
 
-            // 内圈邻居
             if (ring > 0)
             {
                 int innerRing = ring - 1;
@@ -104,25 +102,28 @@ namespace SimplexLab.Maze
                 }
             }
 
-            // 外圈邻居
             if (ring < field.rings - 1)
             {
                 int outerRing = ring + 1;
-                int outerSector = field.MapSector(ring, sector, outerRing);
-                if (!visited[outerRing][outerSector])
+                int innerSectors = field.GetSectorsInRing(ring);
+                int outerSectors = field.GetSectorsInRing(outerRing);
+                int firstOuter = (sector * outerSectors) / innerSectors;
+                int lastOuter = ((sector + 1) * outerSectors) / innerSectors;
+                for (int os = firstOuter; os < lastOuter; os++)
                 {
-                    neighbors.Add(new Tile(outerRing, outerSector));
+                    if (!visited[outerRing][os])
+                    {
+                        neighbors.Add(new Tile(outerRing, os));
+                    }
                 }
             }
 
-            // 左邻居（逆时针）
             int leftSector = field.GetPrevSector(ring, sector);
             if (!visited[ring][leftSector])
             {
                 neighbors.Add(new Tile(ring, leftSector));
             }
 
-            // 右邻居（顺时针）
             int rightSector = field.GetNextSector(ring, sector);
             if (!visited[ring][rightSector])
             {
@@ -139,10 +140,7 @@ namespace SimplexLab.Maze
         {
             if (r1 == r2)
             {
-                // 同一圈：移除径向墙
-                //int sectorsInRing = field.GetSectorsInRing(r1);
                 int wallSector = Math.Min(s1, s2);
-                // 特殊情况：边界相邻（s1最大，s2最小）
                 if (Math.Abs(s1 - s2) > 1)
                 {
                     wallSector = Math.Max(s1, s2);
@@ -151,11 +149,9 @@ namespace SimplexLab.Maze
             }
             else
             {
-                // 不同圈：移除内圈墙
                 int wallRing = Math.Min(r1, r2);
-                //int fromRing = r1 < r2 ? r1 : r2;
-                int fromSector = r1 < r2 ? s1 : s2;
-                field.SetInnerWall(wallRing, fromSector, false);
+                int outerSector = r1 > r2 ? s1 : s2;
+                field.SetInnerWall(wallRing, outerSector, false);
             }
         }
     }

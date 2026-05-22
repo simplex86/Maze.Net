@@ -10,8 +10,9 @@ namespace SimplexLab.Maze
     public struct CircularMazeField
     {
         /// <summary>
-        /// 内圈墙（径向墙的内半径）- 分隔相邻圈的圆弧墙
-        /// [ring][sector]：表示圈 ring 的外半径（与圈 ring+1 之间）的墙是否存在
+        /// 内圈墙（圆弧墙）- 分隔相邻圈的墙
+        /// [ring][sector]：表示圈 ring 与圈 ring+1 之间、在外圈扇形 sector 位置处的墙是否存在
+        /// sector 按外圈（ring+1）的扇形索引，每个外圈扇形拥有独立的墙段
         /// </summary>
         private bool[][] innerWalls = null;
 
@@ -112,13 +113,24 @@ namespace SimplexLab.Maze
             for (var r = 0; r < this.rings; r++)
             {
                 var sectorsInRing = this.sectorsPerRing[r];
-                innerWalls[r] = new bool[sectorsInRing];
                 radialWalls[r] = new bool[sectorsInRing];
-
                 for (var s = 0; s < sectorsInRing; s++)
                 {
-                    innerWalls[r][s] = true;  // 内圈墙存在
-                    radialWalls[r][s] = true;  // 径向墙存在
+                    radialWalls[r][s] = true;
+                }
+
+                if (r < this.rings - 1)
+                {
+                    var outerSectorsInRing = this.sectorsPerRing[r + 1];
+                    innerWalls[r] = new bool[outerSectorsInRing];
+                    for (var s = 0; s < outerSectorsInRing; s++)
+                    {
+                        innerWalls[r][s] = true;
+                    }
+                }
+                else
+                {
+                    innerWalls[r] = Array.Empty<bool>();
                 }
             }
         }
@@ -178,20 +190,22 @@ namespace SimplexLab.Maze
 
         /// <summary>
         /// 获取内圈墙状态（分隔圈 ring 和 ring+1 的墙）
+        /// sector 为外圈（ring+1）的扇形索引
         /// </summary>
         public bool GetInnerWall(int ring, int sector)
         {
-            if (ring < 0 || ring >= rings - 1 || sector < 0 || sector >= GetSectorsInRing(ring))
+            if (ring < 0 || ring >= rings - 1 || sector < 0 || sector >= GetSectorsInRing(ring + 1))
                 return true;
             return innerWalls[ring][sector];
         }
 
         /// <summary>
         /// 设置内圈墙状态（分隔圈 ring 和 ring+1 的墙）
+        /// sector 为外圈（ring+1）的扇形索引
         /// </summary>
         public void SetInnerWall(int ring, int sector, bool exists)
         {
-            if (ring < 0 || ring >= rings - 1 || sector < 0 || sector >= GetSectorsInRing(ring))
+            if (ring < 0 || ring >= rings - 1 || sector < 0 || sector >= GetSectorsInRing(ring + 1))
                 return;
             innerWalls[ring][sector] = exists;
         }

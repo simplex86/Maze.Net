@@ -88,30 +88,16 @@ namespace Maze.TApplication
 
             var pen = new Pen(Color.Black);
 
-            // 获取最大的扇形数（通常是最外圈），用于所有径向墙对齐
-            var maxSectors = 0;
-            for (var r = 0; r < field.rings; r++)
-            {
-                var s = field.GetSectorsInRing(r);
-                if (s > maxSectors) maxSectors = s;
-            }
-            var maxAngleStep = 2 * Math.PI / maxSectors;
-
             // 1. 绘制所有内圈墙（圆弧墙，分隔相邻圈）
             for (var r = 0; r < field.rings - 1; r++)
             {
-                // 对于分隔圈 r 和 r+1 的内圈墙，应该使用外圈（r+1）的扇形数
                 var sectorsInOuterRing = field.GetSectorsInRing(r + 1);
                 var angleStep = 2 * Math.PI / sectorsInOuterRing;
                 var outerRadius = (r + 1) * thickness;
 
                 for (var s = 0; s < sectorsInOuterRing; s++)
                 {
-                    // 将外圈的扇形映射到内圈的对应扇形
-                    var mappedInnerSector = field.MapSector(r + 1, s, r);
-                    
-                    // 如果墙存在，绘制它
-                    if (field.GetInnerWall(r, mappedInnerSector))
+                    if (field.GetInnerWall(r, s))
                     {
                         var startAngle = s * angleStep - Math.PI / 2;
                         DrawArc(grap, pen, centerX, centerY, outerRadius, startAngle, angleStep);
@@ -120,27 +106,21 @@ namespace Maze.TApplication
             }
 
             // 2. 绘制所有径向墙（直线墙，分隔同一圈相邻扇形）
+            // radialWalls[r][s] 是扇形 s 与扇形 (s+1)%n 之间的墙
+            // 该墙位于扇形 s 的右边界，即角度 (s+1) * 2π/n
             for (var r = 0; r < field.rings; r++)
             {
                 var sectorsInRing = field.GetSectorsInRing(r);
                 var innerRadius = r * thickness;
                 var outerRadius = (r + 1) * thickness;
+                var angleStep = 2 * Math.PI / sectorsInRing;
 
-                var drawn = new bool[sectorsInRing]; // 避免重复绘制
-
-                // 遍历每一个可能的对齐位置（使用maxSectors）
-                for (var align = 0; align < maxSectors; align++)
+                for (var s = 0; s < sectorsInRing; s++)
                 {
-                    // 计算当前对齐角度对应的该圈扇形
-                    var s = (align * sectorsInRing) / maxSectors;
-                    
-                    // 检查墙是否存在且未绘制
-                    if (field.GetRadialWall(r, s) && !drawn[s])
+                    if (field.GetRadialWall(r, s))
                     {
-                        // 用最大扇形数的角度来绘制，确保对齐！
-                        var angle = align * maxAngleStep - Math.PI / 2;
+                        var angle = ((s + 1) % sectorsInRing) * angleStep - Math.PI / 2;
                         DrawRadialLine(grap, pen, centerX, centerY, innerRadius, outerRadius, angle);
-                        drawn[s] = true;
                     }
                 }
             }
