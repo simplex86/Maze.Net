@@ -49,9 +49,10 @@
             // canvas
             // 
             canvas.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            canvas.Location = new System.Drawing.Point(218, 3);
+            canvas.Location = new System.Drawing.Point(343, 4);
+            canvas.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             canvas.Name = "canvas";
-            canvas.Size = new System.Drawing.Size(529, 574);
+            canvas.Size = new System.Drawing.Size(831, 810);
             canvas.TabIndex = 0;
             canvas.TabStop = false;
             canvas.Paint += OnCanvasPaintHandler;
@@ -59,9 +60,10 @@
             // generation
             // 
             generation.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-            generation.Location = new System.Drawing.Point(3, 512);
+            generation.Location = new System.Drawing.Point(5, 723);
+            generation.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             generation.Name = "generation";
-            generation.Size = new System.Drawing.Size(210, 65);
+            generation.Size = new System.Drawing.Size(330, 92);
             generation.TabIndex = 1;
             generation.Text = "Generate";
             generation.UseVisualStyleBackColor = true;
@@ -69,59 +71,61 @@
             // 
             // label10
             // 
-            label10.Location = new System.Drawing.Point(3, 118);
-            label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label10.Location = new System.Drawing.Point(5, 167);
             label10.Name = "label10";
             label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label10.Size = new System.Drawing.Size(74, 17);
+            label10.Size = new System.Drawing.Size(116, 24);
             label10.TabIndex = 12;
             label10.Text = "Thickness";
             label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // thickness
             // 
-            thickness.Location = new System.Drawing.Point(93, 116);
-            thickness.Margin = new System.Windows.Forms.Padding(2);
+            thickness.Location = new System.Drawing.Point(146, 164);
             thickness.Minimum = new decimal(new int[] { 15, 0, 0, 0 });
             thickness.Name = "thickness";
-            thickness.Size = new System.Drawing.Size(120, 23);
+            thickness.Size = new System.Drawing.Size(189, 30);
             thickness.TabIndex = 13;
             thickness.Value = new decimal(new int[] { 20, 0, 0, 0 });
             // 
             // sectors
             // 
-            sectors.Location = new System.Drawing.Point(93, 59);
+            sectors.Location = new System.Drawing.Point(146, 83);
+            sectors.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             sectors.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
             sectors.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             sectors.Name = "sectors";
-            sectors.Size = new System.Drawing.Size(120, 23);
+            sectors.Size = new System.Drawing.Size(189, 30);
             sectors.TabIndex = 11;
             sectors.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
             // rings
             // 
-            rings.Location = new System.Drawing.Point(93, 32);
+            rings.Location = new System.Drawing.Point(146, 45);
+            rings.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             rings.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             rings.Name = "rings";
-            rings.Size = new System.Drawing.Size(120, 23);
+            rings.Size = new System.Drawing.Size(189, 30);
             rings.TabIndex = 10;
             rings.Value = new decimal(new int[] { 20, 0, 0, 0 });
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(3, 61);
+            label2.Location = new System.Drawing.Point(5, 86);
+            label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(51, 17);
+            label2.Size = new System.Drawing.Size(72, 24);
             label2.TabIndex = 9;
             label2.Text = "Sectors";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(3, 34);
+            label1.Location = new System.Drawing.Point(5, 48);
+            label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(40, 17);
+            label1.Size = new System.Drawing.Size(58, 24);
             label1.TabIndex = 8;
             label1.Text = "Rings";
             // 
@@ -130,19 +134,17 @@
             algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             algorithm.FormattingEnabled = true;
             algorithm.Items.AddRange(new object[] { "DFS", "BFS", "Prim", "Kruskal", "Wilson", "Eller", "AldousBroder" });
-            algorithm.Location = new System.Drawing.Point(93, 3);
-            algorithm.Margin = new System.Windows.Forms.Padding(2);
+            algorithm.Location = new System.Drawing.Point(146, 4);
             algorithm.Name = "algorithm";
-            algorithm.Size = new System.Drawing.Size(120, 25);
+            algorithm.Size = new System.Drawing.Size(186, 32);
             algorithm.TabIndex = 23;
             // 
             // label13
             // 
-            label13.Location = new System.Drawing.Point(3, 6);
-            label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label13.Location = new System.Drawing.Point(5, 8);
             label13.Name = "label13";
             label13.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label13.Size = new System.Drawing.Size(86, 17);
+            label13.Size = new System.Drawing.Size(135, 24);
             label13.TabIndex = 22;
             label13.Text = "Algorithm";
             label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -151,27 +153,25 @@
             // 
             strategy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             strategy.FormattingEnabled = true;
-            strategy.Items.AddRange(new object[] { "Each", "Arc", "Area" });
-            strategy.Location = new System.Drawing.Point(93, 87);
-            strategy.Margin = new System.Windows.Forms.Padding(2);
+            strategy.Items.AddRange(new object[] { "Arc", "Area" });
+            strategy.Location = new System.Drawing.Point(146, 123);
             strategy.Name = "strategy";
-            strategy.Size = new System.Drawing.Size(120, 25);
+            strategy.Size = new System.Drawing.Size(186, 32);
             strategy.TabIndex = 25;
             // 
             // label3
             // 
-            label3.Location = new System.Drawing.Point(3, 90);
-            label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label3.Location = new System.Drawing.Point(5, 127);
             label3.Name = "label3";
             label3.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label3.Size = new System.Drawing.Size(86, 17);
+            label3.Size = new System.Drawing.Size(135, 24);
             label3.TabIndex = 24;
             label3.Text = "Strategy";
             label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CircularMazeControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(strategy);
             Controls.Add(label3);
@@ -185,8 +185,9 @@
             Controls.Add(label1);
             Controls.Add(generation);
             Controls.Add(canvas);
+            Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             Name = "CircularMazeControl";
-            Size = new System.Drawing.Size(750, 580);
+            Size = new System.Drawing.Size(1179, 819);
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             ((System.ComponentModel.ISupportInitialize)thickness).EndInit();
             ((System.ComponentModel.ISupportInitialize)sectors).EndInit();

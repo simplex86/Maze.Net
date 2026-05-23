@@ -24,7 +24,7 @@ namespace SimplexLab.Maze
         /// <param name="sectors">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public CircularMazeField Create(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
+        public CircularMazeField Create(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Arc)
         {
             if (provider == null || provider.algorithm != algorithm)
             {
@@ -44,7 +44,7 @@ namespace SimplexLab.Maze
         /// <param name="sectors">高度</param>
         /// <param name="algorithm">生成算法</param>
         /// <returns>生成的迷宫场地</returns>
-        public async Task<CircularMazeField> CreateAsync(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Each)
+        public async Task<CircularMazeField> CreateAsync(int rings, int sectors, MazeAlgorithm algorithm = MazeAlgorithm.DFS, SectorStrategy strategy = SectorStrategy.Arc)
         {
             return await Task.Run(() => Create(rings, sectors, algorithm, strategy));
         }
@@ -60,6 +60,8 @@ namespace SimplexLab.Maze
             {
                 case MazeAlgorithm.DFS:
                     return new CircularMazeDfsProvider();
+                case MazeAlgorithm.BFS:
+                    return new CircularMazeBfsProvider();
                 case MazeAlgorithm.Prim:
                     return new CircularMazePrimProvider();
                 case MazeAlgorithm.Kruskal:
@@ -70,13 +72,11 @@ namespace SimplexLab.Maze
                     return new CircularMazeEllerProvider();
                 case MazeAlgorithm.AldousBroder:
                     return new CircularMazeAldousBroderProvider();
-                case MazeAlgorithm.BFS:
-                    return new CircularMazeBfsProvider();
                 default:
                     break;
             }
 
-            return null;
+            return new CircularMazeDfsProvider();
         }
     }
 }

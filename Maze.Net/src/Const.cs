@@ -41,16 +41,12 @@ namespace SimplexLab.Maze
     public enum SectorStrategy
     {
         /// <summary>
-        /// 每圈扇形数相同
-        /// </summary>
-        Each = 1,
-        /// <summary>
         /// 弧长相同
         /// </summary>
-        Arc = 2,
+        Arc = 1,
         /// <summary>
         /// 面积相同
         /// </summary>
-        Area = 3,
+        Area = 2,
     }
 }

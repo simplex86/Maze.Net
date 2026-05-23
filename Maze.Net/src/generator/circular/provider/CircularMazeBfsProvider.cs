@@ -11,7 +11,7 @@ namespace SimplexLab.Maze
 
         public CircularMazeField Create(int rings, int sectors)
         {
-            return Create(rings, sectors, SectorStrategy.Each);
+            return Create(rings, sectors, SectorStrategy.Arc);
         }
 
         public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)

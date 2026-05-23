@@ -19,7 +19,7 @@ namespace Maze.TApplication
         {
             InitializeComponent();
             algorithm.SelectedIndex = 0;
-            strategy.SelectedIndex = 1;
+            strategy.SelectedIndex = 0;
         }
 
         private void OnGenerationClickedHandler(object sender, System.EventArgs e)

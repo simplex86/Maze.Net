@@ -81,7 +81,7 @@ namespace Maze.TApplication
             circularMazePage.Margin = new Padding(5, 4, 5, 4);
             circularMazePage.Name = "circularMazePage";
             circularMazePage.Padding = new Padding(5, 4, 5, 4);
-            circularMazePage.Size = new Size(1890, 987);
+            circularMazePage.Size = new Size(1550, 987);
             circularMazePage.TabIndex = 1;
             circularMazePage.Text = "Circular Maze";
             circularMazePage.UseVisualStyleBackColor = true;
@@ -92,7 +92,7 @@ namespace Maze.TApplication
             circularMazeControl1.Location = new Point(5, 4);
             circularMazeControl1.Margin = new Padding(8, 6, 8, 6);
             circularMazeControl1.Name = "circularMazeControl1";
-            circularMazeControl1.Size = new Size(1880, 979);
+            circularMazeControl1.Size = new Size(1540, 979);
             circularMazeControl1.TabIndex = 4;
             // 
             // MainForm
@@ -105,7 +105,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1200, 800);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.6.25";
+            Text = "Maze Generator v0.6.29";
             tabs.ResumeLayout(false);
             rectangularMazePage.ResumeLayout(false);
             circularMazePage.ResumeLayout(false);
