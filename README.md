@@ -59,26 +59,33 @@ public class CircularMazeGenerator
 #### 同步函数
 
 ``` csharp
-public CircularMazeField Create(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+public CircularMazeField Create(int rings, 
+                                int sectors, 
+                                MazeAlgorithm algorithm = MazeAlgorithm.DFS, 
+                                SectorStrategy strategy = SectorStrategy.Arc)
 ```
 
 #### 异步函数
 
 ``` csharp
-public await Task<CircularMazeField> CreateAsync(int width, int height, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+public async Task<CircularMazeField> CreateAsync(int rings, 
+                                                 int sectors, 
+                                                 MazeAlgorithm algorithm = MazeAlgorithm.DFS, 
+                                                 SectorStrategy strategy = SectorStrategy.Arc)
 ```
 
 #### 参数
 
-- **width**  宽度
-- **height** 高度
+- **width** 环数
+- **height** 分割数
 - **algorithm** 生成算法
+- **strategy** 分割策略
 
 ### 示例
 
 ``` csharp
 var generator = new CircularMazeGenerator();
-generator.Create(width, height, MazeAlgorithm.Kruskal);
+generator.Create(rings, sectors, MazeAlgorithm.Kruskal, SectorStrategy.Arc);
 ```
 
 ### 效果
