@@ -1,7 +1,7 @@
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 矩形迷宫算法
+    /// 迷宫算法
     /// </summary>
     public enum MazeAlgorithm
     {
@@ -33,7 +33,6 @@ namespace SimplexLab.Maze
         /// 
         /// </summary>
         AldousBroder = 7,
-        
     }
 
     /// <summary>
