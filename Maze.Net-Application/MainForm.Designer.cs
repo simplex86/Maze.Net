@@ -105,7 +105,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1200, 800);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.6.29";
+            Text = "Maze Generator v0.6.59";
             tabs.ResumeLayout(false);
             rectangularMazePage.ResumeLayout(false);
             circularMazePage.ResumeLayout(false);

@@ -66,31 +66,39 @@ namespace SimplexLab.Maze
             // 计算每圈的扇形数量
             this.sectorsPerRing = new int[this.rings];
 
-            // 1. 从内圈开始，扇形数从较小的值开始
-            // 2. 逐圈向外，根据弧长判断是否需要翻倍
-            // 3. 保证不超过最大扇形数
-
-            // 先找到最大的 2 的幂次，不超过 maxSectors
             var normalizedMaxSectors = 3;
             while (normalizedMaxSectors * 2 <= this.sectors)
             {
                 normalizedMaxSectors *= 2;
             }
 
-            // 从内圈开始计算
-            this.sectorsPerRing[0] = 3;  // 最内圈至少 3 个扇形
-            for (var r = 1; r < this.rings; r++)
+            if (strategy == SectorStrategy.Arc)
             {
-                this.sectorsPerRing[r] = this.sectorsPerRing[r - 1];
-                // 计算弧长（半径 = r + 1，因为我们从 ring 0 开始）
-                double arcLength = (2 * Math.PI * (r + 1)) / this.sectorsPerRing[r - 1];
-                if (arcLength > 2.0 && this.sectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                this.sectorsPerRing[0] = 3;
+                for (var r = 1; r < this.rings; r++)
                 {
-                    this.sectorsPerRing[r] *= 2;
+                    this.sectorsPerRing[r] = this.sectorsPerRing[r - 1];
+                    double arcLength = (2 * Math.PI * (r + 1)) / this.sectorsPerRing[r - 1];
+                    if (arcLength > 2.0 && this.sectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                    {
+                        this.sectorsPerRing[r] *= 2;
+                    }
+                }
+            }
+            else
+            {
+                this.sectorsPerRing[0] = 3;
+                for (var r = 1; r < this.rings; r++)
+                {
+                    this.sectorsPerRing[r] = this.sectorsPerRing[r - 1];
+                    double area = (Math.PI * (r + 1) * (r + 1)) / this.sectorsPerRing[r - 1];
+                    if (area > 2.0 && this.sectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                    {
+                        this.sectorsPerRing[r] *= 2;
+                    }
                 }
             }
 
-            // 确保最外圈至少达到 normalizedMaxSectors
             if (this.sectorsPerRing[this.rings - 1] < normalizedMaxSectors)
             {
                 this.sectorsPerRing[this.rings - 1] = normalizedMaxSectors;
