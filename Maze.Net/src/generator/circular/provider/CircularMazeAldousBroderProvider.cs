@@ -98,8 +98,15 @@ namespace SimplexLab.Maze
             // 外圈邻居
             if (ring < field.rings - 1)
             {
-                var outerSector = field.MapSector(ring, sector, ring + 1);
-                neighbors.Add(new Tile(ring + 1, outerSector));
+                int outerRing = ring + 1;
+                int innerSectors = field.GetSectorsInRing(ring);
+                int outerSectors = field.GetSectorsInRing(outerRing);
+                int firstOuter = (sector * outerSectors) / innerSectors;
+                int lastOuter = ((sector + 1) * outerSectors) / innerSectors;
+                for (int os = firstOuter; os < lastOuter; os++)
+                {
+                    neighbors.Add(new Tile(outerRing, os));
+                }
             }
 
             // 逆时针邻居
@@ -142,8 +149,8 @@ namespace SimplexLab.Maze
             {
                 // 不同圈：移除内圈墙
                 var innerRing = Math.Min(tile1.lateral, tile2.lateral);
-                var innerSector = tile1.lateral == innerRing ? tile1.radial : tile2.radial;
-                field.SetInnerWall(innerRing, innerSector, false);
+                var outerSector = tile1.lateral != innerRing ? tile1.radial : tile2.radial;
+                field.SetInnerWall(innerRing, outerSector, false);
             }
         }
     }

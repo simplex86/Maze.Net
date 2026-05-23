@@ -98,8 +98,7 @@ namespace SimplexLab.Maze
                     var idx1 = field.GetTileIndex(innerRing, innerSector);
                     var idx2 = field.GetTileIndex(outerRing, outerSector);
                     
-                    // 这里我们传递内圈的扇形位置，因为 innerWalls 是以内圈扇形索引存储的
-                    walls.Add(new Wall(WallType.Inner, r, innerSector, idx1, idx2));
+                    walls.Add(new Wall(WallType.Inner, r, s, idx1, idx2));
                 }
             }
 

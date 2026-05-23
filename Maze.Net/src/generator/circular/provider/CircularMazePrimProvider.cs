@@ -99,10 +99,16 @@ namespace SimplexLab.Maze
             if (ring < field.rings - 1)
             {
                 var outerRing = ring + 1;
-                var outerSector = field.MapSector(ring, sector, outerRing);
-                if (!visited[outerRing][outerSector])
+                int innerSectors = field.GetSectorsInRing(ring);
+                int outerSectors = field.GetSectorsInRing(outerRing);
+                int firstOuter = (sector * outerSectors) / innerSectors;
+                int lastOuter = ((sector + 1) * outerSectors) / innerSectors;
+                for (int os = firstOuter; os < lastOuter; os++)
                 {
-                    edges.Add(Tuple.Create(new Tile(ring, sector), new Tile(outerRing, outerSector)));
+                    if (!visited[outerRing][os])
+                    {
+                        edges.Add(Tuple.Create(new Tile(ring, sector), new Tile(outerRing, os)));
+                    }
                 }
             }
 
@@ -143,8 +149,8 @@ namespace SimplexLab.Maze
                 // 不同圈：移除内圈墙
                 var wallRing = Math.Min(r1, r2);
                 //var fromRing = r1 < r2 ? r1 : r2;
-                var fromSector = r1 < r2 ? s1 : s2;
-                field.SetInnerWall(wallRing, fromSector, false);
+                var outerSector = r1 > r2 ? s1 : s2;
+                field.SetInnerWall(wallRing, outerSector, false);
             }
         }
     }

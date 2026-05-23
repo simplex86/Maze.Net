@@ -39,7 +39,7 @@ namespace SimplexLab.Maze
 
             // 并查集字典（键：扇形编号，值：集合根）
             var parent = new Dictionary<int, int>();
-            var nextSetId = 0;
+            var nextSetId = field.sectors;
 
             // 处理每一圈（从内到外）
             for (var r = 0; r < field.rings; r++)
@@ -56,16 +56,16 @@ namespace SimplexLab.Maze
                 }
 
                 // 水平连接阶段（同圈连接）
+                var isLastRing = (r == field.rings - 1);
+
                 for (var s = 0; s < sectorsInRing; s++)
                 {
                     var nextS = (s + 1) % sectorsInRing;
                     var root1 = Find(parent, s);
                     var root2 = Find(parent, nextS);
 
-                    // 随机决定是否连接（最后一圈强制不闭合环形，否则保证每个集合至少有一个垂直连接）
-                    if (root1 != root2 && random.Next(2) == 0)
+                    if (root1 != root2 && (isLastRing || random.Next(2) == 0))
                     {
-                        // 打通径向墙
                         field.SetRadialWall(r, s, false);
                         parent[root2] = root1;
                     }
@@ -111,12 +111,9 @@ namespace SimplexLab.Maze
                     {
                         if (hasVertical[s])
                         {
-                            field.SetInnerWall(r, s, false);
-
-                            // 计算对应的外圈扇形
                             var outerS = field.MapSector(r, s, r + 1);
+                            field.SetInnerWall(r, outerS, false);
 
-                            // 继承集合关系
                             var root = Find(parent, s);
                             nextParent[outerS] = root;
                         }
