@@ -3,17 +3,39 @@ using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
+    /// <summary>
+    /// 圆形迷宫生成器
+    /// 基于BFS算法生成随机迷宫
+    /// </summary>
     public class CircularMazeBfsProvider : ICircularMazeProvider
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private Random random = new Random();
-
+        /// <summary>
+        /// 
+        /// </summary>
         public MazeAlgorithm algorithm { get; } = MazeAlgorithm.BFS;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rings"></param>
+        /// <param name="sectors"></param>
+        /// <returns></returns>
         public CircularMazeField Create(int rings, int sectors)
         {
             return Create(rings, sectors, SectorStrategy.Arc);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rings"></param>
+        /// <param name="sectors"></param>
+        /// <param name="strategy"></param>
+        /// <returns></returns>
         public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)
         {
             var field = new CircularMazeField(rings, sectors, strategy);
@@ -38,7 +60,7 @@ namespace SimplexLab.Maze
                 queue.RemoveAt(index);
 
                 var neighbors = GetNeighborPositions(field, tile.lateral, tile.radial);
-                Shuffle(neighbors);
+                neighbors.Shuffle(random);
 
                 foreach (var (nr, ns) in neighbors)
                 {
@@ -54,6 +76,13 @@ namespace SimplexLab.Maze
             return field;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="ring"></param>
+        /// <param name="sector"></param>
+        /// <returns></returns>
         private List<(int ring, int sector)> GetNeighborPositions(CircularMazeField field, int ring, int sector)
         {
             var neighbors = new List<(int, int)>();
@@ -87,6 +116,14 @@ namespace SimplexLab.Maze
             return neighbors;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="ring1"></param>
+        /// <param name="sector1"></param>
+        /// <param name="ring2"></param>
+        /// <param name="sector2"></param>
         private void RemoveWall(CircularMazeField field, int ring1, int sector1, int ring2, int sector2)
         {
             if (ring1 == ring2)
@@ -104,17 +141,6 @@ namespace SimplexLab.Maze
                 int innerRing = Math.Min(ring1, ring2);
                 int outerSector = (ring1 > ring2) ? sector1 : sector2;
                 field.SetInnerWall(innerRing, outerSector, false);
-            }
-        }
-
-        private void Shuffle<T>(List<T> list)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-                T temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
             }
         }
     }

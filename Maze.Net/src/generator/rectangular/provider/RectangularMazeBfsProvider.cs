@@ -74,7 +74,7 @@ namespace SimplexLab.Maze
                 }
 
                 // 随机打乱下一层的顺序，增加迷宫的随机性
-                Shuffle(nextLevel);
+                nextLevel.Shuffle(random);
 
                 // 处理下一层
                 var newCurrentLevel = new Queue<Tile>();
@@ -129,20 +129,6 @@ namespace SimplexLab.Maze
             }
 
             return neighbors;
-        }
-
-        /// <summary>
-        /// Fisher-Yates 洗牌算法
-        /// </summary>
-        private void Shuffle<T>(List<T> list)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-                T temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
-            }
         }
     }
 }

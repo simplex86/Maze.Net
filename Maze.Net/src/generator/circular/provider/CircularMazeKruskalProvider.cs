@@ -68,7 +68,7 @@ namespace SimplexLab.Maze
             var field = new CircularMazeField(rings, sectors, strategy);
             var cells = field.GetTotalCells();
 
-            // 收集所有墙，预先计算索引
+            // 预先计算索引
             var walls = new List<Wall>();
 
             // 收集径向墙（同圈相邻扇形之间的墙）
@@ -86,7 +86,6 @@ namespace SimplexLab.Maze
             // 收集内圈墙（相邻圈之间的墙）
             for (var r = 0; r < field.rings - 1; r++)
             {
-                // 关键修复：使用外圈的扇形数，而不是内圈的
                 var sectorsInOuterRing = field.GetSectorsInRing(r + 1);
                 for (var s = 0; s < sectorsInOuterRing; s++)
                 {
@@ -105,10 +104,7 @@ namespace SimplexLab.Maze
             // 打乱墙的顺序
             walls.Shuffle(random);
 
-            // 管理连通性
             var dsu = new DisjointSet(cells);
-
-            // 逐个尝试打通墙
             foreach (var wall in walls)
             {
                 // 如果两个格子不在同一连通分量，则打通墙

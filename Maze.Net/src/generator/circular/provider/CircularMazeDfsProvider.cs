@@ -5,7 +5,7 @@ namespace SimplexLab.Maze
 {
     /// <summary>
     /// 圆形迷宫生成器
-    /// 基于深度优先搜索算法生成随机迷宫
+    /// 基于DFS算法生成随机迷宫
     /// </summary>
     public class CircularMazeDfsProvider : ICircularMazeProvider
     {

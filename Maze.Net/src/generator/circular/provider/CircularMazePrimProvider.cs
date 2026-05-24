@@ -134,8 +134,6 @@ namespace SimplexLab.Maze
         {
             if (r1 == r2)
             {
-                // 同一圈：移除径向墙
-                //var sectorsInRing = field.GetSectorsInRing(r1);
                 var wallSector = Math.Min(s1, s2);
                 // 特殊情况：边界相邻（s1最大，s2最小）
                 if (Math.Abs(s1 - s2) > 1)
@@ -148,7 +146,6 @@ namespace SimplexLab.Maze
             {
                 // 不同圈：移除内圈墙
                 var wallRing = Math.Min(r1, r2);
-                //var fromRing = r1 < r2 ? r1 : r2;
                 var outerSector = r1 > r2 ? s1 : s2;
                 field.SetInnerWall(wallRing, outerSector, false);
             }
