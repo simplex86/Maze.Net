@@ -1,69 +1,32 @@
 using System;
+using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
-    /// <summary>
-    /// 圆形迷宫场地
-    /// 使用极坐标系统：ring（圈数）和 sector（扇形数）
-    /// 存储相邻格子之间的墙的状态
-    /// </summary>
-    public struct CircularMazeField
+    public struct CircularMazeField : IMazeField
     {
-        /// <summary>
-        /// 内圈墙（圆弧墙）- 分隔相邻圈的墙
-        /// [ring][sector]：表示圈 ring 与圈 ring+1 之间、在外圈扇形 sector 位置处的墙是否存在
-        /// sector 按外圈（ring+1）的扇形索引，每个外圈扇形拥有独立的墙段
-        /// </summary>
         private bool[][] innerWalls = null;
-
-        /// <summary>
-        /// 径向墙（放射状墙）- 分隔同一圈相邻扇形的直线墙
-        /// [ring][sector]：表示圈 ring 的 sector 与 sector+1 之间的墙是否存在
-        /// </summary>
         private bool[][] radialWalls = null;
-
-        /// <summary>
-        /// 每圈的扇形数量缓存
-        /// </summary>
         private int[] sectorsPerRing = null;
+        private int cachedCellCount = 0;
 
-        /// <summary>
-        /// 圈数（从中心向外的层数）
-        /// </summary>
         public int rings { get; } = 20;
-
-        /// <summary>
-        /// 最大扇形数（最外圈的扇形数量）
-        /// </summary>
         public int sectors { get; } = 100;
-
-        /// <summary>
-        /// 扇形分割策略
-        /// </summary>
         public SectorStrategy strategy { get; } = SectorStrategy.Arc;
 
-        /// <summary>
-        /// 初始化圆形迷宫场地
-        /// </summary>
+        public int count => cachedCellCount;
+
         public CircularMazeField(int rings, int sectors)
             : this(rings, sectors, SectorStrategy.Arc)
         {
-
         }
 
-        /// <summary>
-        /// 初始化圆形迷宫场地
-        /// </summary>
-        /// <param name="rings">圈数</param>
-        /// <param name="maxSectors">最大扇形数（最外圈）</param>
         public CircularMazeField(int rings, int maxSectors, SectorStrategy strategy)
         {
-            // 确保最小尺寸
             this.rings = Math.Max(1, rings);
             this.sectors = Math.Max(3, maxSectors);
             this.strategy = strategy;
 
-            // 计算每圈的扇形数量
             this.sectorsPerRing = new int[this.rings];
 
             var normalizedMaxSectors = 3;
@@ -104,11 +67,9 @@ namespace SimplexLab.Maze
                 this.sectorsPerRing[this.rings - 1] = normalizedMaxSectors;
             }
 
-            // 创建墙数组
             innerWalls = new bool[this.rings][];
             radialWalls = new bool[this.rings][];
 
-            // 初始化所有墙为"存在"状态
             for (var r = 0; r < this.rings; r++)
             {
                 var sectorsInRing = this.sectorsPerRing[r];
@@ -132,11 +93,14 @@ namespace SimplexLab.Maze
                     innerWalls[r] = Array.Empty<bool>();
                 }
             }
+
+            cachedCellCount = 0;
+            for (var r = 0; r < this.rings; r++)
+            {
+                cachedCellCount += this.sectorsPerRing[r];
+            }
         }
 
-        /// <summary>
-        /// 获取指定圈的扇形数量
-        /// </summary>
         public int GetSectorsInRing(int ring)
         {
             if (ring < 0 || ring >= rings)
@@ -144,53 +108,30 @@ namespace SimplexLab.Maze
             return sectorsPerRing[ring];
         }
 
-        /// <summary>
-        /// 将某圈的扇形映射到内圈/外圈的对应扇形
-        /// </summary>
         public int MapSector(int fromRing, int fromSector, int toRing)
         {
             var fromSectors = GetSectorsInRing(fromRing);
             var toSectors = GetSectorsInRing(toRing);
-
-            // 比例映射
             return (fromSector * toSectors) / fromSectors;
         }
 
-        /// <summary>
-        /// 获取某个格子的下一个扇形（顺时针方向）
-        /// </summary>
         public int GetNextSector(int ring, int sector)
         {
             var sectorsInRing = GetSectorsInRing(ring);
             return (sector + 1) % sectorsInRing;
         }
 
-        /// <summary>
-        /// 获取某个格子的上一个扇形（逆时针方向）
-        /// </summary>
         public int GetPrevSector(int ring, int sector)
         {
             var sectorsInRing = GetSectorsInRing(ring);
             return (sector - 1 + sectorsInRing) % sectorsInRing;
         }
 
-        /// <summary>
-        /// 获取格子总数
-        /// </summary>
         public int GetTotalCells()
         {
-            var total = 0;
-            for (var r = 0; r < rings; r++)
-            {
-                total += GetSectorsInRing(r);
-            }
-            return total;
+            return cachedCellCount;
         }
 
-        /// <summary>
-        /// 获取内圈墙状态（分隔圈 ring 和 ring+1 的墙）
-        /// sector 为外圈（ring+1）的扇形索引
-        /// </summary>
         public bool GetInnerWall(int ring, int sector)
         {
             if (ring < 0 || ring >= rings - 1 || sector < 0 || sector >= GetSectorsInRing(ring + 1))
@@ -198,10 +139,6 @@ namespace SimplexLab.Maze
             return innerWalls[ring][sector];
         }
 
-        /// <summary>
-        /// 设置内圈墙状态（分隔圈 ring 和 ring+1 的墙）
-        /// sector 为外圈（ring+1）的扇形索引
-        /// </summary>
         public void SetInnerWall(int ring, int sector, bool exists)
         {
             if (ring < 0 || ring >= rings - 1 || sector < 0 || sector >= GetSectorsInRing(ring + 1))
@@ -209,9 +146,6 @@ namespace SimplexLab.Maze
             innerWalls[ring][sector] = exists;
         }
 
-        /// <summary>
-        /// 获取径向墙状态（分隔圈 ring 内 sector 和 sector+1 的墙）
-        /// </summary>
         public bool GetRadialWall(int ring, int sector)
         {
             if (ring < 0 || ring >= rings || sector < 0 || sector >= GetSectorsInRing(ring))
@@ -219,9 +153,6 @@ namespace SimplexLab.Maze
             return radialWalls[ring][sector];
         }
 
-        /// <summary>
-        /// 设置径向墙状态（分隔圈 ring 内 sector 和 sector+1 的墙）
-        /// </summary>
         public void SetRadialWall(int ring, int sector, bool exists)
         {
             if (ring < 0 || ring >= rings || sector < 0 || sector >= GetSectorsInRing(ring))
@@ -229,10 +160,6 @@ namespace SimplexLab.Maze
             radialWalls[ring][sector] = exists;
         }
 
-        /// <summary>
-        /// 将指定的(ring, sector)映射到唯一的整数索引
-        /// 用于DisjointSet等需要整数索引的场景
-        /// </summary>
         public int GetTileIndex(int ring, int sector)
         {
             if (ring < 0 || ring >= rings || sector < 0 || sector >= GetSectorsInRing(ring))
@@ -244,6 +171,132 @@ namespace SimplexLab.Maze
                 index += sectorsPerRing[r];
             }
             return index + sector;
+        }
+
+        public int GetTileIndex(Tile tile)
+        {
+            return GetTileIndex(tile.lateral, tile.radial);
+        }
+
+        public Tile GetTileByIndex(int index)
+        {
+            if (index < 0 || index >= count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            int remaining = index;
+            for (int r = 0; r < rings; r++)
+            {
+                if (remaining < sectorsPerRing[r])
+                    return new Tile(r, remaining);
+                remaining -= sectorsPerRing[r];
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+
+        public List<Tile> GetNeighbors(Tile tile)
+        {
+            int ring = tile.lateral;
+            int sector = tile.radial;
+            var neighbors = new List<Tile>(6);
+
+            if (ring > 0)
+            {
+                int innerSector = MapSector(ring, sector, ring - 1);
+                neighbors.Add(new Tile(ring - 1, innerSector));
+            }
+
+            if (ring < rings - 1)
+            {
+                int outerRing = ring + 1;
+                int innerSectors = GetSectorsInRing(ring);
+                int outerSectors = GetSectorsInRing(outerRing);
+                int firstOuter = (sector * outerSectors) / innerSectors;
+                int lastOuter = ((sector + 1) * outerSectors) / innerSectors;
+                for (int os = firstOuter; os < lastOuter; os++)
+                {
+                    neighbors.Add(new Tile(outerRing, os));
+                }
+            }
+
+            int leftSector = GetPrevSector(ring, sector);
+            neighbors.Add(new Tile(ring, leftSector));
+
+            int rightSector = GetNextSector(ring, sector);
+            neighbors.Add(new Tile(ring, rightSector));
+
+            return neighbors;
+        }
+
+        bool IMazeField.HasWallBetween(Tile a, Tile b)
+        {
+            int r1 = a.lateral, s1 = a.radial;
+            int r2 = b.lateral, s2 = b.radial;
+
+            if (r1 == r2)
+            {
+                int sectorsInRing = GetSectorsInRing(r1);
+                if (Math.Abs(s1 - s2) == 1 || (s1 == 0 && s2 == sectorsInRing - 1) || (s2 == 0 && s1 == sectorsInRing - 1))
+                {
+                    int wallSector = Math.Min(s1, s2);
+                    if (Math.Abs(s1 - s2) > 1)
+                        wallSector = Math.Max(s1, s2);
+                    return GetRadialWall(r1, wallSector);
+                }
+                return true;
+            }
+
+            int ringDiff = Math.Abs(r1 - r2);
+            if (ringDiff == 1)
+            {
+                int innerRing = Math.Min(r1, r2);
+                int outerSector = r1 > r2 ? s1 : s2;
+                int innerSector = r1 > r2 ? s2 : s1;
+                int mappedSector = MapSector(innerRing + 1, outerSector, innerRing);
+                if (mappedSector == innerSector)
+                    return GetInnerWall(innerRing, outerSector);
+            }
+
+            return true;
+        }
+
+        void IMazeField.RemoveWallBetween(Tile a, Tile b)
+        {
+            int r1 = a.lateral, s1 = a.radial;
+            int r2 = b.lateral, s2 = b.radial;
+
+            if (r1 == r2)
+            {
+                int sectorsInRing = GetSectorsInRing(r1);
+                int wallSector = Math.Min(s1, s2);
+                if (Math.Abs(s1 - s2) > 1)
+                    wallSector = Math.Max(s1, s2);
+                SetRadialWall(r1, wallSector, false);
+            }
+            else
+            {
+                int innerRing = Math.Min(r1, r2);
+                int outerSector = r1 > r2 ? s1 : s2;
+                SetInnerWall(innerRing, outerSector, false);
+            }
+        }
+
+        public int rows => rings;
+
+        public int GetRow(Tile tile)
+        {
+            return tile.lateral;
+        }
+
+        public List<Tile> GetTilesInRow(int row)
+        {
+            if (row < 0 || row >= rings)
+                throw new ArgumentOutOfRangeException(nameof(row));
+            var sectorsInRing = sectorsPerRing[row];
+            var tiles = new List<Tile>(sectorsInRing);
+            for (int s = 0; s < sectorsInRing; s++)
+                tiles.Add(new Tile(row, s));
+            return tiles;
         }
     }
 }

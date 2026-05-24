@@ -14,6 +14,8 @@ namespace SimplexLab.Maze
         /// </summary>
         private Random random = new Random();
 
+        private IMazeAlgorithm broder = new MazeAldousBroderAlgorithm();
+
         /// <summary>
         /// 当前算法类型
         /// </summary>
@@ -36,122 +38,7 @@ namespace SimplexLab.Maze
         public CircularMazeField Create(int rings, int sectors, SectorStrategy strategy)
         {
             var field = new CircularMazeField(rings, sectors, strategy);
-
-            // 计算总格子数
-            var totalCells = 0;
-            for (var r = 0; r < field.rings; r++)
-            {
-                totalCells += field.GetSectorsInRing(r);
-            }
-
-            // 已访问标记
-            bool[][] visited = new bool[field.rings][];
-            for (var r = 0; r < field.rings; r++)
-            {
-                visited[r] = new bool[field.GetSectorsInRing(r)];
-            }
-
-            // 随机选择起点
-            var currentRing = random.Next(field.rings);
-            var currentSector = random.Next(field.GetSectorsInRing(currentRing));
-            visited[currentRing][currentSector] = true;
-            var visitedCount = 1;
-
-            // Aldous-Broder算法主循环
-            var currentTile = new Tile(currentRing, currentSector);
-            while (visitedCount < totalCells)
-            {
-                // 获取随机邻居
-                var neighbors = GetNeighbors(field, currentTile.lateral, currentTile.radial);
-                var idx = random.Next(neighbors.Count);
-                var next = neighbors[idx];
-
-                // 如果邻居未访问，则打通墙并标记为已访问
-                if (!visited[next.lateral][next.radial])
-                {
-                    RemoveWall(field, currentTile, next);
-                    visited[next.lateral][next.radial] = true;
-                    visitedCount++;
-                }
-
-                // 移动到邻居
-                currentTile = next;
-            }
-
-            return field;
-        }
-
-        /// <summary>
-        /// 获取指定格子的所有邻居
-        /// </summary>
-        private List<Tile> GetNeighbors(CircularMazeField field, int ring, int sector)
-        {
-            var neighbors = new List<Tile>();
-
-            // 内圈邻居
-            if (ring > 0)
-            {
-                var innerSector = field.MapSector(ring, sector, ring - 1);
-                neighbors.Add(new Tile(ring - 1, innerSector));
-            }
-
-            // 外圈邻居
-            if (ring < field.rings - 1)
-            {
-                int outerRing = ring + 1;
-                int innerSectors = field.GetSectorsInRing(ring);
-                int outerSectors = field.GetSectorsInRing(outerRing);
-                int firstOuter = (sector * outerSectors) / innerSectors;
-                int lastOuter = ((sector + 1) * outerSectors) / innerSectors;
-                for (int os = firstOuter; os < lastOuter; os++)
-                {
-                    neighbors.Add(new Tile(outerRing, os));
-                }
-            }
-
-            // 逆时针邻居
-            var sectorsInRing = field.GetSectorsInRing(ring);
-            var prevSector = (sector - 1 + sectorsInRing) % sectorsInRing;
-            neighbors.Add(new Tile(ring, prevSector));
-
-            // 顺时针邻居
-            var nextSector = (sector + 1) % sectorsInRing;
-            neighbors.Add(new Tile(ring, nextSector));
-
-            return neighbors;
-        }
-
-        /// <summary>
-        /// 移除两个相邻格子之间的墙
-        /// </summary>
-        private void RemoveWall(CircularMazeField field, Tile tile1, Tile tile2)
-        {
-            if (tile1.lateral == tile2.lateral)
-            {
-                // 同圈：移除径向墙
-                var r = tile1.lateral;
-                var sectorsInRing = field.GetSectorsInRing(r);
-                var s1 = Math.Min(tile1.radial, tile2.radial);
-                var s2 = Math.Max(tile1.radial, tile2.radial);
-                if (s2 - s1 == 1 || (s1 == 0 && s2 == sectorsInRing - 1))
-                {
-                    if (s2 == sectorsInRing - 1 && s1 == 0)
-                    {
-                        field.SetRadialWall(r, s2, false);
-                    }
-                    else
-                    {
-                        field.SetRadialWall(r, s1, false);
-                    }
-                }
-            }
-            else
-            {
-                // 不同圈：移除内圈墙
-                var innerRing = Math.Min(tile1.lateral, tile2.lateral);
-                var outerSector = tile1.lateral != innerRing ? tile1.radial : tile2.radial;
-                field.SetInnerWall(innerRing, outerSector, false);
-            }
+            return (CircularMazeField)broder.Create(field);
         }
     }
 }
