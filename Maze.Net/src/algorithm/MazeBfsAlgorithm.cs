@@ -26,32 +26,32 @@ namespace SimplexLab.Maze
 
             while (currentLevel.Count > 0)
             {
-                var nextLevel = new List<(Tile parent, Tile child)>();
+                var nextEdges = new List<(Tile parent, Tile child)>();
 
                 foreach (var tile in currentLevel)
                 {
                     foreach (var neighbor in field.GetNeighbors(tile))
                     {
                         if (!visited[field.GetTileIndex(neighbor)])
-                        {
-                            visited[field.GetTileIndex(neighbor)] = true;
-                            nextLevel.Add((tile, neighbor));
-                        }
+                            nextEdges.Add((tile, neighbor));
                     }
                 }
 
-                nextLevel.Shuffle(random);
+                nextEdges.Shuffle(random);
 
-                foreach (var (parent, child) in nextLevel)
+                var nextLevel = new List<Tile>();
+
+                foreach (var (parent, child) in nextEdges)
                 {
-                    field.RemoveWallBetween(parent, child);
+                    if (!visited[field.GetTileIndex(child)])
+                    {
+                        field.RemoveWallBetween(parent, child);
+                        visited[field.GetTileIndex(child)] = true;
+                        nextLevel.Add(child);
+                    }
                 }
 
-                currentLevel = new List<Tile>(nextLevel.Count);
-                foreach (var (_, child) in nextLevel)
-                {
-                    currentLevel.Add(child);
-                }
+                currentLevel = nextLevel;
             }
 
             return field;
