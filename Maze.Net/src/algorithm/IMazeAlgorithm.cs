@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SimplexLab.Maze
@@ -54,5 +55,22 @@ namespace SimplexLab.Maze
         /// <param name="graph">邻接表</param>
         /// <returns>生成树边集</returns>
         List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    internal abstract class MazeAlgorithm : IMazeAlgorithm
+    {
+        protected Random random;
+
+        protected MazeAlgorithm(Random random)
+        {
+            this.random = random;
+        }
+
+        public abstract EMazeAlgorithm algorithm { get; }
+
+        public abstract List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph);
     }
 }

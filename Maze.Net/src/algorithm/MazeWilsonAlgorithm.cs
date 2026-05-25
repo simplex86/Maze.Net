@@ -3,34 +3,13 @@ using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
-    /// <summary>
-    /// Wilson迷宫生成算法（环擦除随机游走）
-    /// </summary>
-    internal class MazeWilsonAlgorithm : IMazeAlgorithm
+    internal class MazeWilsonAlgorithm : MazeAlgorithm
     {
-        private Random random = null;
+        public override EMazeAlgorithm algorithm => EMazeAlgorithm.Wilson;
 
-        /// <summary>
-        /// 算法
-        /// </summary>
-        public EMazeAlgorithm algorithm => EMazeAlgorithm.Wilson;
+        public MazeWilsonAlgorithm(Random random) : base(random) { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="random"></param>
-        public MazeWilsonAlgorithm(Random random)
-        {
-            this.random = random;
-        }
-
-        /// <summary>
-        /// 在给定的图上生成随机生成树（Wilson方式）
-        /// </summary>
-        /// <param name="vertexCount">顶点数</param>
-        /// <param name="graph">邻接表</param>
-        /// <returns>生成树边集</returns>
-        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
             var spanningTree = new List<(int, int)>();
             var visited = new bool[vertexCount];
@@ -65,9 +44,6 @@ namespace SimplexLab.Maze
             return spanningTree;
         }
 
-        /// <summary>
-        /// 随机选取一个未访问的顶点
-        /// </summary>
         private int PickUnvisited(bool[] visited, int vertexCount)
         {
             int vertex;
@@ -79,9 +55,6 @@ namespace SimplexLab.Maze
             return vertex;
         }
 
-        /// <summary>
-        /// 从start出发随机游走，直到到达已访问顶点，返回路径（环擦除）
-        /// </summary>
         private List<int> RandomWalkToVisited(List<List<Edge>> graph, bool[] visited, int start)
         {
             var direction = new Dictionary<int, int>();
@@ -100,7 +73,6 @@ namespace SimplexLab.Maze
                 current = next;
             }
 
-            // 从start回溯，环擦除
             var path = new List<int>();
             int trace = start;
             path.Add(trace);

@@ -3,34 +3,13 @@ using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
-    /// <summary>
-    /// Kruskal迷宫生成算法
-    /// </summary>
-    internal class MazeKruskalAlgorithm : IMazeAlgorithm
+    internal class MazeKruskalAlgorithm : MazeAlgorithm
     {
-        private Random random = null;
+        public override EMazeAlgorithm algorithm => EMazeAlgorithm.Kruskal;
 
-        /// <summary>
-        /// 算法
-        /// </summary>
-        public EMazeAlgorithm algorithm => EMazeAlgorithm.Kruskal;
+        public MazeKruskalAlgorithm(Random random) : base(random) { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="random"></param>
-        public MazeKruskalAlgorithm(Random random)
-        {
-            this.random = random;
-        }
-
-        /// <summary>
-        /// 在给定的图上生成随机生成树（Kruskal方式）
-        /// </summary>
-        /// <param name="vertexCount">顶点数</param>
-        /// <param name="graph">邻接表</param>
-        /// <returns>生成树边集</returns>
-        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
             var spanningTree = new List<(int, int)>();
 
@@ -51,9 +30,6 @@ namespace SimplexLab.Maze
             return spanningTree;
         }
 
-        /// <summary>
-        /// 收集所有内部边（去重，仅保留 i < j）
-        /// </summary>
         private List<(int a, int b)> CollectEdges(List<List<Edge>> graph)
         {
             var edges = new List<(int a, int b)>();

@@ -3,34 +3,13 @@ using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
-    /// <summary>
-    /// 广度优先搜索迷宫生成算法
-    /// </summary>
-    internal class MazeBfsAlgorithm : IMazeAlgorithm
+    internal class MazeBfsAlgorithm : MazeAlgorithm
     {
-        private Random random = null;
+        public override EMazeAlgorithm algorithm => EMazeAlgorithm.BFS;
 
-        /// <summary>
-        /// 算法
-        /// </summary>
-        public EMazeAlgorithm algorithm => EMazeAlgorithm.BFS;
+        public MazeBfsAlgorithm(Random random) : base(random) { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="random"></param>
-        public MazeBfsAlgorithm(Random random)
-        {
-            this.random = random;
-        }
-
-        /// <summary>
-        /// 在给定的图上生成随机生成树（BFS方式）
-        /// </summary>
-        /// <param name="vertexCount">顶点数</param>
-        /// <param name="graph">邻接表</param>
-        /// <returns>生成树边集</returns>
-        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
             var spanningTree = new List<(int, int)>();
             var visited = new bool[vertexCount];
