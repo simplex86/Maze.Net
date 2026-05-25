@@ -96,15 +96,5 @@ namespace SimplexLab.Maze
             return true;
         }
 
-        /// <summary>
-        /// 判断两个元素是否在同一集合中
-        /// </summary>
-        /// <param name="x">第一个元素</param>
-        /// <param name="y">第二个元素</param>
-        /// <returns>如果在同一集合返回true，否则返回false</returns>
-        public bool IsConnected(int x, int y)
-        {
-            return Find(x) == Find(y);
-        }
     }
 }

@@ -17,12 +17,6 @@ namespace SimplexLab.Maze
         public SectorStrategy strategy { get; }
         public int count => _cachedCellCount;
         public List<List<Edge>> graph => _graph;
-        public int rows => rings;
-
-        public CircularMazeField(int rings, int sectors)
-            : this(rings, sectors, SectorStrategy.Arc)
-        {
-        }
 
         public CircularMazeField(int rings, int maxSectors, SectorStrategy strategy)
         {
@@ -67,13 +61,6 @@ namespace SimplexLab.Maze
                 _cachedCellCount += _sectorsPerRing[r];
 
             _graph = BuildGraph();
-        }
-
-        public int GetSectorsInRing(int ring)
-        {
-            if (ring < 0 || ring >= rings)
-                return 0;
-            return _sectorsPerRing[ring];
         }
 
         private int VertexIndex(int ring, int sector)
@@ -173,50 +160,6 @@ namespace SimplexLab.Maze
                     }
                 }
             }
-        }
-
-        public int GetTileIndex(int ring, int sector)
-        {
-            if (ring < 0 || ring >= rings || sector < 0 || sector >= GetSectorsInRing(ring))
-                throw new ArgumentOutOfRangeException();
-            return VertexIndex(ring, sector);
-        }
-
-        public int GetTileIndex(Tile tile)
-        {
-            return GetTileIndex(tile.lateral, tile.radial);
-        }
-
-        public Tile GetTileByIndex(int index)
-        {
-            if (index < 0 || index >= count)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            int remaining = index;
-            for (int r = 0; r < rings; r++)
-            {
-                if (remaining < _sectorsPerRing[r])
-                    return new Tile(r, remaining);
-                remaining -= _sectorsPerRing[r];
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(index));
-        }
-
-        public int GetRow(Tile tile)
-        {
-            return tile.lateral;
-        }
-
-        public List<Tile> GetTilesInRow(int row)
-        {
-            if (row < 0 || row >= rings)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            var sectorsInRing = _sectorsPerRing[row];
-            var tiles = new List<Tile>(sectorsInRing);
-            for (int s = 0; s < sectorsInRing; s++)
-                tiles.Add(new Tile(row, s));
-            return tiles;
         }
     }
 }

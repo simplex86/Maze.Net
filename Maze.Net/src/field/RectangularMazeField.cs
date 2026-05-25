@@ -14,7 +14,6 @@ namespace SimplexLab.Maze
         public int height { get; }
         public int count => width * height;
         public List<List<Edge>> graph => _graph;
-        public int rows => height;
 
         public RectangularMazeField(int width, int height)
         {
@@ -96,40 +95,6 @@ namespace SimplexLab.Maze
                     }
                 }
             }
-        }
-
-        public int GetTileIndex(int x, int y)
-        {
-            if (x < 0 || x >= width || y < 0 || y >= height)
-                throw new ArgumentOutOfRangeException();
-            return y * width + x;
-        }
-
-        public int GetTileIndex(Tile tile)
-        {
-            return GetTileIndex(tile.lateral, tile.radial);
-        }
-
-        public Tile GetTileByIndex(int index)
-        {
-            if (index < 0 || index >= count)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return new Tile(index % width, index / width);
-        }
-
-        public int GetRow(Tile tile)
-        {
-            return tile.radial;
-        }
-
-        public List<Tile> GetTilesInRow(int row)
-        {
-            if (row < 0 || row >= height)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            var tiles = new List<Tile>(width);
-            for (int x = 0; x < width; x++)
-                tiles.Add(new Tile(x, row));
-            return tiles;
         }
     }
 }
