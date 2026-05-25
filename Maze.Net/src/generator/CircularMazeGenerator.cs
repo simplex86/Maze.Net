@@ -4,6 +4,21 @@ using System.Threading.Tasks;
 namespace SimplexLab.Maze
 {
     /// <summary>
+    /// 扇形分割策略
+    /// </summary>
+    public enum SectorStrategy
+    {
+        /// <summary>
+        /// 弧长相同
+        /// </summary>
+        Arc = 1,
+        /// <summary>
+        /// 面积相同
+        /// </summary>
+        Area = 2,
+    }
+
+    /// <summary>
     /// 圆形迷宫生成器
     /// </summary>
     public class CircularMazeGenerator
