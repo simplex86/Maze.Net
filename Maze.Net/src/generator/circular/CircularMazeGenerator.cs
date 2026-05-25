@@ -31,7 +31,7 @@ namespace SimplexLab.Maze
         {
             if (provider == null || provider.algorithm != algorithm)
             {
-                provider = CreateAlgorithm(algorithm);
+                provider = Utils.CreateAlgorithm(algorithm);
             }
 
             var field = new CircularMazeField(rings, sectors, strategy);
@@ -52,36 +52,6 @@ namespace SimplexLab.Maze
                                                          SectorStrategy strategy = SectorStrategy.Arc)
         {
             return await Task.Run(() => Create(rings, sectors, algorithm, strategy));
-        }
-
-        /// <summary>
-        /// 创建算法提供者
-        /// </summary>
-        /// <param name="algorithm">算法类型</param>
-        /// <returns>算法提供者</returns>
-        private IMazeAlgorithm CreateAlgorithm(MazeAlgorithm algorithm)
-        {
-            switch (algorithm)
-            {
-                case MazeAlgorithm.DFS:
-                    return new MazeDfsAlgorithm();
-                case MazeAlgorithm.BFS:
-                    return new MazeBfsAlgorithm();
-                case MazeAlgorithm.Prim:
-                    return new MazePrimAlgorithm();
-                case MazeAlgorithm.Kruskal:
-                    return new MazeKruskalAlgorithm();
-                case MazeAlgorithm.Wilson:
-                    return new MazeWilsonAlgorithm();
-                case MazeAlgorithm.Eller:
-                    return new MazeEllerAlgorithm();
-                case MazeAlgorithm.AldousBroder:
-                    return new MazeAldousBroderAlgorithm();
-                default:
-                    break;
-            }
-
-            return new MazeDfsAlgorithm();
         }
     }
 }
