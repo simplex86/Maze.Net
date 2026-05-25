@@ -13,6 +13,7 @@ namespace Maze.TApplication
         private RectangularMazeField rectangularMazeField = null;
         private CircularMazeField circularMazeField = null;
         private HoneycombMazeField honeycombMazeField = null;
+        private TriangularMazeField triangularMazeField = null;
 
         private List<Control> controls = new List<Control>();
 
@@ -23,6 +24,7 @@ namespace Maze.TApplication
             controls.Add(rectangularMazeControl);
             controls.Add(circularMazeControl);
             controls.Add(honeycombMazeControl);
+            controls.Add(triangularMazeControl);
 
             shape.SelectedIndex = (int)mazeShape;
             algorithm.SelectedIndex = (int)MazeAlgorithm.Kruskal - 1;
@@ -54,6 +56,9 @@ namespace Maze.TApplication
                 case MazeShape.Honeycomb:
                     GenerateHoneycombMaze();
                     break;
+                case MazeShape.Triangular:
+                    GenerateTriangularMaze();
+                    break;
                 default:
                     break;
             }
@@ -72,11 +77,15 @@ namespace Maze.TApplication
                 case MazeShape.Honeycomb:
                     DrawHoneycombMaze(e.Graphics);
                     break;
+                case MazeShape.Triangular:
+                    DrawTriangularMaze(e.Graphics);
+                    break;
                 default: 
                     break;
             }
         }
 
+        #region Rectangular
         private void GenerateRectangularMaze()
         {
             var width = rectangularMazeControl.MazeWidth;
@@ -98,6 +107,21 @@ namespace Maze.TApplication
             canvas.Refresh();
         }
 
+        private void DrawRectangularMaze(Graphics grap)
+        {
+            if (rectangularMazeField != null)
+            {
+                var renderer = new RectangularMazeRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(rectangularMazeControl.Thickness)
+                        .Draw(grap, rectangularMazeField);
+            }
+        }
+
+        #endregion
+
+        #region Circular
+
         private void GenerateCircularMaze()
         {
             var rings = circularMazeControl.Rings;
@@ -116,10 +140,24 @@ namespace Maze.TApplication
             canvas.Refresh();
         }
 
+        private void DrawCircularMaze(Graphics grap)
+        {
+            if (circularMazeField != null)
+            {
+                var renderer = new CircularMazeRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(circularMazeControl.Thickness)
+                        .Draw(grap, circularMazeField);
+            }
+        }
+
+        #endregion
+
+        #region Honeycomb
+
         private void GenerateHoneycombMaze()
         {
             var length = honeycombMazeControl.Length;
-            var thickness = honeycombMazeControl.Thickness;
             var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             GenerateHoneycombMazeAsync(length, algm);
@@ -133,28 +171,6 @@ namespace Maze.TApplication
             canvas.Refresh();
         }
 
-        private void DrawRectangularMaze(Graphics grap)
-        {
-            if (rectangularMazeField != null)
-            {
-                var renderer = new RectangularMazeRenderer();
-                renderer.SetSize(canvas.Width, canvas.Height)
-                        .SetThickness(rectangularMazeControl.Thickness)
-                        .Draw(grap, rectangularMazeField);
-            }
-        }
-
-        private void DrawCircularMaze(Graphics grap)
-        {
-            if (circularMazeField != null)
-            {
-                var renderer = new CircularMazeRenderer();
-                renderer.SetSize(canvas.Width, canvas.Height)
-                        .SetThickness(circularMazeControl.Thickness)
-                        .Draw(grap, circularMazeField);
-            }
-        }
-
         private void DrawHoneycombMaze(Graphics grap)
         {
             if (honeycombMazeField != null)
@@ -165,6 +181,40 @@ namespace Maze.TApplication
                         .Draw(grap, honeycombMazeField);
             }
         }
+
+        #endregion
+
+        #region Triangular
+
+        private void GenerateTriangularMaze()
+        {
+            var length = triangularMazeControl.Length;
+            var orientation = triangularMazeControl.Orientation;
+            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+
+            GenerateTriangularMazeAsync(length, orientation, algm);
+        }
+
+        private async Task GenerateTriangularMazeAsync(int length, TriangleOrientation orientation, MazeAlgorithm algorithm)
+        {
+            var genrator = new TriangularMazeGenerator();
+            triangularMazeField = await genrator.CreateAsync(length, orientation, algorithm);
+
+            canvas.Refresh();
+        }
+
+        private void DrawTriangularMaze(Graphics grap)
+        {
+            if (triangularMazeField != null)
+            {
+                var renderer = new TriangularMazeRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(triangularMazeControl.Thickness)
+                        .Draw(grap, triangularMazeField);
+            }
+        }
+
+        #endregion
 
         //private bool IsDragabled()
         //{

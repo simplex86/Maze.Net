@@ -32,6 +32,7 @@ namespace Maze.TApplication
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            triangularMazeControl = new TriangularMazeControl();
             honeycombMazeControl = new HoneycombMazeControl();
             circularMazeControl = new CircularMazeControl();
             rectangularMazeControl = new RectangularMazeControl();
@@ -59,6 +60,7 @@ namespace Maze.TApplication
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(triangularMazeControl);
             splitContainer1.Panel1.Controls.Add(honeycombMazeControl);
             splitContainer1.Panel1.Controls.Add(circularMazeControl);
             splitContainer1.Panel1.Controls.Add(rectangularMazeControl);
@@ -76,24 +78,36 @@ namespace Maze.TApplication
             splitContainer1.SplitterWidth = 6;
             splitContainer1.TabIndex = 0;
             // 
+            // triangularMazeControl
+            // 
+            triangularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            triangularMazeControl.Location = new Point(9, 435);
+            triangularMazeControl.Margin = new Padding(5, 4, 5, 4);
+            triangularMazeControl.Name = "triangularMazeControl";
+            triangularMazeControl.Size = new Size(447, 112);
+            triangularMazeControl.TabIndex = 27;
+            // 
             // honeycombMazeControl
             // 
+            honeycombMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             honeycombMazeControl.Location = new Point(9, 356);
             honeycombMazeControl.Margin = new Padding(5, 4, 5, 4);
             honeycombMazeControl.Name = "honeycombMazeControl";
-            honeycombMazeControl.Size = new Size(445, 112);
+            honeycombMazeControl.Size = new Size(447, 112);
             honeycombMazeControl.TabIndex = 26;
             // 
             // circularMazeControl
             // 
+            circularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             circularMazeControl.Location = new Point(9, 205);
             circularMazeControl.Margin = new Padding(5, 4, 5, 4);
             circularMazeControl.Name = "circularMazeControl";
-            circularMazeControl.Size = new Size(446, 164);
+            circularMazeControl.Size = new Size(447, 164);
             circularMazeControl.TabIndex = 1;
             // 
             // rectangularMazeControl
             // 
+            rectangularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             rectangularMazeControl.Location = new Point(9, 91);
             rectangularMazeControl.Margin = new Padding(5, 4, 5, 4);
             rectangularMazeControl.Name = "rectangularMazeControl";
@@ -126,7 +140,7 @@ namespace Maze.TApplication
             shape.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             shape.DropDownStyle = ComboBoxStyle.DropDownList;
             shape.FormattingEnabled = true;
-            shape.Items.AddRange(new object[] { "Rectangular", "Circular", "Honeycomb" });
+            shape.Items.AddRange(new object[] { "Rectangular", "Circular", "Honeycomb", "Triangular" });
             shape.Location = new Point(148, 13);
             shape.Margin = new Padding(5, 4, 5, 4);
             shape.Name = "shape";
@@ -180,7 +194,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1196, 793);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.8.71";
+            Text = "Maze Generator v0.8.73";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -202,5 +216,6 @@ namespace Maze.TApplication
         private RectangularMazeControl rectangularMazeControl;
         private CircularMazeControl circularMazeControl;
         private HoneycombMazeControl honeycombMazeControl;
+        private TriangularMazeControl triangularMazeControl;
     }
 }

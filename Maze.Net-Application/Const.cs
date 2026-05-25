@@ -17,5 +17,9 @@
         /// 蜂窝状的
         /// </summary>
         Honeycomb,
+        /// <summary>
+        /// 三角形的
+        /// </summary>
+        Triangular,
     }
 }
