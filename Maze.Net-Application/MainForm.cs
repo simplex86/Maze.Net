@@ -1,13 +1,132 @@
 using System;
+using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using SimplexLab.Maze;
 
 namespace Maze.TApplication
 {
     public partial class MainForm : Form
     {
+        private MazeShape mazeShape = MazeShape.Rectangular;
+        private RectangularMazeField rectangularMazeField = null;
+        private CircularMazeField circularMazeField = null;
+
         public MainForm()
         {
             InitializeComponent();
+
+            shape.SelectedIndex = (int)mazeShape;
+            algorithm.SelectedIndex = (int)MazeAlgorithm.Kruskal - 1;
+        }
+
+        private void OnShapeChangedHandler(object sender, EventArgs e)
+        {
+            mazeShape = (MazeShape)shape.SelectedIndex;
+
+            switch (mazeShape)
+            {
+                case MazeShape.Rectangular:
+                    rectangularMazeControl.Visible = true;
+                    circularMazeControl.Visible = false;
+                    break;
+                case MazeShape.Circular:
+                    rectangularMazeControl.Visible = false;
+                    circularMazeControl.Visible = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnGenerationClickedHandler(object sender, EventArgs e)
+        {
+            switch (mazeShape)
+            {
+                case MazeShape.Rectangular:
+                    GenerateRectangularMaze();
+                    break;
+                case MazeShape.Circular:
+                    GenerateCircularMaze();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnCanvasPaintHandler(object sender, PaintEventArgs e)
+        {
+            switch (mazeShape)
+            {
+                case MazeShape.Rectangular:
+                    DrawRectangularMaze(e.Graphics);
+                    break;
+                case MazeShape.Circular:
+                    DrawCircularMaze(e.Graphics);
+                    break;
+                default: 
+                    break;
+            }
+        }
+
+        private void GenerateRectangularMaze()
+        {
+            var width = rectangularMazeControl.Width;
+            var height = rectangularMazeControl.Height;
+            var thickness = rectangularMazeControl.Thickness;
+            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+
+            if (width  < 3) width  = canvas.Width  / thickness;
+            if (height < 3) height = canvas.Height / thickness;
+
+            GenerateRectangularMazeAsync(width, height, algm);
+        }
+
+        private async Task GenerateRectangularMazeAsync(int width, int height, MazeAlgorithm algorithm)
+        {
+            var genrator = new RectangularMazeGenerator();
+            rectangularMazeField = await genrator.CreateAsync(width, height, algorithm);
+
+            canvas.Refresh();
+        }
+
+        private void GenerateCircularMaze()
+        {
+            var rings = circularMazeControl.Rings;
+            var sectors = circularMazeControl.Sectors;
+            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+
+            GenerateCircularMazeAsync(rings, sectors, algm);
+        }
+
+        private async Task GenerateCircularMazeAsync(int rings, int sectors, MazeAlgorithm algorithm)
+        {
+            var genrator = new CircularMazeGenerator();
+            circularMazeField = await genrator.CreateAsync(rings, sectors, algorithm);
+
+            canvas.Refresh();
+        }
+
+        private void DrawRectangularMaze(Graphics grap)
+        {
+            if (rectangularMazeField != null)
+            {
+                var renderer = new RectangularMazeRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(rectangularMazeControl.Thickness)
+                        .Draw(grap, rectangularMazeField);
+            }
+        }
+
+        private void DrawCircularMaze(Graphics grap)
+        {
+            if (circularMazeField != null)
+            {
+                var renderer = new CircularMazeRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(circularMazeControl.Thickness)
+                        .Draw(grap, circularMazeField);
+            }
         }
 
         //private bool IsDragabled()
