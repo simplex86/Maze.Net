@@ -12,9 +12,9 @@ namespace SimplexLab.Maze
 
         public int rings { get; }
         public int sectors { get; }
-        public SectorStrategy strategy { get; }
+        public ESectorStrategy strategy { get; }
 
-        public CircularMazeField(int rings, int maxSectors, SectorStrategy strategy)
+        public CircularMazeField(int rings, int maxSectors, ESectorStrategy strategy)
         {
             this.rings = Math.Max(1, rings);
             this.sectors = Math.Max(3, maxSectors);
@@ -26,7 +26,7 @@ namespace SimplexLab.Maze
             while (normalizedMaxSectors * 2 <= this.sectors)
                 normalizedMaxSectors *= 2;
 
-            if (strategy == SectorStrategy.Arc)
+            if (strategy == ESectorStrategy.Arc)
             {
                 _sectorsPerRing[0] = 3;
                 for (var r = 1; r < this.rings; r++)

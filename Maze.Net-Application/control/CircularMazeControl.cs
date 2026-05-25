@@ -16,7 +16,7 @@ namespace Maze.TApplication
         /// <summary>
         /// 
         /// </summary>
-        public SectorStrategy SectorStrategy => (SectorStrategy)(strategy.SelectedIndex + 1);
+        public ESectorStrategy SectorStrategy => (ESectorStrategy)(strategy.SelectedIndex + 1);
         /// <summary>
         /// 
         /// </summary>

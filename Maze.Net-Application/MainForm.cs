@@ -10,7 +10,7 @@ namespace Maze.TApplication
 {
     public partial class MainForm : Form
     {
-        private MazeShape mazeShape = MazeShape.Rectangular;
+        private EMazeShape mazeShape = EMazeShape.Rectangular;
         private MazeField mazeField = null;
 
         private List<Control> controls = new List<Control>();
@@ -27,12 +27,12 @@ namespace Maze.TApplication
             controls.Add(circularHexagonMazeControl);
 
             shape.SelectedIndex = (int)mazeShape;
-            algorithm.SelectedIndex = (int)MazeAlgorithm.Kruskal - 1;
+            algorithm.SelectedIndex = (int)EMazeAlgorithm.Kruskal - 1;
         }
 
         private void OnShapeChangedHandler(object sender, EventArgs e)
         {
-            mazeShape = (MazeShape)shape.SelectedIndex;
+            mazeShape = (EMazeShape)shape.SelectedIndex;
 
             foreach (var control in controls)
             {
@@ -47,22 +47,22 @@ namespace Maze.TApplication
         {
             switch (mazeShape)
             {
-                case MazeShape.Rectangular:
+                case EMazeShape.Rectangular:
                     GenerateRectangularMaze();
                     break;
-                case MazeShape.Circular:
+                case EMazeShape.Circular:
                     GenerateCircularMaze();
                     break;
-                case MazeShape.Honeycomb:
+                case EMazeShape.Honeycomb:
                     GenerateHoneycombMaze();
                     break;
-                case MazeShape.Triangular:
+                case EMazeShape.Triangular:
                     GenerateTriangularMaze();
                     break;
-                case MazeShape.Hexagonal:
+                case EMazeShape.Hexagonal:
                     GenerateHexagonalMaze();
                     break;
-                case MazeShape.CircularHexagon:
+                case EMazeShape.CircularHexagon:
                     GenerateCircularHexagonMaze();
                     break;
                 default:
@@ -76,22 +76,22 @@ namespace Maze.TApplication
 
             switch (mazeShape)
             {
-                case MazeShape.Rectangular:
+                case EMazeShape.Rectangular:
                     DrawRectangularMaze(e.Graphics);
                     break;
-                case MazeShape.Circular:
+                case EMazeShape.Circular:
                     DrawCircularMaze(e.Graphics);
                     break;
-                case MazeShape.Honeycomb:
+                case EMazeShape.Honeycomb:
                     DrawHoneycombMaze(e.Graphics);
                     break;
-                case MazeShape.Triangular:
+                case EMazeShape.Triangular:
                     DrawTriangularMaze(e.Graphics);
                     break;
-                case MazeShape.Hexagonal:
+                case EMazeShape.Hexagonal:
                     DrawHexagonalMaze(e.Graphics);
                     break;
-                case MazeShape.CircularHexagon:
+                case EMazeShape.CircularHexagon:
                     DrawCircularHexagonMaze(e.Graphics);
                     break;
                 default: 
@@ -106,7 +106,7 @@ namespace Maze.TApplication
             var width = rectangularMazeControl.MazeWidth;
             var height = rectangularMazeControl.MazeHeight;
             var thickness = rectangularMazeControl.Thickness;
-            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             if (width  < 3) width  = canvas.Width  / thickness;
             if (height < 3) height = canvas.Height / thickness;
@@ -114,7 +114,7 @@ namespace Maze.TApplication
             GenerateRectangularMazeAsync(width, height, algm);
         }
 
-        private async Task GenerateRectangularMazeAsync(int width, int height, MazeAlgorithm algorithm)
+        private async Task GenerateRectangularMazeAsync(int width, int height, EMazeAlgorithm algorithm)
         {
             var genrator = new RectangularMazeGenerator();
             mazeField = await genrator.GenerateAsync(width, height, algorithm);
@@ -141,13 +141,13 @@ namespace Maze.TApplication
         {
             var rings = circularMazeControl.Rings;
             var sectors = circularMazeControl.Sectors;
-            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
             var strategy = circularMazeControl.SectorStrategy;
 
             GenerateCircularMazeAsync(rings, sectors, algm, strategy);
         }
 
-        private async Task GenerateCircularMazeAsync(int rings, int sectors, MazeAlgorithm algorithm, SectorStrategy strategy)
+        private async Task GenerateCircularMazeAsync(int rings, int sectors, EMazeAlgorithm algorithm, ESectorStrategy strategy)
         {
             var genrator = new CircularMazeGenerator();
             mazeField = await genrator.GenerateAsync(rings, sectors, algorithm, strategy);
@@ -173,12 +173,12 @@ namespace Maze.TApplication
         private void GenerateHoneycombMaze()
         {
             var length = honeycombMazeControl.Length;
-            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             GenerateHoneycombMazeAsync(length, algm);
         }
 
-        private async Task GenerateHoneycombMazeAsync(int length, MazeAlgorithm algorithm)
+        private async Task GenerateHoneycombMazeAsync(int length, EMazeAlgorithm algorithm)
         {
             var genrator = new HoneycombMazeGenerator();
             mazeField = await genrator.GenerateAsync(length, algorithm);
@@ -205,12 +205,12 @@ namespace Maze.TApplication
         {
             var length = triangularMazeControl.Length;
             var orientation = triangularMazeControl.Orientation;
-            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             GenerateTriangularMazeAsync(length, orientation, algm);
         }
 
-        private async Task GenerateTriangularMazeAsync(int length, TriangleOrientation orientation, MazeAlgorithm algorithm)
+        private async Task GenerateTriangularMazeAsync(int length, TriangleOrientation orientation, EMazeAlgorithm algorithm)
         {
             var genrator = new TriangularMazeGenerator();
             mazeField = await genrator.GenerateAsync(length, orientation, algorithm);
@@ -236,12 +236,12 @@ namespace Maze.TApplication
         private void GenerateHexagonalMaze()
         {
             var length = hexagonalMazeControl.Length;
-            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             GenerateHexagonalMazeAsync(length, algm);
         }
 
-        private async Task GenerateHexagonalMazeAsync(int length, MazeAlgorithm algorithm)
+        private async Task GenerateHexagonalMazeAsync(int length, EMazeAlgorithm algorithm)
         {
             var genrator = new HexagonalMazeGenerator();
             mazeField = await genrator.GenerateAsync(length, algorithm);
@@ -267,12 +267,12 @@ namespace Maze.TApplication
         private void GenerateCircularHexagonMaze()
         {
             var length = circularHexagonMazeControl.Length;
-            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             GenerateCircularHexagonMazeAsync(length, algm);
         }
 
-        private async Task GenerateCircularHexagonMazeAsync(int length, MazeAlgorithm algorithm)
+        private async Task GenerateCircularHexagonMazeAsync(int length, EMazeAlgorithm algorithm)
         {
             var genrator = new CircularHexagonMazeGenerator();
             mazeField = await genrator.GenerateAsync(length, algorithm);

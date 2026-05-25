@@ -18,7 +18,7 @@ namespace SimplexLab.Maze
 
         public TriangularMazeField Generate(int order,
                                             TriangleOrientation orientation = TriangleOrientation.Upward,
-                                            MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+                                            EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
         {
             var field = new TriangularMazeField(order, orientation);
             return Generate(field, algorithm);
@@ -26,7 +26,7 @@ namespace SimplexLab.Maze
 
         public async Task<TriangularMazeField> GenerateAsync(int order,
                                                              TriangleOrientation orientation = TriangleOrientation.Upward,
-                                                             MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+                                                             EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
         {
             return await Task.Run(() => Generate(order, orientation, algorithm));
         }

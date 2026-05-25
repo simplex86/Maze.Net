@@ -16,13 +16,13 @@ namespace SimplexLab.Maze
         
         }
 
-        public CircularHexagonMazeField Generate(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public CircularHexagonMazeField Generate(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
         {
             var field = new CircularHexagonMazeField(size);
             return Generate(field, algorithm);
         }
 
-        public async Task<CircularHexagonMazeField> GenerateAsync(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public async Task<CircularHexagonMazeField> GenerateAsync(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
         {
             return await Task.Run(() => Generate(size, algorithm));
         }

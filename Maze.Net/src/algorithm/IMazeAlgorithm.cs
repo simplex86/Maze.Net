@@ -5,7 +5,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 迷宫算法
     /// </summary>
-    public enum MazeAlgorithm
+    public enum EMazeAlgorithm
     {
         /// <summary>
         /// 深度优先
@@ -45,7 +45,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 算法类型
         /// </summary>
-        MazeAlgorithm algorithm { get; }
+        EMazeAlgorithm algorithm { get; }
 
         /// <summary>
         /// 在给定的图上生成随机生成树

@@ -3,7 +3,7 @@
     /// <summary>
     /// 迷宫的形状
     /// </summary>
-    internal enum MazeShape
+    internal enum EMazeShape
     {
         /// <summary>
         /// 矩形的

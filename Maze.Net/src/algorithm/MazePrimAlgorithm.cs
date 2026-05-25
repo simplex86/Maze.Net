@@ -13,7 +13,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 算法
         /// </summary>
-        public MazeAlgorithm algorithm => MazeAlgorithm.Prim;
+        public EMazeAlgorithm algorithm => EMazeAlgorithm.Prim;
 
         /// <summary>
         /// 

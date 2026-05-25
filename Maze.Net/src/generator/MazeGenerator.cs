@@ -17,7 +17,7 @@ namespace SimplexLab.Maze
             this.random = random;
         }
 
-        protected TField Generate(TField field, MazeAlgorithm algorithm)
+        protected TField Generate(TField field, EMazeAlgorithm algorithm)
         {
             if (provider == null || provider.algorithm != algorithm)
             {

@@ -13,7 +13,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 算法
         /// </summary>
-        public MazeAlgorithm algorithm => MazeAlgorithm.DFS;
+        public EMazeAlgorithm algorithm => EMazeAlgorithm.DFS;
 
         /// <summary>
         /// 

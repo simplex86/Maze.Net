@@ -13,23 +13,23 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="algorithm">算法类型</param>
         /// <returns>算法提供者</returns>
-        public static IMazeAlgorithm CreateAlgorithm(MazeAlgorithm algorithm, Random random)
+        public static IMazeAlgorithm CreateAlgorithm(EMazeAlgorithm algorithm, Random random)
         {
             switch (algorithm)
             {
-                case MazeAlgorithm.DFS:
+                case EMazeAlgorithm.DFS:
                     return new MazeDfsAlgorithm(random);
-                case MazeAlgorithm.BFS:
+                case EMazeAlgorithm.BFS:
                     return new MazeBfsAlgorithm(random);
-                case MazeAlgorithm.Prim:
+                case EMazeAlgorithm.Prim:
                     return new MazePrimAlgorithm(random);
-                case MazeAlgorithm.Kruskal:
+                case EMazeAlgorithm.Kruskal:
                     return new MazeKruskalAlgorithm(random);
-                case MazeAlgorithm.Wilson:
+                case EMazeAlgorithm.Wilson:
                     return new MazeWilsonAlgorithm(random);
-                case MazeAlgorithm.Eller:
+                case EMazeAlgorithm.Eller:
                     return new MazeEllerAlgorithm(random);
-                case MazeAlgorithm.AldousBroder:
+                case EMazeAlgorithm.AldousBroder:
                     return new MazeAldousBroderAlgorithm(random);
                 default:
                     break;

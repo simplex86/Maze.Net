@@ -122,7 +122,7 @@ namespace Maze.TApplication
             circularMazeControl.Location = new Point(9, 205);
             circularMazeControl.Margin = new Padding(5, 4, 5, 4);
             circularMazeControl.Name = "circularMazeControl";
-            circularMazeControl.Size = new Size(447, 116);
+            circularMazeControl.Size = new Size(447, 154);
             circularMazeControl.TabIndex = 1;
             // 
             // rectangularMazeControl
