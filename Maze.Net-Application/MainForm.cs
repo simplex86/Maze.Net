@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,9 +13,14 @@ namespace Maze.TApplication
         private RectangularMazeField rectangularMazeField = null;
         private CircularMazeField circularMazeField = null;
 
+        private List<Control> controls = new List<Control>();
+
         public MainForm()
         {
             InitializeComponent();
+
+            controls.Add(rectangularMazeControl);
+            controls.Add(circularMazeControl);
 
             shape.SelectedIndex = (int)mazeShape;
             algorithm.SelectedIndex = (int)MazeAlgorithm.Kruskal - 1;
@@ -24,19 +30,13 @@ namespace Maze.TApplication
         {
             mazeShape = (MazeShape)shape.SelectedIndex;
 
-            switch (mazeShape)
+            foreach (var control in controls)
             {
-                case MazeShape.Rectangular:
-                    rectangularMazeControl.Visible = true;
-                    circularMazeControl.Visible = false;
-                    break;
-                case MazeShape.Circular:
-                    rectangularMazeControl.Visible = false;
-                    circularMazeControl.Visible = true;
-                    break;
-                default:
-                    break;
+                control.Visible = false;
             }
+
+            controls[(int)mazeShape].Visible = true;
+            controls[(int)mazeShape].Location = new Point(9, 91);
         }
 
         private void OnGenerationClickedHandler(object sender, EventArgs e)

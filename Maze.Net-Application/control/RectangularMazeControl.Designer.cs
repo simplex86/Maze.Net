@@ -41,11 +41,10 @@
             // 
             // label10
             // 
-            label10.Location = new System.Drawing.Point(1, 56);
-            label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label10.Location = new System.Drawing.Point(2, 79);
             label10.Name = "label10";
             label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label10.Size = new System.Drawing.Size(74, 17);
+            label10.Size = new System.Drawing.Size(116, 24);
             label10.TabIndex = 12;
             label10.Text = "Thickness";
             label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -53,52 +52,55 @@
             // thickness
             // 
             thickness.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            thickness.Location = new System.Drawing.Point(90, 54);
-            thickness.Margin = new System.Windows.Forms.Padding(2);
+            thickness.Location = new System.Drawing.Point(140, 76);
             thickness.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             thickness.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             thickness.Name = "thickness";
-            thickness.Size = new System.Drawing.Size(124, 23);
+            thickness.Size = new System.Drawing.Size(264, 30);
             thickness.TabIndex = 13;
             thickness.Value = new decimal(new int[] { 15, 0, 0, 0 });
             // 
             // height
             // 
             height.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            height.Location = new System.Drawing.Point(90, 27);
+            height.Location = new System.Drawing.Point(140, 38);
+            height.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             height.Name = "height";
-            height.Size = new System.Drawing.Size(124, 23);
+            height.Size = new System.Drawing.Size(264, 30);
             height.TabIndex = 11;
             // 
             // width
             // 
             width.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            width.Location = new System.Drawing.Point(90, 0);
+            width.Location = new System.Drawing.Point(140, 0);
+            width.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             width.Name = "width";
-            width.Size = new System.Drawing.Size(124, 23);
+            width.Size = new System.Drawing.Size(264, 30);
             width.TabIndex = 10;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(1, 29);
+            label2.Location = new System.Drawing.Point(2, 41);
+            label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(46, 17);
+            label2.Size = new System.Drawing.Size(69, 24);
             label2.TabIndex = 9;
             label2.Text = "Height";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(1, 2);
+            label1.Location = new System.Drawing.Point(2, 3);
+            label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(42, 17);
+            label1.Size = new System.Drawing.Size(63, 24);
             label1.TabIndex = 8;
             label1.Text = "Width";
             // 
             // RectangularMazeControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(label10);
             Controls.Add(thickness);
@@ -106,8 +108,9 @@
             Controls.Add(width);
             Controls.Add(label2);
             Controls.Add(label1);
+            Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             Name = "RectangularMazeControl";
-            Size = new System.Drawing.Size(214, 82);
+            Size = new System.Drawing.Size(405, 116);
             ((System.ComponentModel.ISupportInitialize)thickness).EndInit();
             ((System.ComponentModel.ISupportInitialize)height).EndInit();
             ((System.ComponentModel.ISupportInitialize)width).EndInit();

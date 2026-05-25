@@ -32,9 +32,8 @@ namespace Maze.TApplication
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            rectangularMazeControl = new RectangularMazeControl();
             circularMazeControl = new CircularMazeControl();
+            rectangularMazeControl = new RectangularMazeControl();
             algorithm = new ComboBox();
             label13 = new Label();
             shape = new ComboBox();
@@ -45,7 +44,6 @@ namespace Maze.TApplication
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             SuspendLayout();
             // 
@@ -55,11 +53,13 @@ namespace Maze.TApplication
             splitContainer1.FixedPanel = FixedPanel.Panel1;
             splitContainer1.IsSplitterFixed = true;
             splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Margin = new Padding(5, 4, 5, 4);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(flowLayoutPanel1);
+            splitContainer1.Panel1.Controls.Add(circularMazeControl);
+            splitContainer1.Panel1.Controls.Add(rectangularMazeControl);
             splitContainer1.Panel1.Controls.Add(algorithm);
             splitContainer1.Panel1.Controls.Add(label13);
             splitContainer1.Panel1.Controls.Add(shape);
@@ -69,35 +69,26 @@ namespace Maze.TApplication
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(canvas);
-            splitContainer1.Size = new Size(1184, 761);
-            splitContainer1.SplitterDistance = 291;
+            splitContainer1.Size = new Size(1578, 1044);
+            splitContainer1.SplitterDistance = 457;
+            splitContainer1.SplitterWidth = 6;
             splitContainer1.TabIndex = 0;
-            // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel1.Controls.Add(rectangularMazeControl);
-            flowLayoutPanel1.Controls.Add(circularMazeControl);
-            flowLayoutPanel1.Location = new Point(0, 72);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(291, 347);
-            flowLayoutPanel1.TabIndex = 26;
-            // 
-            // rectangularMazeControl
-            // 
-            rectangularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            rectangularMazeControl.Location = new Point(3, 3);
-            rectangularMazeControl.Name = "rectangularMazeControl";
-            rectangularMazeControl.Size = new Size(285, 82);
-            rectangularMazeControl.TabIndex = 0;
             // 
             // circularMazeControl
             // 
-            circularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            circularMazeControl.Location = new Point(3, 91);
+            circularMazeControl.Location = new Point(10, 215);
+            circularMazeControl.Margin = new Padding(5, 4, 5, 4);
             circularMazeControl.Name = "circularMazeControl";
-            circularMazeControl.Size = new Size(285, 115);
+            circularMazeControl.Size = new Size(446, 164);
             circularMazeControl.TabIndex = 1;
+            // 
+            // rectangularMazeControl
+            // 
+            rectangularMazeControl.Location = new Point(9, 91);
+            rectangularMazeControl.Margin = new Padding(5, 4, 5, 4);
+            rectangularMazeControl.Name = "rectangularMazeControl";
+            rectangularMazeControl.Size = new Size(447, 116);
+            rectangularMazeControl.TabIndex = 0;
             // 
             // algorithm
             // 
@@ -105,19 +96,17 @@ namespace Maze.TApplication
             algorithm.DropDownStyle = ComboBoxStyle.DropDownList;
             algorithm.FormattingEnabled = true;
             algorithm.Items.AddRange(new object[] { "DFS", "BFS", "Prim", "Kruskal", "Wilson", "Eller", "AldousBroder" });
-            algorithm.Location = new Point(93, 42);
-            algorithm.Margin = new Padding(2);
+            algorithm.Location = new Point(148, 52);
             algorithm.Name = "algorithm";
-            algorithm.Size = new Size(195, 25);
+            algorithm.Size = new Size(306, 32);
             algorithm.TabIndex = 25;
             // 
             // label13
             // 
-            label13.Location = new Point(5, 45);
-            label13.Margin = new Padding(2, 0, 2, 0);
+            label13.Location = new Point(11, 55);
             label13.Name = "label13";
             label13.RightToLeft = RightToLeft.No;
-            label13.Size = new Size(86, 17);
+            label13.Size = new Size(135, 24);
             label13.TabIndex = 24;
             label13.Text = "Algorithm";
             label13.TextAlign = ContentAlignment.MiddleLeft;
@@ -128,58 +117,65 @@ namespace Maze.TApplication
             shape.DropDownStyle = ComboBoxStyle.DropDownList;
             shape.FormattingEnabled = true;
             shape.Items.AddRange(new object[] { "Rectangular", "Circular" });
-            shape.Location = new Point(93, 12);
+            shape.Location = new Point(148, 13);
+            shape.Margin = new Padding(5, 4, 5, 4);
             shape.Name = "shape";
-            shape.Size = new Size(195, 25);
+            shape.Size = new Size(306, 32);
             shape.TabIndex = 2;
             shape.SelectedIndexChanged += OnShapeChangedHandler;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(5, 15);
+            label1.Location = new Point(11, 21);
+            label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(44, 17);
+            label1.Size = new Size(63, 24);
             label1.TabIndex = 1;
             label1.Text = "Shape";
             // 
             // generation
             // 
+            generation.BackColor = Color.SkyBlue;
             generation.Dock = DockStyle.Bottom;
-            generation.Location = new Point(0, 691);
+            generation.Font = new Font("Microsoft YaHei UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            generation.Location = new Point(0, 917);
+            generation.Margin = new Padding(5, 4, 5, 4);
             generation.Name = "generation";
-            generation.Size = new Size(291, 70);
+            generation.Size = new Size(457, 127);
             generation.TabIndex = 0;
             generation.Text = "Generate";
-            generation.UseVisualStyleBackColor = true;
+            generation.UseVisualStyleBackColor = false;
             generation.Click += OnGenerationClickedHandler;
             // 
             // canvas
             // 
+            canvas.BackColor = Color.White;
             canvas.Dock = DockStyle.Fill;
             canvas.Location = new Point(0, 0);
+            canvas.Margin = new Padding(5, 4, 5, 4);
             canvas.Name = "canvas";
-            canvas.Size = new Size(889, 761);
+            canvas.Size = new Size(1115, 1044);
             canvas.TabIndex = 0;
             canvas.TabStop = false;
             canvas.Paint += OnCanvasPaintHandler;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1184, 761);
+            ClientSize = new Size(1578, 1044);
             Controls.Add(splitContainer1);
-            MinimumSize = new Size(769, 578);
+            Margin = new Padding(5, 4, 5, 4);
+            MinimumSize = new Size(1196, 793);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.7.66";
+            Text = "Maze Generator v0.7.69";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             ResumeLayout(false);
         }
@@ -193,7 +189,6 @@ namespace Maze.TApplication
         private PictureBox canvas;
         private Label label13;
         private ComboBox algorithm;
-        private FlowLayoutPanel flowLayoutPanel1;
         private RectangularMazeControl rectangularMazeControl;
         private CircularMazeControl circularMazeControl;
     }
