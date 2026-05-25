@@ -52,9 +52,7 @@ namespace Maze.TApplication
         {
             DrawBackground(grap);
 
-            if (field == null)
-                return;
-
+            if (field == null) return;
             DrawField(grap, field);
         }
 
@@ -65,6 +63,7 @@ namespace Maze.TApplication
         {
             var brush = new SolidBrush(Color.White);
             grap.FillRectangle(brush, 0, 0, width, height);
+            brush.Dispose();
         }
 
         /// <summary>
@@ -103,6 +102,8 @@ namespace Maze.TApplication
                     }
                 }
             }
+
+            pen.Dispose();
         }
     }
 }

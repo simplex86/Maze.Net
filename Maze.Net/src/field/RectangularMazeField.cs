@@ -6,20 +6,17 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 矩形迷宫场地（邻接表方案）
     /// </summary>
-    public class RectangularMazeField : IMazeField
+    public class RectangularMazeField : MazeField
     {
-        private readonly List<List<Edge>> _graph;
-
         public int width { get; }
         public int height { get; }
-        public int count => width * height;
-        public List<List<Edge>> graph => _graph;
 
         public RectangularMazeField(int width, int height)
         {
             this.width = Math.Max(1, width);
             this.height = Math.Max(1, height);
-            _graph = BuildGraph();
+            count = width * height;
+            graph = BuildGraph();
         }
 
         private List<List<Edge>> BuildGraph()
@@ -72,29 +69,6 @@ namespace SimplexLab.Maze
             }
 
             return g;
-        }
-
-        public void RemoveBorders(List<(int, int)> spanningTree)
-        {
-            foreach (var (u, v) in spanningTree)
-            {
-                for (int i = 0; i < _graph[u].Count; i++)
-                {
-                    if (_graph[u][i].Neighbor == v)
-                    {
-                        _graph[u][i].Border = null;
-                        break;
-                    }
-                }
-                for (int i = 0; i < _graph[v].Count; i++)
-                {
-                    if (_graph[v][i].Neighbor == u)
-                    {
-                        _graph[v][i].Border = null;
-                        break;
-                    }
-                }
-            }
         }
     }
 }

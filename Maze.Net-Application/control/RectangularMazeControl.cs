@@ -7,11 +7,11 @@ namespace Maze.TApplication
         /// <summary>
         /// 
         /// </summary>
-        public int Width => (int)width.Value;
+        public int MazeWidth => (int)width.Value;
         /// <summary>
         /// 
         /// </summary>
-        public int Height => (int)height.Value;
+        public int MazeHeight => (int)height.Value;
         /// <summary>
         /// 
         /// </summary>

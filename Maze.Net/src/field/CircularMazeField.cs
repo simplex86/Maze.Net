@@ -6,17 +6,13 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 圆形迷宫场地（邻接表方案）
     /// </summary>
-    public class CircularMazeField : IMazeField
+    public class CircularMazeField : MazeField
     {
-        private readonly List<List<Edge>> _graph;
         private readonly int[] _sectorsPerRing;
-        private readonly int _cachedCellCount;
 
         public int rings { get; }
         public int sectors { get; }
         public SectorStrategy strategy { get; }
-        public int count => _cachedCellCount;
-        public List<List<Edge>> graph => _graph;
 
         public CircularMazeField(int rings, int maxSectors, SectorStrategy strategy)
         {
@@ -56,11 +52,11 @@ namespace SimplexLab.Maze
             if (_sectorsPerRing[this.rings - 1] < normalizedMaxSectors)
                 _sectorsPerRing[this.rings - 1] = normalizedMaxSectors;
 
-            _cachedCellCount = 0;
+            count = 0;
             for (var r = 0; r < this.rings; r++)
-                _cachedCellCount += _sectorsPerRing[r];
+                count += _sectorsPerRing[r];
 
-            _graph = BuildGraph();
+            graph = BuildGraph();
         }
 
         private int VertexIndex(int ring, int sector)
@@ -73,7 +69,7 @@ namespace SimplexLab.Maze
 
         private List<List<Edge>> BuildGraph()
         {
-            var g = new List<List<Edge>>(_cachedCellCount);
+            var g = new List<List<Edge>>(count);
 
             for (int r = 0; r < rings; r++)
             {
@@ -137,29 +133,6 @@ namespace SimplexLab.Maze
             }
 
             return g;
-        }
-
-        public void RemoveBorders(List<(int, int)> spanningTree)
-        {
-            foreach (var (u, v) in spanningTree)
-            {
-                for (int i = 0; i < _graph[u].Count; i++)
-                {
-                    if (_graph[u][i].Neighbor == v)
-                    {
-                        _graph[u][i].Border = null;
-                        break;
-                    }
-                }
-                for (int i = 0; i < _graph[v].Count; i++)
-                {
-                    if (_graph[v][i].Neighbor == u)
-                    {
-                        _graph[v][i].Border = null;
-                        break;
-                    }
-                }
-            }
         }
     }
 }

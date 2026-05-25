@@ -71,8 +71,8 @@ namespace Maze.TApplication
 
         private void GenerateRectangularMaze()
         {
-            var width = rectangularMazeControl.Width;
-            var height = rectangularMazeControl.Height;
+            var width = rectangularMazeControl.MazeWidth;
+            var height = rectangularMazeControl.MazeHeight;
             var thickness = rectangularMazeControl.Thickness;
             var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
 
@@ -95,14 +95,15 @@ namespace Maze.TApplication
             var rings = circularMazeControl.Rings;
             var sectors = circularMazeControl.Sectors;
             var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+            var strategy = circularMazeControl.SectorStrategy;
 
-            GenerateCircularMazeAsync(rings, sectors, algm);
+            GenerateCircularMazeAsync(rings, sectors, algm, strategy);
         }
 
-        private async Task GenerateCircularMazeAsync(int rings, int sectors, MazeAlgorithm algorithm)
+        private async Task GenerateCircularMazeAsync(int rings, int sectors, MazeAlgorithm algorithm, SectorStrategy strategy)
         {
             var genrator = new CircularMazeGenerator();
-            circularMazeField = await genrator.CreateAsync(rings, sectors, algorithm);
+            circularMazeField = await genrator.CreateAsync(rings, sectors, algorithm, strategy);
 
             canvas.Refresh();
         }
