@@ -78,7 +78,7 @@
             rings.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             rings.Location = new System.Drawing.Point(140, 0);
             rings.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            rings.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            rings.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
             rings.Name = "rings";
             rings.Size = new System.Drawing.Size(264, 30);
             rings.TabIndex = 10;

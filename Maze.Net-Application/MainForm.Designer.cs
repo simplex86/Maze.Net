@@ -32,6 +32,7 @@ namespace Maze.TApplication
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            honeycombMazeControl = new HoneycombMazeControl();
             circularMazeControl = new CircularMazeControl();
             rectangularMazeControl = new RectangularMazeControl();
             algorithm = new ComboBox();
@@ -58,6 +59,7 @@ namespace Maze.TApplication
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(honeycombMazeControl);
             splitContainer1.Panel1.Controls.Add(circularMazeControl);
             splitContainer1.Panel1.Controls.Add(rectangularMazeControl);
             splitContainer1.Panel1.Controls.Add(algorithm);
@@ -74,9 +76,17 @@ namespace Maze.TApplication
             splitContainer1.SplitterWidth = 6;
             splitContainer1.TabIndex = 0;
             // 
+            // honeycombMazeControl
+            // 
+            honeycombMazeControl.Location = new Point(9, 356);
+            honeycombMazeControl.Margin = new Padding(5, 4, 5, 4);
+            honeycombMazeControl.Name = "honeycombMazeControl";
+            honeycombMazeControl.Size = new Size(445, 112);
+            honeycombMazeControl.TabIndex = 26;
+            // 
             // circularMazeControl
             // 
-            circularMazeControl.Location = new Point(10, 215);
+            circularMazeControl.Location = new Point(9, 205);
             circularMazeControl.Margin = new Padding(5, 4, 5, 4);
             circularMazeControl.Name = "circularMazeControl";
             circularMazeControl.Size = new Size(446, 164);
@@ -116,7 +126,7 @@ namespace Maze.TApplication
             shape.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             shape.DropDownStyle = ComboBoxStyle.DropDownList;
             shape.FormattingEnabled = true;
-            shape.Items.AddRange(new object[] { "Rectangular", "Circular" });
+            shape.Items.AddRange(new object[] { "Rectangular", "Circular", "Honeycomb" });
             shape.Location = new Point(148, 13);
             shape.Margin = new Padding(5, 4, 5, 4);
             shape.Name = "shape";
@@ -170,7 +180,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1196, 793);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.7.69";
+            Text = "Maze Generator v0.8.71";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -191,5 +201,6 @@ namespace Maze.TApplication
         private ComboBox algorithm;
         private RectangularMazeControl rectangularMazeControl;
         private CircularMazeControl circularMazeControl;
+        private HoneycombMazeControl honeycombMazeControl;
     }
 }

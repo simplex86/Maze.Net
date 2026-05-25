@@ -17,6 +17,9 @@
     <Compile Update="control\CircularMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="control\HoneycombMazeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

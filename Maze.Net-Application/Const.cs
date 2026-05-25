@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Maze.TApplication
+﻿namespace Maze.TApplication
 {
     /// <summary>
     /// 
@@ -19,5 +13,9 @@ namespace Maze.TApplication
         /// 圆形的
         /// </summary>
         Circular,
+        /// <summary>
+        /// 蜂窝状的
+        /// </summary>
+        Honeycomb,
     }
 }

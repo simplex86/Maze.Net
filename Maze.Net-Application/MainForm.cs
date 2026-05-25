@@ -12,6 +12,7 @@ namespace Maze.TApplication
         private MazeShape mazeShape = MazeShape.Rectangular;
         private RectangularMazeField rectangularMazeField = null;
         private CircularMazeField circularMazeField = null;
+        private HoneycombMazeField honeycombMazeField = null;
 
         private List<Control> controls = new List<Control>();
 
@@ -21,6 +22,7 @@ namespace Maze.TApplication
 
             controls.Add(rectangularMazeControl);
             controls.Add(circularMazeControl);
+            controls.Add(honeycombMazeControl);
 
             shape.SelectedIndex = (int)mazeShape;
             algorithm.SelectedIndex = (int)MazeAlgorithm.Kruskal - 1;
@@ -49,6 +51,9 @@ namespace Maze.TApplication
                 case MazeShape.Circular:
                     GenerateCircularMaze();
                     break;
+                case MazeShape.Honeycomb:
+                    GenerateHoneycombMaze();
+                    break;
                 default:
                     break;
             }
@@ -63,6 +68,9 @@ namespace Maze.TApplication
                     break;
                 case MazeShape.Circular:
                     DrawCircularMaze(e.Graphics);
+                    break;
+                case MazeShape.Honeycomb:
+                    DrawHoneycombMaze(e.Graphics);
                     break;
                 default: 
                     break;
@@ -108,6 +116,23 @@ namespace Maze.TApplication
             canvas.Refresh();
         }
 
+        private void GenerateHoneycombMaze()
+        {
+            var length = honeycombMazeControl.Length;
+            var thickness = honeycombMazeControl.Thickness;
+            var algm = (MazeAlgorithm)(algorithm.SelectedIndex + 1);
+
+            GenerateHoneycombMazeAsync(length, algm);
+        }
+
+        private async Task GenerateHoneycombMazeAsync(int length, MazeAlgorithm algorithm)
+        {
+            var genrator = new HoneycombMazeGenerator();
+            honeycombMazeField = await genrator.CreateAsync(length, algorithm);
+
+            canvas.Refresh();
+        }
+
         private void DrawRectangularMaze(Graphics grap)
         {
             if (rectangularMazeField != null)
@@ -127,6 +152,17 @@ namespace Maze.TApplication
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(circularMazeControl.Thickness)
                         .Draw(grap, circularMazeField);
+            }
+        }
+
+        private void DrawHoneycombMaze(Graphics grap)
+        {
+            if (honeycombMazeField != null)
+            {
+                var renderer = new HoneycombMazeRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(honeycombMazeControl.Thickness)
+                        .Draw(grap, honeycombMazeField);
             }
         }
 
