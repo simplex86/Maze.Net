@@ -7,7 +7,7 @@ namespace Maze.TApplication
     public partial class RectangularMazeControl : UserControl
     {
         private RectangularMazeGenerator generator = new RectangularMazeGenerator();
-        private RectangularMazeField field;
+        private RectangularMazeField? field;
         private RectangularMazeRenderer renderer = new RectangularMazeRenderer();
 
         private int offsetx = 0;

@@ -4,54 +4,56 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ���� BFS ���Թ������㷨
+    /// 广度优先搜索迷宫生成算法
     /// </summary>
     internal class MazeBfsAlgorithm : IMazeAlgorithm
     {
         private Random random = new Random();
 
         /// <summary>
-        /// �㷨
+        /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.BFS;
 
         /// <summary>
-        /// �����Թ�
+        /// 在给定的图上生成随机生成树（BFS方式）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public IMazeField Create(IMazeField field)
+        /// <param name="vertexCount">顶点数</param>
+        /// <param name="graph">邻接表</param>
+        /// <returns>生成树边集</returns>
+        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
-            var visited = new bool[field.count];
+            var spanningTree = new List<(int, int)>();
+            var visited = new bool[vertexCount];
 
-            var startTile = field.GetTileByIndex(random.Next(field.count));
-            visited[field.GetTileIndex(startTile)] = true;
+            int start = random.Next(vertexCount);
+            visited[start] = true;
 
-            var currentLevel = new List<Tile> { startTile };
+            var currentLevel = new List<int> { start };
 
             while (currentLevel.Count > 0)
             {
-                var nextEdges = new List<(Tile parent, Tile child)>();
+                var nextEdges = new List<(int parent, int child)>();
 
-                foreach (var tile in currentLevel)
+                foreach (int vertex in currentLevel)
                 {
-                    foreach (var neighbor in field.GetNeighbors(tile))
+                    foreach (var edge in graph[vertex])
                     {
-                        if (!visited[field.GetTileIndex(neighbor)])
-                            nextEdges.Add((tile, neighbor));
+                        if (edge.Neighbor != -1 && !visited[edge.Neighbor])
+                            nextEdges.Add((vertex, edge.Neighbor));
                     }
                 }
 
                 nextEdges.Shuffle(random);
 
-                var nextLevel = new List<Tile>();
+                var nextLevel = new List<int>();
 
                 foreach (var (parent, child) in nextEdges)
                 {
-                    if (!visited[field.GetTileIndex(child)])
+                    if (!visited[child])
                     {
-                        field.RemoveWallBetween(parent, child);
-                        visited[field.GetTileIndex(child)] = true;
+                        spanningTree.Add((parent, child));
+                        visited[child] = true;
                         nextLevel.Add(child);
                     }
                 }
@@ -59,7 +61,7 @@ namespace SimplexLab.Maze
                 currentLevel = nextLevel;
             }
 
-            return field;
+            return spanningTree;
         }
     }
 }

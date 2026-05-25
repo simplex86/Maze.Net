@@ -31,7 +31,9 @@ namespace SimplexLab.Maze
             }
 
             var field = new RectangularMazeField(width, height);
-            return (RectangularMazeField)provider.Create(field);
+            var spanningTree = provider.GenerateSpanningTree(field.count, field.graph);
+            field.RemoveBorders(spanningTree);
+            return field;
         }
 
         /// <summary>

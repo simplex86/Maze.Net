@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SimplexLab.Maze;
@@ -8,7 +8,7 @@ namespace Maze.TApplication
     public partial class CircularMazeControl : UserControl
     {
         private CircularMazeGenerator generator = new CircularMazeGenerator();
-        private CircularMazeField field;
+        private CircularMazeField? field;
         private CircularMazeRenderer renderer = new CircularMazeRenderer();
 
         private int offsetx = 0;

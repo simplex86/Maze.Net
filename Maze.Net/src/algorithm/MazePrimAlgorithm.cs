@@ -4,30 +4,32 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ���� PRIM ���Թ������㷨
+    /// Prim迷宫生成算法
     /// </summary>
     internal class MazePrimAlgorithm : IMazeAlgorithm
     {
         private Random random = new Random();
 
         /// <summary>
-        /// �㷨
+        /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.Prim;
 
         /// <summary>
-        /// �����Թ�
+        /// 在给定的图上生成随机生成树（Prim方式）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public IMazeField Create(IMazeField field)
+        /// <param name="vertexCount">顶点数</param>
+        /// <param name="graph">邻接表</param>
+        /// <returns>生成树边集</returns>
+        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
-            var visited = new bool[field.count];
-            var frontier = new List<(Tile from, Tile to)>();
+            var spanningTree = new List<(int, int)>();
+            var visited = new bool[vertexCount];
+            var frontier = new List<(int from, int to)>();
 
-            var startTile = field.GetTileByIndex(random.Next(field.count));
-            visited[field.GetTileIndex(startTile)] = true;
-            AddFrontier(field, visited, frontier, startTile);
+            int start = random.Next(vertexCount);
+            visited[start] = true;
+            AddFrontier(graph, visited, frontier, start);
 
             while (frontier.Count > 0)
             {
@@ -35,30 +37,26 @@ namespace SimplexLab.Maze
                 var (from, to) = frontier[idx];
                 frontier.RemoveAt(idx);
 
-                if (visited[field.GetTileIndex(to)])
+                if (visited[to])
                     continue;
 
-                field.RemoveWallBetween(from, to);
-                visited[field.GetTileIndex(to)] = true;
-                AddFrontier(field, visited, frontier, to);
+                spanningTree.Add((from, to));
+                visited[to] = true;
+                AddFrontier(graph, visited, frontier, to);
             }
 
-            return field;
+            return spanningTree;
         }
 
         /// <summary>
-        /// 
+        /// 将顶点的未访问邻居加入frontier
         /// </summary>
-        /// <param name="field"></param>
-        /// <param name="visited"></param>
-        /// <param name="frontier"></param>
-        /// <param name="tile"></param>
-        private void AddFrontier(IMazeField field, bool[] visited, List<(Tile from, Tile to)> frontier, Tile tile)
+        private void AddFrontier(List<List<Edge>> graph, bool[] visited, List<(int from, int to)> frontier, int vertex)
         {
-            foreach (var neighbor in field.GetNeighbors(tile))
+            foreach (var edge in graph[vertex])
             {
-                if (!visited[field.GetTileIndex(neighbor)])
-                    frontier.Add((tile, neighbor));
+                if (edge.Neighbor != -1 && !visited[edge.Neighbor])
+                    frontier.Add((vertex, edge.Neighbor));
             }
         }
     }

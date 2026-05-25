@@ -6,7 +6,7 @@ namespace Maze.TApplication
 {
     /// <summary>
     /// 矩形迷宫渲染器
-    /// 基于墙的存在状态进行绘制
+    /// 基于邻接表中的 CellBorder 几何数据进行绘制
     /// </summary>
     internal class RectangularMazeRenderer
     {
@@ -48,9 +48,13 @@ namespace Maze.TApplication
         /// <summary>
         /// 绘制迷宫
         /// </summary>
-        public void Draw(Graphics grap, RectangularMazeField field)
+        public void Draw(Graphics grap, RectangularMazeField? field)
         {
             DrawBackground(grap);
+
+            if (field == null)
+                return;
+
             DrawField(grap, field);
         }
 
@@ -69,9 +73,7 @@ namespace Maze.TApplication
         private void DrawField(Graphics grap, RectangularMazeField field)
         {
             if (field.width == 0 || field.height == 0)
-            {
                 return;
-            }
 
             // 计算迷宫在画布上的居中位置
             int mazeWidth = field.width * thickness;
@@ -81,38 +83,26 @@ namespace Maze.TApplication
 
             var pen = new Pen(Color.Black);
 
-            // 1. 绘制内部横向墙（只绘制 y 从 1 到 height-1）
-            for (int y = 1; y < field.height; y++)
+            // 遍历邻接表，绘制所有未移除的边界
+            var graph = field.graph;
+            for (int v = 0; v < graph.Count; v++)
             {
-                for (int x = 0; x < field.width; x++)
+                foreach (var edge in graph[v])
                 {
-                    if (field.GetHorizontalWall(x, y))
+                    // 避免重复绘制：边界边始终绘制，内部边仅当 neighbor > v 时绘制
+                    if (edge.Neighbor != -1 && edge.Neighbor <= v)
+                        continue;
+
+                    if (edge.Border is LineBorder line)
                     {
-                        int x1 = cx + x * thickness;
-                        int x2 = cx + (x + 1) * thickness;
-                        int yPos = cy + y * thickness;
-                        grap.DrawLine(pen, x1, yPos, x2, yPos);
+                        int x1 = cx + (int)(line.X1 * thickness);
+                        int y1 = cy + (int)(line.Y1 * thickness);
+                        int x2 = cx + (int)(line.X2 * thickness);
+                        int y2 = cy + (int)(line.Y2 * thickness);
+                        grap.DrawLine(pen, x1, y1, x2, y2);
                     }
                 }
             }
-
-            // 2. 绘制内部纵向墙（只绘制 x 从 1 到 width-1）
-            for (int y = 0; y < field.height; y++)
-            {
-                for (int x = 1; x < field.width; x++)
-                {
-                    if (field.GetVerticalWall(x, y))
-                    {
-                        int xPos = cx + x * thickness;
-                        int y1 = cy + y * thickness;
-                        int y2 = cy + (y + 1) * thickness;
-                        grap.DrawLine(pen, xPos, y1, xPos, y2);
-                    }
-                }
-            }
-
-            // 3. 绘制外边界（完整矩形）
-            grap.DrawRectangle(pen, cx, cy, mazeWidth, mazeHeight);
         }
     }
 }

@@ -4,46 +4,54 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ���� Aldous-Broder ���Թ������㷨
+    /// Aldous-Broder迷宫生成算法
     /// </summary>
     internal class MazeAldousBroderAlgorithm : IMazeAlgorithm
     {
         private Random random = new Random();
 
         /// <summary>
-        /// �㷨
+        /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.AldousBroder;
 
         /// <summary>
-        /// �����Թ�
+        /// 在给定的图上生成随机生成树（Aldous-Broder方式）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public IMazeField Create(IMazeField field)
+        /// <param name="vertexCount">顶点数</param>
+        /// <param name="graph">邻接表</param>
+        /// <returns>生成树边集</returns>
+        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
-            var visited = new bool[field.count];
+            var spanningTree = new List<(int, int)>();
+            var visited = new bool[vertexCount];
 
-            var current = field.GetTileByIndex(random.Next(field.count));
-            visited[field.GetTileIndex(current)] = true;
+            int current = random.Next(vertexCount);
+            visited[current] = true;
             int visitedCount = 1;
 
-            while (visitedCount < field.count)
+            while (visitedCount < vertexCount)
             {
-                var neighbors = field.GetNeighbors(current);
-                var next = neighbors[random.Next(neighbors.Count)];
-
-                if (!visited[field.GetTileIndex(next)])
+                var neighbors = new List<int>();
+                foreach (var edge in graph[current])
                 {
-                    field.RemoveWallBetween(current, next);
-                    visited[field.GetTileIndex(next)] = true;
+                    if (edge.Neighbor != -1)
+                        neighbors.Add(edge.Neighbor);
+                }
+
+                int next = neighbors[random.Next(neighbors.Count)];
+
+                if (!visited[next])
+                {
+                    spanningTree.Add((current, next));
+                    visited[next] = true;
                     visitedCount++;
                 }
 
                 current = next;
             }
 
-            return field;
+            return spanningTree;
         }
     }
 }

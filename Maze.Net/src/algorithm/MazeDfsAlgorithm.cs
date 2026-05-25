@@ -4,42 +4,51 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ����DFS���Թ������㷨
+    /// 深度优先搜索迷宫生成算法
     /// </summary>
     internal class MazeDfsAlgorithm : IMazeAlgorithm
     {
         private Random random = new Random();
 
         /// <summary>
-        /// �㷨
+        /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.DFS;
 
         /// <summary>
-        /// �����Թ�
+        /// 在给定的图上生成随机生成树（DFS方式）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public IMazeField Create(IMazeField field)
+        /// <param name="vertexCount">顶点数</param>
+        /// <param name="graph">邻接表</param>
+        /// <returns>生成树边集</returns>
+        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
-            var visited = new bool[field.count];
+            var spanningTree = new List<(int, int)>();
+            var visited = new bool[vertexCount];
 
-            var startTile = field.GetTileByIndex(random.Next(field.count));
-            visited[field.GetTileIndex(startTile)] = true;
+            int start = random.Next(vertexCount);
+            visited[start] = true;
 
-            var stack = new Stack<Tile>();
-            stack.Push(startTile);
+            var stack = new Stack<int>();
+            stack.Push(start);
 
             while (stack.Count > 0)
             {
-                var current = stack.Peek();
-                var unvisited = GetUnvisitedNeighbors(field, visited, current);
+                int current = stack.Peek();
+
+                // 收集当前顶点的未访问邻居
+                var unvisited = new List<int>();
+                foreach (var edge in graph[current])
+                {
+                    if (edge.Neighbor != -1 && !visited[edge.Neighbor])
+                        unvisited.Add(edge.Neighbor);
+                }
 
                 if (unvisited.Count > 0)
                 {
-                    var next = unvisited[random.Next(unvisited.Count)];
-                    field.RemoveWallBetween(current, next);
-                    visited[field.GetTileIndex(next)] = true;
+                    int next = unvisited[random.Next(unvisited.Count)];
+                    spanningTree.Add((current, next));
+                    visited[next] = true;
                     stack.Push(next);
                 }
                 else
@@ -48,25 +57,7 @@ namespace SimplexLab.Maze
                 }
             }
 
-            return field;
-        }
-
-        /// <summary>
-        /// ��ȡΪ���ʵ��ھ�
-        /// </summary>
-        /// <param name="field"></param>
-        /// <param name="visited"></param>
-        /// <param name="tile"></param>
-        /// <returns></returns>
-        private List<Tile> GetUnvisitedNeighbors(IMazeField field, bool[] visited, Tile tile)
-        {
-            var unvisited = new List<Tile>();
-            foreach (var neighbor in field.GetNeighbors(tile))
-            {
-                if (!visited[field.GetTileIndex(neighbor)]) 
-                    unvisited.Add(neighbor);
-            }
-            return unvisited;
+            return spanningTree;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Maze.TApplication
 {
     /// <summary>
     /// 圆形迷宫渲染器
+    /// 基于邻接表中的 CellBorder 几何数据进行绘制
     /// </summary>
     internal class CircularMazeRenderer
     {
@@ -16,11 +17,8 @@ namespace Maze.TApplication
         private int offsety = 0;
 
         /// <summary>
-        /// 
+        /// 设置绘制尺寸
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
         public CircularMazeRenderer SetSize(int width, int height)
         {
             this.width = width;
@@ -29,10 +27,8 @@ namespace Maze.TApplication
         }
 
         /// <summary>
-        /// 
+        /// 设置格子厚度
         /// </summary>
-        /// <param name="thickness"></param>
-        /// <returns></returns>
         public CircularMazeRenderer SetThickness(int thickness)
         {
             this.thickness = thickness;
@@ -40,11 +36,8 @@ namespace Maze.TApplication
         }
 
         /// <summary>
-        /// 
+        /// 设置偏移量
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public CircularMazeRenderer SetOffset(int x, int y)
         {
             this.offsetx = x;
@@ -53,15 +46,17 @@ namespace Maze.TApplication
         }
 
         /// <summary>
-        /// 
+        /// 绘制迷宫
         /// </summary>
-        /// <param name="grap"></param>
-        /// <param name="field"></param>
-        public void Draw(Graphics grap, CircularMazeField field)
+        public void Draw(Graphics grap, CircularMazeField? field)
         {
             grap.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
             DrawBackground(grap);
+
+            if (field == null)
+                return;
+
             DrawField(grap, field);
         }
 
@@ -82,103 +77,43 @@ namespace Maze.TApplication
             if (field.rings == 0 || thickness <= 0 || width <= 0 || height <= 0)
                 return;
 
-            // 计算画布中心（圆心与画布中心对齐）
-            var centerX = width / 2.0f + offsetx;
-            var centerY = height / 2.0f + offsety;
+            float centerX = width / 2.0f + offsetx;
+            float centerY = height / 2.0f + offsety;
 
             var pen = new Pen(Color.Black);
 
-            // 1. 绘制所有内圈墙（圆弧墙，分隔相邻圈）
-            for (var r = 0; r < field.rings - 1; r++)
+            // 遍历邻接表，绘制所有未移除的边界
+            var graph = field.graph;
+            for (int v = 0; v < graph.Count; v++)
             {
-                var sectorsInOuterRing = field.GetSectorsInRing(r + 1);
-                var angleStep = 2 * Math.PI / sectorsInOuterRing;
-                var outerRadius = (r + 1) * thickness;
-
-                for (var s = 0; s < sectorsInOuterRing; s++)
+                foreach (var edge in graph[v])
                 {
-                    if (field.GetInnerWall(r, s))
+                    // 避免重复绘制：边界边始终绘制，内部边仅当 neighbor > v 时绘制
+                    if (edge.Neighbor != -1 && edge.Neighbor <= v)
+                        continue;
+
+                    if (edge.Border is LineBorder line)
                     {
-                        var startAngle = s * angleStep - Math.PI / 2;
-                        DrawArc(grap, pen, centerX, centerY, outerRadius, startAngle, angleStep);
+                        float x1 = centerX + (float)(line.X1 * thickness);
+                        float y1 = centerY + (float)(line.Y1 * thickness);
+                        float x2 = centerX + (float)(line.X2 * thickness);
+                        float y2 = centerY + (float)(line.Y2 * thickness);
+                        grap.DrawLine(pen, x1, y1, x2, y2);
+                    }
+                    else if (edge.Border is ArcBorder arc)
+                    {
+                        float cx = centerX + (float)(arc.CenterX * thickness);
+                        float cy = centerY + (float)(arc.CenterY * thickness);
+                        float radius = (float)(arc.Radius * thickness);
+                        if (radius <= 0) continue;
+
+                        float startAngleDeg = (float)(arc.StartAngle * 180 / Math.PI);
+                        float sweepAngleDeg = (float)(arc.SweepAngle * 180 / Math.PI);
+
+                        grap.DrawArc(pen, cx - radius, cy - radius, radius * 2, radius * 2, startAngleDeg, sweepAngleDeg);
                     }
                 }
             }
-
-            // 2. 绘制所有径向墙（直线墙，分隔同一圈相邻扇形）
-            // radialWalls[r][s] 是扇形 s 与扇形 (s+1)%n 之间的墙
-            // 该墙位于扇形 s 的右边界，即角度 (s+1) * 2π/n
-            for (var r = 0; r < field.rings; r++)
-            {
-                var sectorsInRing = field.GetSectorsInRing(r);
-                var innerRadius = r * thickness;
-                var outerRadius = (r + 1) * thickness;
-                var angleStep = 2 * Math.PI / sectorsInRing;
-
-                for (var s = 0; s < sectorsInRing; s++)
-                {
-                    if (field.GetRadialWall(r, s))
-                    {
-                        var angle = ((s + 1) % sectorsInRing) * angleStep - Math.PI / 2;
-                        DrawRadialLine(grap, pen, centerX, centerY, innerRadius, outerRadius, angle);
-                    }
-                }
-            }
-
-            // 3. 绘制边界（最内圈和最外圈总是可见）
-            var innermostRadius = 0;
-            var outermostRadius = field.rings * thickness;
-
-            // 最内圈（完整圆）
-            if (innermostRadius > 0)
-            {
-                DrawArc(grap, pen, centerX, centerY, innermostRadius, -Math.PI / 2, 2 * Math.PI);
-            }
-
-            // 最外圈（完整圆）
-            if (outermostRadius > 0)
-            {
-                DrawArc(grap, pen, centerX, centerY, outermostRadius, -Math.PI / 2, 2 * Math.PI);
-            }
-        }
-
-        /// <summary>
-        /// 绘制圆弧
-        /// </summary>
-        private void DrawArc(Graphics grap, Pen pen, float centerX, float centerY, int radius, double startAngle, double sweepAngle)
-        {
-            if (radius <= 0)
-                return;
-
-            var x = centerX - radius;
-            var y = centerY - radius;
-            var diameter = radius * 2;
-
-            // 将弧度转换为角度（GDI+使用角度）
-            var startAngleDeg = (float)(startAngle * 180 / Math.PI);
-            var sweepAngleDeg = (float)(sweepAngle * 180 / Math.PI);
-
-            grap.DrawArc(pen, x, y, diameter, diameter, startAngleDeg, sweepAngleDeg);
-        }
-
-        /// <summary>
-        /// 绘制径向线（从内圈到外圈的直线）
-        /// </summary>
-        private void DrawRadialLine(Graphics grap, Pen pen, float centerX, float centerY, int innerRadius, int outerRadius, double angle)
-        {
-            if (innerRadius < 0 || outerRadius <= innerRadius)
-                return;
-
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
-
-            // 使用float来提高精度，减少整数转换误差
-            var x1 = centerX + innerRadius * cos;
-            var y1 = centerY + innerRadius * sin;
-            var x2 = centerX + outerRadius * cos;
-            var y2 = centerY + outerRadius * sin;
-
-            grap.DrawLine(pen, x1, y1, x2, y2);
         }
     }
 }

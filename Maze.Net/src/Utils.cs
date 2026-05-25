@@ -4,7 +4,7 @@ using System;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 
+    /// 工具类
     /// </summary>
     internal static class Utils
     {

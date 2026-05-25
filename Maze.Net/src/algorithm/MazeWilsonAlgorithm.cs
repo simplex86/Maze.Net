@@ -4,99 +4,100 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ���� Wilson ���Թ������㷨
+    /// Wilson迷宫生成算法（环擦除随机游走）
     /// </summary>
     internal class MazeWilsonAlgorithm : IMazeAlgorithm
     {
         private Random random = new Random();
 
         /// <summary>
-        /// �㷨
+        /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.Wilson;
 
         /// <summary>
-        /// �����Թ�
+        /// 在给定的图上生成随机生成树（Wilson方式）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public IMazeField Create(IMazeField field)
+        /// <param name="vertexCount">顶点数</param>
+        /// <param name="graph">邻接表</param>
+        /// <returns>生成树边集</returns>
+        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
-            var visited = new bool[field.count];
+            var spanningTree = new List<(int, int)>();
+            var visited = new bool[vertexCount];
 
-            var startTile = field.GetTileByIndex(random.Next(field.count));
-            visited[field.GetTileIndex(startTile)] = true;
+            int start = random.Next(vertexCount);
+            visited[start] = true;
             int visitedCount = 1;
 
-            while (visitedCount < field.count)
+            while (visitedCount < vertexCount)
             {
-                var walkStart = PickUnvisited(field, visited);
-                var path = RandomWalkToVisited(field, visited, walkStart);
+                int walkStart = PickUnvisited(visited, vertexCount);
+                var path = RandomWalkToVisited(graph, visited, walkStart);
 
                 for (int i = 0; i < path.Count - 1; i++)
                 {
-                    field.RemoveWallBetween(path[i], path[i + 1]);
-                    if (!visited[field.GetTileIndex(path[i])])
+                    spanningTree.Add((path[i], path[i + 1]));
+                    if (!visited[path[i]])
                     {
-                        visited[field.GetTileIndex(path[i])] = true;
+                        visited[path[i]] = true;
                         visitedCount++;
                     }
                 }
 
-                var last = path[path.Count - 1];
-                if (!visited[field.GetTileIndex(last)])
+                int last = path[path.Count - 1];
+                if (!visited[last])
                 {
-                    visited[field.GetTileIndex(last)] = true;
+                    visited[last] = true;
                     visitedCount++;
                 }
             }
 
-            return field;
+            return spanningTree;
         }
 
         /// <summary>
-        /// 
+        /// 随机选取一个未访问的顶点
         /// </summary>
-        /// <param name="field"></param>
-        /// <param name="visited"></param>
-        /// <returns></returns>
-        private Tile PickUnvisited(IMazeField field, bool[] visited)
+        private int PickUnvisited(bool[] visited, int vertexCount)
         {
-            Tile tile;
+            int vertex;
             do
             {
-                tile = field.GetTileByIndex(random.Next(field.count));
-            } while (visited[field.GetTileIndex(tile)]);
+                vertex = random.Next(vertexCount);
+            } while (visited[vertex]);
 
-            return tile;
+            return vertex;
         }
 
         /// <summary>
-        /// 
+        /// 从start出发随机游走，直到到达已访问顶点，返回路径（环擦除）
         /// </summary>
-        /// <param name="field"></param>
-        /// <param name="visited"></param>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        private List<Tile> RandomWalkToVisited(IMazeField field, bool[] visited, Tile start)
+        private List<int> RandomWalkToVisited(List<List<Edge>> graph, bool[] visited, int start)
         {
-            var direction = new Dictionary<int, Tile>();
-            var current = start;
+            var direction = new Dictionary<int, int>();
+            int current = start;
 
-            while (!visited[field.GetTileIndex(current)])
+            while (!visited[current])
             {
-                var neighbors = field.GetNeighbors(current);
-                var next = neighbors[random.Next(neighbors.Count)];
-                direction[field.GetTileIndex(current)] = next;
+                var neighbors = new List<int>();
+                foreach (var edge in graph[current])
+                {
+                    if (edge.Neighbor != -1)
+                        neighbors.Add(edge.Neighbor);
+                }
+                int next = neighbors[random.Next(neighbors.Count)];
+                direction[current] = next;
                 current = next;
             }
 
-            var path = new List<Tile>();
-            var trace = start;
+            // 从start回溯，环擦除
+            var path = new List<int>();
+            int trace = start;
             path.Add(trace);
-            while (!visited[field.GetTileIndex(trace)])
+            while (!visited[trace])
             {
-                trace = direction[field.GetTileIndex(trace)];
+                trace = direction[trace];
                 path.Add(trace);
             }
 

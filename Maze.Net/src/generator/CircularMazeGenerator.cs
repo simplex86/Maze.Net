@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
@@ -17,16 +17,16 @@ namespace SimplexLab.Maze
         }
 
         /// <summary>
-        /// 创建矩形迷宫
+        /// 创建圆形迷宫
         /// </summary>
-        /// <param name="rings">宽度</param>
-        /// <param name="sectors">高度</param>
+        /// <param name="rings">环数</param>
+        /// <param name="sectors">最大扇区数</param>
         /// <param name="algorithm">生成算法</param>
         /// <param name="strategy">分割策略</param>
         /// <returns>生成的迷宫场地</returns>
-        public CircularMazeField Create(int rings, 
-                                        int sectors, 
-                                        MazeAlgorithm algorithm = MazeAlgorithm.DFS, 
+        public CircularMazeField Create(int rings,
+                                        int sectors,
+                                        MazeAlgorithm algorithm = MazeAlgorithm.DFS,
                                         SectorStrategy strategy = SectorStrategy.Arc)
         {
             if (provider == null || provider.algorithm != algorithm)
@@ -35,20 +35,22 @@ namespace SimplexLab.Maze
             }
 
             var field = new CircularMazeField(rings, sectors, strategy);
-            return (CircularMazeField)provider.Create(field);
+            var spanningTree = provider.GenerateSpanningTree(field.count, field.graph);
+            field.RemoveBorders(spanningTree);
+            return field;
         }
 
         /// <summary>
-        /// 异步创建矩形迷宫
+        /// 异步创建圆形迷宫
         /// </summary>
-        /// <param name="rings">宽度</param>
-        /// <param name="sectors">高度</param>
+        /// <param name="rings">环数</param>
+        /// <param name="sectors">最大扇区数</param>
         /// <param name="algorithm">生成算法</param>
         /// <param name="strategy">分割策略</param>
         /// <returns>生成的迷宫场地</returns>
-        public async Task<CircularMazeField> CreateAsync(int rings, 
-                                                         int sectors, 
-                                                         MazeAlgorithm algorithm = MazeAlgorithm.DFS, 
+        public async Task<CircularMazeField> CreateAsync(int rings,
+                                                         int sectors,
+                                                         MazeAlgorithm algorithm = MazeAlgorithm.DFS,
                                                          SectorStrategy strategy = SectorStrategy.Arc)
         {
             return await Task.Run(() => Create(rings, sectors, algorithm, strategy));

@@ -4,61 +4,57 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ���� Kruskal ���Թ������㷨
+    /// Kruskal迷宫生成算法
     /// </summary>
     internal class MazeKruskalAlgorithm : IMazeAlgorithm
     {
         private Random random = new Random();
 
         /// <summary>
-        /// �㷨
+        /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.Kruskal;
 
         /// <summary>
-        /// �����Թ�
+        /// 在给定的图上生成随机生成树（Kruskal方式）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public IMazeField Create(IMazeField field)
+        /// <param name="vertexCount">顶点数</param>
+        /// <param name="graph">邻接表</param>
+        /// <returns>生成树边集</returns>
+        public List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
         {
-            var edges = CollectEdges(field);
+            var spanningTree = new List<(int, int)>();
+
+            var edges = CollectEdges(graph);
             edges.Shuffle(random);
 
-            var dsu = new DisjointSet(field.count);
+            var dsu = new DisjointSet(vertexCount);
 
             foreach (var (a, b) in edges)
             {
-                int idxA = field.GetTileIndex(a);
-                int idxB = field.GetTileIndex(b);
-
-                if (dsu.Union(idxA, idxB))
+                if (dsu.Union(a, b))
                 {
-                    field.RemoveWallBetween(a, b);
+                    spanningTree.Add((a, b));
                     if (dsu.Count == 1) break;
                 }
             }
 
-            return field;
+            return spanningTree;
         }
 
         /// <summary>
-        /// �ռ���
+        /// 收集所有内部边（去重，仅保留 i < j）
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        private List<(Tile a, Tile b)> CollectEdges(IMazeField field)
+        private List<(int a, int b)> CollectEdges(List<List<Edge>> graph)
         {
-            var edges = new List<(Tile a, Tile b)>();
+            var edges = new List<(int a, int b)>();
 
-            for (int i = 0; i < field.count; i++)
+            for (int i = 0; i < graph.Count; i++)
             {
-                var tile = field.GetTileByIndex(i);
-                foreach (var neighbor in field.GetNeighbors(tile))
+                foreach (var edge in graph[i])
                 {
-                    int j = field.GetTileIndex(neighbor);
-                    if (j > i)
-                        edges.Add((tile, neighbor));
+                    if (edge.Neighbor != -1 && edge.Neighbor > i)
+                        edges.Add((i, edge.Neighbor));
                 }
             }
 
