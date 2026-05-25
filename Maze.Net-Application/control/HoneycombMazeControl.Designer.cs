@@ -55,7 +55,7 @@
             thickness.Name = "thickness";
             thickness.Size = new System.Drawing.Size(264, 30);
             thickness.TabIndex = 13;
-            thickness.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            thickness.Value = new decimal(new int[] { 25, 0, 0, 0 });
             // 
             // length
             // 
@@ -66,7 +66,7 @@
             length.Name = "length";
             length.Size = new System.Drawing.Size(264, 30);
             length.TabIndex = 10;
-            length.Value = new decimal(new int[] { 15, 0, 0, 0 });
+            length.Value = new decimal(new int[] { 12, 0, 0, 0 });
             // 
             // label1
             // 

@@ -17,6 +17,12 @@
     <Compile Update="control\CircularMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="control\CircularHexagonMazeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="control\HexagonalMazeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="control\TriangularMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
