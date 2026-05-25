@@ -1,7 +1,7 @@
 ﻿namespace Maze.TApplication
 {
     /// <summary>
-    /// 
+    /// 迷宫的形状
     /// </summary>
     internal enum MazeShape
     {
@@ -21,5 +21,13 @@
         /// 三角形的
         /// </summary>
         Triangular,
+        /// <summary>
+        /// 六边形的
+        /// </summary>
+        Hexagonal,
+        /// <summary>
+        /// 六边形圆环
+        /// </summary>
+        CircularHexagon,
     }
 }
