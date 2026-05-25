@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
@@ -7,13 +8,24 @@ namespace SimplexLab.Maze
     /// </summary>
     public class RectangularMazeGenerator
     {
+        private Random random = null;
         private IMazeAlgorithm provider = null;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public RectangularMazeGenerator()
+            : this(Random.Shared)
         {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="random"></param>
+        public RectangularMazeGenerator(Random random)
+        {
+            this.random = random;
         }
 
         /// <summary>
@@ -27,7 +39,7 @@ namespace SimplexLab.Maze
         {
             if (provider == null || provider.algorithm != algorithm)
             {
-                provider = Utils.CreateAlgorithm(algorithm);
+                provider = Utils.CreateAlgorithm(algorithm, random);
             }
 
             var field = new RectangularMazeField(width, height);

@@ -8,12 +8,21 @@ namespace SimplexLab.Maze
     /// </summary>
     internal class MazeKruskalAlgorithm : IMazeAlgorithm
     {
-        private Random random = new Random();
+        private Random random = null;
 
         /// <summary>
         /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.Kruskal;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="random"></param>
+        public MazeKruskalAlgorithm(Random random)
+        {
+            this.random = random;
+        }
 
         /// <summary>
         /// 在给定的图上生成随机生成树（Kruskal方式）

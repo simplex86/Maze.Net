@@ -8,12 +8,21 @@ namespace SimplexLab.Maze
     /// </summary>
     internal class MazeWilsonAlgorithm : IMazeAlgorithm
     {
-        private Random random = new Random();
+        private Random random = null;
 
         /// <summary>
         /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.Wilson;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="random"></param>
+        public MazeWilsonAlgorithm(Random random)
+        {
+            this.random = random;
+        }
 
         /// <summary>
         /// 在给定的图上生成随机生成树（Wilson方式）

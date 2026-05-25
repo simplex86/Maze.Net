@@ -8,12 +8,21 @@ namespace SimplexLab.Maze
     /// </summary>
     internal class MazeDfsAlgorithm : IMazeAlgorithm
     {
-        private Random random = new Random();
+        private Random random = null;
 
         /// <summary>
         /// 算法
         /// </summary>
         public MazeAlgorithm algorithm => MazeAlgorithm.DFS;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="random"></param>
+        public MazeDfsAlgorithm(Random random)
+        {
+            this.random = random;
+        }
 
         /// <summary>
         /// 在给定的图上生成随机生成树（DFS方式）
