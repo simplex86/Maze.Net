@@ -3,37 +3,28 @@ using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
-    public class HoneycombMazeGenerator
+    public class HoneycombMazeGenerator : MazeGenerator<HoneycombMazeField>
     {
-        private Random random = null;
-        private IMazeAlgorithm provider = null;
-
-        public HoneycombMazeGenerator()
-            : this(Random.Shared)
+        public HoneycombMazeGenerator() 
         {
+        
         }
 
-        public HoneycombMazeGenerator(Random random)
-        {
-            this.random = random;
+        public HoneycombMazeGenerator(Random random) 
+            : base(random) 
+        { 
+        
         }
 
-        public HoneycombMazeField Create(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public HoneycombMazeField Generate(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
         {
-            if (provider == null || provider.algorithm != algorithm)
-            {
-                provider = Utils.CreateAlgorithm(algorithm, random);
-            }
-
             var field = new HoneycombMazeField(size);
-            var spanningTree = provider.GenerateSpanningTree(field.count, field.graph);
-            field.RemoveBorders(spanningTree);
-            return field;
+            return Generate(field, algorithm);
         }
 
-        public async Task<HoneycombMazeField> CreateAsync(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public async Task<HoneycombMazeField> GenerateAsync(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
         {
-            return await Task.Run(() => Create(size, algorithm));
+            return await Task.Run(() => Generate(size, algorithm));
         }
     }
 }

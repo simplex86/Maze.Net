@@ -3,84 +3,40 @@ using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
-    /// <summary>
-    /// 扇形分割策略
-    /// </summary>
     public enum SectorStrategy
     {
-        /// <summary>
-        /// 弧长相同
-        /// </summary>
         Arc = 1,
-        /// <summary>
-        /// 面积相同
-        /// </summary>
         Area = 2,
     }
 
-    /// <summary>
-    /// 圆形迷宫生成器
-    /// </summary>
-    public class CircularMazeGenerator
+    public class CircularMazeGenerator : MazeGenerator<CircularMazeField>
     {
-        private Random random = null;
-        private IMazeAlgorithm provider = null;
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public CircularMazeGenerator()
-            : this(Random.Shared)
-        {
+        public CircularMazeGenerator() 
+        { 
+        
         }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="random"></param>
-        public CircularMazeGenerator(Random random)
-        {
-            this.random = random;
+        public CircularMazeGenerator(Random random) 
+            : base(random) 
+        { 
+        
         }
 
-        /// <summary>
-        /// 创建圆形迷宫
-        /// </summary>
-        /// <param name="rings">环数</param>
-        /// <param name="sectors">最大扇区数</param>
-        /// <param name="algorithm">生成算法</param>
-        /// <param name="strategy">分割策略</param>
-        /// <returns>生成的迷宫场地</returns>
-        public CircularMazeField Create(int rings,
-                                        int sectors,
-                                        MazeAlgorithm algorithm = MazeAlgorithm.DFS,
-                                        SectorStrategy strategy = SectorStrategy.Arc)
+        public CircularMazeField Generate(int rings,
+                                          int sectors,
+                                          MazeAlgorithm algorithm = MazeAlgorithm.DFS,
+                                          SectorStrategy strategy = SectorStrategy.Arc)
         {
-            if (provider == null || provider.algorithm != algorithm)
-            {
-                provider = Utils.CreateAlgorithm(algorithm, random);
-            }
-
             var field = new CircularMazeField(rings, sectors, strategy);
-            var spanningTree = provider.GenerateSpanningTree(field.count, field.graph);
-            field.RemoveBorders(spanningTree);
-            return field;
+            return Generate(field, algorithm);
         }
 
-        /// <summary>
-        /// 异步创建圆形迷宫
-        /// </summary>
-        /// <param name="rings">环数</param>
-        /// <param name="sectors">最大扇区数</param>
-        /// <param name="algorithm">生成算法</param>
-        /// <param name="strategy">分割策略</param>
-        /// <returns>生成的迷宫场地</returns>
-        public async Task<CircularMazeField> CreateAsync(int rings,
-                                                         int sectors,
-                                                         MazeAlgorithm algorithm = MazeAlgorithm.DFS,
-                                                         SectorStrategy strategy = SectorStrategy.Arc)
+        public async Task<CircularMazeField> GenerateAsync(int rings,
+                                                           int sectors,
+                                                           MazeAlgorithm algorithm = MazeAlgorithm.DFS,
+                                                           SectorStrategy strategy = SectorStrategy.Arc)
         {
-            return await Task.Run(() => Create(rings, sectors, algorithm, strategy));
+            return await Task.Run(() => Generate(rings, sectors, algorithm, strategy));
         }
     }
 }

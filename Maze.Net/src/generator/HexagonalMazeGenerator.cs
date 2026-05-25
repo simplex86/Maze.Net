@@ -3,39 +3,28 @@ using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
-    public class HexagonalMazeGenerator
+    public class HexagonalMazeGenerator : MazeGenerator<HexagonalMazeField>
     {
-        private Random random = null;
-        private IMazeAlgorithm provider = null;
-
-        public HexagonalMazeGenerator()
-            : this(Random.Shared)
+        public HexagonalMazeGenerator() 
         {
+        
         }
 
-        public HexagonalMazeGenerator(Random random)
-        {
-            this.random = random;
+        public HexagonalMazeGenerator(Random random) 
+            : base(random) 
+        { 
+        
         }
 
-        public HexagonalMazeField Create(int size,
-                                         MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public HexagonalMazeField Generate(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
         {
-            if (provider == null || provider.algorithm != algorithm)
-            {
-                provider = Utils.CreateAlgorithm(algorithm, random);
-            }
-
             var field = new HexagonalMazeField(size);
-            var spanningTree = provider.GenerateSpanningTree(field.count, field.graph);
-            field.RemoveBorders(spanningTree);
-            return field;
+            return Generate(field, algorithm);
         }
 
-        public async Task<HexagonalMazeField> CreateAsync(int size,
-                                                           MazeAlgorithm algorithm = MazeAlgorithm.Prim)
+        public async Task<HexagonalMazeField> GenerateAsync(int size, MazeAlgorithm algorithm = MazeAlgorithm.Prim)
         {
-            return await Task.Run(() => Create(size, algorithm));
+            return await Task.Run(() => Generate(size, algorithm));
         }
     }
 }

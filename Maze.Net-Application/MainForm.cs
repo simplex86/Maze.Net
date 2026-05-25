@@ -117,7 +117,7 @@ namespace Maze.TApplication
         private async Task GenerateRectangularMazeAsync(int width, int height, MazeAlgorithm algorithm)
         {
             var genrator = new RectangularMazeGenerator();
-            mazeField = await genrator.CreateAsync(width, height, algorithm);
+            mazeField = await genrator.GenerateAsync(width, height, algorithm);
 
             canvas.Refresh();
         }
@@ -150,7 +150,7 @@ namespace Maze.TApplication
         private async Task GenerateCircularMazeAsync(int rings, int sectors, MazeAlgorithm algorithm, SectorStrategy strategy)
         {
             var genrator = new CircularMazeGenerator();
-            mazeField = await genrator.CreateAsync(rings, sectors, algorithm, strategy);
+            mazeField = await genrator.GenerateAsync(rings, sectors, algorithm, strategy);
 
             canvas.Refresh();
         }
@@ -181,7 +181,7 @@ namespace Maze.TApplication
         private async Task GenerateHoneycombMazeAsync(int length, MazeAlgorithm algorithm)
         {
             var genrator = new HoneycombMazeGenerator();
-            mazeField = await genrator.CreateAsync(length, algorithm);
+            mazeField = await genrator.GenerateAsync(length, algorithm);
 
             canvas.Refresh();
         }
@@ -213,7 +213,7 @@ namespace Maze.TApplication
         private async Task GenerateTriangularMazeAsync(int length, TriangleOrientation orientation, MazeAlgorithm algorithm)
         {
             var genrator = new TriangularMazeGenerator();
-            mazeField = await genrator.CreateAsync(length, orientation, algorithm);
+            mazeField = await genrator.GenerateAsync(length, orientation, algorithm);
 
             canvas.Refresh();
         }
@@ -244,7 +244,7 @@ namespace Maze.TApplication
         private async Task GenerateHexagonalMazeAsync(int length, MazeAlgorithm algorithm)
         {
             var genrator = new HexagonalMazeGenerator();
-            mazeField = await genrator.CreateAsync(length, algorithm);
+            mazeField = await genrator.GenerateAsync(length, algorithm);
 
             canvas.Refresh();
         }
@@ -275,7 +275,7 @@ namespace Maze.TApplication
         private async Task GenerateCircularHexagonMazeAsync(int length, MazeAlgorithm algorithm)
         {
             var genrator = new CircularHexagonMazeGenerator();
-            mazeField = await genrator.CreateAsync(length, algorithm);
+            mazeField = await genrator.GenerateAsync(length, algorithm);
 
             canvas.Refresh();
         }

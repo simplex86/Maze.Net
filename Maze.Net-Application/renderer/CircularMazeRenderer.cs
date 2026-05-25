@@ -50,8 +50,6 @@ namespace Maze.TApplication
         /// </summary>
         public void Draw(Graphics grap, CircularMazeField? field)
         {
-            grap.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
             DrawBackground(grap);
 
             if (field == null) return;
