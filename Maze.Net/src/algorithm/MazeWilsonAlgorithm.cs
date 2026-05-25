@@ -11,6 +11,11 @@ namespace SimplexLab.Maze
         private Random random = new Random();
 
         /// <summary>
+        /// À„∑®
+        /// </summary>
+        public MazeAlgorithm algorithm => MazeAlgorithm.Wilson;
+
+        /// <summary>
         /// ¥¥Ω®√‘π¨
         /// </summary>
         /// <param name="field"></param>
@@ -62,6 +67,7 @@ namespace SimplexLab.Maze
             {
                 tile = field.GetTileByIndex(random.Next(field.count));
             } while (visited[field.GetTileIndex(tile)]);
+
             return tile;
         }
 

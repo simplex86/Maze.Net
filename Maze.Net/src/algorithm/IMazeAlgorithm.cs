@@ -6,6 +6,11 @@
     internal interface IMazeAlgorithm
     {
         /// <summary>
+        /// 算法
+        /// </summary>
+        MazeAlgorithm algorithm { get; }
+
+        /// <summary>
         /// 创建迷宫
         /// </summary>
         /// <param name="field"></param>

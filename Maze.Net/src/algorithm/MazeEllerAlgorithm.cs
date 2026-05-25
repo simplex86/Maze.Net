@@ -11,6 +11,11 @@ namespace SimplexLab.Maze
         private Random random = new Random();
 
         /// <summary>
+        /// À„∑®
+        /// </summary>
+        public MazeAlgorithm algorithm => MazeAlgorithm.Eller;
+
+        /// <summary>
         /// ¥¥Ω®√‘π¨
         /// </summary>
         /// <param name="field"></param>

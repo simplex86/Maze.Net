@@ -7,7 +7,7 @@ namespace SimplexLab.Maze
     /// </summary>
     public class RectangularMazeGenerator
     {
-        private IRectangularMazeProvider provider = null;
+        private IMazeAlgorithm provider = null;
 
         /// <summary>
         /// 构造函数
@@ -29,11 +29,9 @@ namespace SimplexLab.Maze
             {
                 provider = CreateProvider(algorithm);
             }
-            
-            var field = provider == null ? new RectangularMazeField(width, height) 
-                                         : provider.Create(width, height);
 
-            return field;
+            var field = new RectangularMazeField(width, height);
+            return (RectangularMazeField)provider.Create(field);
         }
 
         /// <summary>
@@ -53,29 +51,29 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="algorithm">算法类型</param>
         /// <returns>算法提供者</returns>
-        private IRectangularMazeProvider CreateProvider(MazeAlgorithm algorithm)
+        private IMazeAlgorithm CreateProvider(MazeAlgorithm algorithm)
         {
             switch (algorithm)
             {
                 case MazeAlgorithm.DFS:
-                    return new RectangularMazeDfsProvider();
-                case MazeAlgorithm.Prim:
-                    return new RectangularMazePrimProvider();
-                case MazeAlgorithm.Kruskal:
-                    return new RectangularMazeKruskalProvider();
-                case MazeAlgorithm.Wilson:
-                    return new RectangularMazeWilsonProvider();
-                case MazeAlgorithm.Eller:
-                    return new RectangularMazeEllerProvider();
-                case MazeAlgorithm.AldousBroder:
-                    return new RectangularMazeAldousBroderProvider();
+                    return new MazeDfsAlgorithm();
                 case MazeAlgorithm.BFS:
-                    return new RectangularMazeBfsProvider();
+                    return new MazeBfsAlgorithm();
+                case MazeAlgorithm.Prim:
+                    return new MazePrimAlgorithm();
+                case MazeAlgorithm.Kruskal:
+                    return new MazeKruskalAlgorithm();
+                case MazeAlgorithm.Wilson:
+                    return new MazeWilsonAlgorithm();
+                case MazeAlgorithm.Eller:
+                    return new MazeEllerAlgorithm();
+                case MazeAlgorithm.AldousBroder:
+                    return new MazeAldousBroderAlgorithm();
                 default:
                     break;
             }
 
-            return null;
+            return new MazeDfsAlgorithm();
         }
     }
 }

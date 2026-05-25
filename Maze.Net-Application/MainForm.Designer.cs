@@ -47,20 +47,18 @@ namespace Maze.TApplication
             tabs.Controls.Add(circularMazePage);
             tabs.Dock = DockStyle.Fill;
             tabs.Location = new Point(0, 0);
-            tabs.Margin = new Padding(5, 4, 5, 4);
             tabs.Name = "tabs";
             tabs.SelectedIndex = 0;
-            tabs.Size = new Size(1558, 1024);
+            tabs.Size = new Size(991, 725);
             tabs.TabIndex = 0;
             // 
             // rectangularMazePage
             // 
             rectangularMazePage.Controls.Add(rectangularMazeControl1);
-            rectangularMazePage.Location = new Point(4, 33);
-            rectangularMazePage.Margin = new Padding(5, 4, 5, 4);
+            rectangularMazePage.Location = new Point(4, 26);
             rectangularMazePage.Name = "rectangularMazePage";
-            rectangularMazePage.Padding = new Padding(5, 4, 5, 4);
-            rectangularMazePage.Size = new Size(1550, 987);
+            rectangularMazePage.Padding = new Padding(3, 3, 3, 3);
+            rectangularMazePage.Size = new Size(983, 695);
             rectangularMazePage.TabIndex = 0;
             rectangularMazePage.Text = "Rectangular Maze";
             rectangularMazePage.UseVisualStyleBackColor = true;
@@ -68,20 +66,19 @@ namespace Maze.TApplication
             // rectangularMazeControl1
             // 
             rectangularMazeControl1.Dock = DockStyle.Fill;
-            rectangularMazeControl1.Location = new Point(5, 4);
-            rectangularMazeControl1.Margin = new Padding(8, 6, 8, 6);
+            rectangularMazeControl1.Location = new Point(3, 3);
+            rectangularMazeControl1.Margin = new Padding(5, 4, 5, 4);
             rectangularMazeControl1.Name = "rectangularMazeControl1";
-            rectangularMazeControl1.Size = new Size(1540, 979);
+            rectangularMazeControl1.Size = new Size(977, 689);
             rectangularMazeControl1.TabIndex = 3;
             // 
             // circularMazePage
             // 
             circularMazePage.Controls.Add(circularMazeControl1);
-            circularMazePage.Location = new Point(4, 33);
-            circularMazePage.Margin = new Padding(5, 4, 5, 4);
+            circularMazePage.Location = new Point(4, 26);
             circularMazePage.Name = "circularMazePage";
-            circularMazePage.Padding = new Padding(5, 4, 5, 4);
-            circularMazePage.Size = new Size(1550, 987);
+            circularMazePage.Padding = new Padding(3, 3, 3, 3);
+            circularMazePage.Size = new Size(983, 695);
             circularMazePage.TabIndex = 1;
             circularMazePage.Text = "Circular Maze";
             circularMazePage.UseVisualStyleBackColor = true;
@@ -89,23 +86,22 @@ namespace Maze.TApplication
             // circularMazeControl1
             // 
             circularMazeControl1.Dock = DockStyle.Fill;
-            circularMazeControl1.Location = new Point(5, 4);
-            circularMazeControl1.Margin = new Padding(8, 6, 8, 6);
+            circularMazeControl1.Location = new Point(3, 3);
+            circularMazeControl1.Margin = new Padding(5, 4, 5, 4);
             circularMazeControl1.Name = "circularMazeControl1";
-            circularMazeControl1.Size = new Size(1540, 979);
+            circularMazeControl1.Size = new Size(977, 689);
             circularMazeControl1.TabIndex = 4;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1558, 1024);
+            ClientSize = new Size(991, 725);
             Controls.Add(tabs);
-            Margin = new Padding(5, 4, 5, 4);
-            MinimumSize = new Size(1200, 800);
+            MinimumSize = new Size(769, 578);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.6.59";
+            Text = "Maze Generator v0.7.62";
             tabs.ResumeLayout(false);
             rectangularMazePage.ResumeLayout(false);
             circularMazePage.ResumeLayout(false);
