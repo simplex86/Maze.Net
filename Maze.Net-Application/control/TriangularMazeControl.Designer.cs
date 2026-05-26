@@ -40,10 +40,11 @@
             // 
             // label10
             // 
-            label10.Location = new System.Drawing.Point(2, 77);
+            label10.Location = new System.Drawing.Point(1, 55);
+            label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label10.Name = "label10";
             label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label10.Size = new System.Drawing.Size(116, 24);
+            label10.Size = new System.Drawing.Size(74, 17);
             label10.TabIndex = 12;
             label10.Text = "Thickness";
             label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -51,41 +52,39 @@
             // thickness
             // 
             thickness.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            thickness.Location = new System.Drawing.Point(141, 75);
+            thickness.Location = new System.Drawing.Point(90, 53);
+            thickness.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             thickness.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             thickness.Minimum = new decimal(new int[] { 15, 0, 0, 0 });
             thickness.Name = "thickness";
-            thickness.Size = new System.Drawing.Size(264, 30);
+            thickness.Size = new System.Drawing.Size(168, 23);
             thickness.TabIndex = 13;
-            thickness.Value = new decimal(new int[] { 25, 0, 0, 0 });
+            thickness.Value = new decimal(new int[] { 20, 0, 0, 0 });
             // 
             // length
             // 
             length.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            length.Location = new System.Drawing.Point(140, 0);
-            length.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            length.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            length.Location = new System.Drawing.Point(89, 0);
             length.Name = "length";
-            length.Size = new System.Drawing.Size(264, 30);
+            length.Size = new System.Drawing.Size(168, 23);
             length.TabIndex = 10;
-            length.Value = new decimal(new int[] { 40, 0, 0, 0 });
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(2, 3);
-            label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            label1.Location = new System.Drawing.Point(1, 2);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(70, 24);
+            label1.Size = new System.Drawing.Size(47, 17);
             label1.TabIndex = 8;
             label1.Text = "Length";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(2, 40);
+            label2.Location = new System.Drawing.Point(1, 28);
+            label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(109, 24);
+            label2.Size = new System.Drawing.Size(73, 17);
             label2.TabIndex = 14;
             label2.Text = "Orientation";
             // 
@@ -94,14 +93,15 @@
             orientation.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             orientation.FormattingEnabled = true;
             orientation.Items.AddRange(new object[] { "Upward", "Downward" });
-            orientation.Location = new System.Drawing.Point(140, 37);
+            orientation.Location = new System.Drawing.Point(89, 26);
+            orientation.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             orientation.Name = "orientation";
-            orientation.Size = new System.Drawing.Size(264, 32);
+            orientation.Size = new System.Drawing.Size(169, 25);
             orientation.TabIndex = 15;
             // 
             // TriangularMazeControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(orientation);
             Controls.Add(label2);
@@ -109,9 +109,8 @@
             Controls.Add(thickness);
             Controls.Add(length);
             Controls.Add(label1);
-            Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             Name = "TriangularMazeControl";
-            Size = new System.Drawing.Size(405, 124);
+            Size = new System.Drawing.Size(258, 88);
             ((System.ComponentModel.ISupportInitialize)thickness).EndInit();
             ((System.ComponentModel.ISupportInitialize)length).EndInit();
             ResumeLayout(false);

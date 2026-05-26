@@ -7,7 +7,7 @@ namespace Maze.TApplication
         /// <summary>
         /// ±ß³¤
         /// </summary>
-        public int Length => (int)length.Value;
+        public int Rings => (int)rings.Value;
         /// <summary>
         /// 
         /// </summary>
