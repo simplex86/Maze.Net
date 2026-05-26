@@ -7,6 +7,11 @@ namespace SimplexLab.Maze
     {
         public int size { get; }
 
+        /// <summary>
+        /// Y轴朝上
+        /// </summary>
+        public override bool FlipY => true;
+
         public HexagonalMazeField(int size)
         {
             this.size = Math.Max(1, size);

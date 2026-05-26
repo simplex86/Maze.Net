@@ -1,34 +1,6 @@
-using System;
-using System.Drawing;
 using SimplexLab.Maze;
 
 namespace Maze.TApplication
 {
-    internal class HexagonalMazeRenderer : MazeRenderer<HexagonalMazeField>
-    {
-        protected override void DrawField(Graphics grap, HexagonalMazeField field)
-        {
-            if (field.size == 0 || thickness <= 0 || width <= 0 || height <= 0)
-                return;
-
-            float centerX = width / 2.0f + offsetx;
-            float centerY = height / 2.0f + offsety;
-
-            var pen = new Pen(Color.Black);
-
-            IterateBorders(field, border =>
-            {
-                if (border is LineBorder line)
-                {
-                    float x1 = centerX + (float)(line.X1 * thickness);
-                    float y1 = centerY - (float)(line.Y1 * thickness);
-                    float x2 = centerX + (float)(line.X2 * thickness);
-                    float y2 = centerY - (float)(line.Y2 * thickness);
-                    grap.DrawLine(pen, x1, y1, x2, y2);
-                }
-            });
-
-            pen.Dispose();
-        }
-    }
+    internal class HexagonalMazeRenderer : MazeRenderer<HexagonalMazeField> { }
 }

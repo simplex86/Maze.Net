@@ -4,10 +4,15 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// ·äÎÑÃÔ¹¬
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½Ô¹ï¿½
     /// </summary>
     public class HoneycombMazeField : MazeField
     {
+        /// <summary>
+        /// Yè½´æœä¸Š
+        /// </summary>
+        public override bool FlipY => true;
+
         private static readonly int[][] Neighbors = new int[][]
         {
             new int[] { -1, 0 },
