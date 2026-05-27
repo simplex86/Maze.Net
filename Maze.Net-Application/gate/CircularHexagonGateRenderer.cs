@@ -19,13 +19,13 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green, bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Gold,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
         {
-            var shape = field!.GetVertexSectorShape(vertex);
+            var shape = GetVertexSectorShape(field!, vertex);
 
             var centerX = TransformX(0, bounds, scale, offsetX);
             var centerY = TransformY(0, bounds, scale, offsetY, flipY);
@@ -88,6 +88,38 @@ namespace Maze.TApplication
                 path.AddLine(outerX, outerY, outerX, outerY);
                 path.CloseFigure();
                 grap.FillPath(brush, path);
+            }
+        }
+
+        private static CurvedTriangle GetVertexSectorShape(CircularHexagonMazeField field, int vertex)
+        {
+            var sectorSize = field.Size * field.Size;
+            var sector = vertex / sectorSize;
+            var remaining = vertex % sectorSize;
+            var updownSize = field.Size * (field.Size + 1) / 2;
+            var updown = remaining < updownSize ? 0 : 1;
+            var idx = updown == 0 ? remaining : remaining - updownSize;
+
+            var row = 0;
+            while ((row + 1) * (row + 2) / 2 <= idx)
+                row++;
+            var column = idx - row * (row + 1) / 2;
+
+            var sectorStart = (sector - 2) * Math.PI / 3;
+
+            if (updown == 0)
+            {
+                var innerAngle = row > 0 ? sectorStart + column * Math.PI / 3 / row : 0;
+                var arcStartAngle = sectorStart + column * Math.PI / 3 / (row + 1);
+                var arcSweepAngle = Math.PI / 3 / (row + 1);
+                return new CurvedTriangle(true, row, innerAngle, row + 1, arcStartAngle, arcSweepAngle, 0, 0);
+            }
+            else
+            {
+                var arcStartAngle = sectorStart + column * Math.PI / 3 / (row + 1);
+                var arcSweepAngle = Math.PI / 3 / (row + 1);
+                var outerAngle = sectorStart + (column + 1) * Math.PI / 3 / (row + 2);
+                return new CurvedTriangle(false, 0, 0, row + 1, arcStartAngle, arcSweepAngle, row + 2, outerAngle);
             }
         }
     }

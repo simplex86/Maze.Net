@@ -26,7 +26,7 @@
         /// </summary>
         Hexagonal,
         /// <summary>
-        /// 六边形圆环
+        /// 圆环-三角格
         /// </summary>
         CircularHexagon,
     }

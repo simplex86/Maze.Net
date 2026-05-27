@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
@@ -21,14 +22,14 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 迷宫出入口
     /// </summary>
-    public class MazeGateGenerator
+    public abstract class GateGenerator<TField> where TField : IMazeField
     {
-        private Random random = null;
+        protected Random random = null;
 
         /// <summary>
         /// 迷宫出入口（使用默认随机数生成器）
         /// </summary>
-        public MazeGateGenerator()
+        public GateGenerator()
             : this(Random.Shared)
         {
 
@@ -38,48 +39,26 @@ namespace SimplexLab.Maze
         /// 迷宫出入口
         /// </summary>
         /// <param name="random">随机数生成器</param>
-        public MazeGateGenerator(Random random)
+        public GateGenerator(Random random)
         {
             this.random = random;
-        }
-
-        /// <summary>
-        /// 创建迷宫出入口（在边缘位置）
-        /// </summary>
-        /// <param name="field">迷宫场地</param>
-        /// <param name="entrance">入口顶点索引</param>
-        /// <param name="exit">出口顶点索引</param>
-        public MazeGate Generate(MazeField field)
-        {
-            return Generate(field, EGatePosition.Edge, EGatePosition.Edge);
         }
 
         /// <summary>
         /// 创建迷宫出入口
         /// </summary>
         /// <param name="field">迷宫场地</param>
-        /// <param name="entrancePosition">入口位置选项</param>
-        /// <param name="exitPosition">出口位置选项</param>
-        /// <param name="entrance">入口顶点索引</param>
-        /// <param name="exit">出口顶点索引</param>
-        public MazeGate Generate(MazeField field, EGatePosition entrancePosition, EGatePosition exitPosition)
+        /// <returns></returns>
+        public abstract MazeGate Generate(TField field);
+
+        /// <summary>
+        /// 创建迷宫出入口（异步）
+        /// </summary>
+        /// <param name="field">迷宫场地</param>
+        public async Task<MazeGate> GenerateAsync(TField field)
         {
-            // 出入口均在边缘时，使用各Field类型的对边约束逻辑
-            if (entrancePosition == EGatePosition.Edge && exitPosition == EGatePosition.Edge)
-            {
-                return field.GenerateOppositeEdgeGate(random);
-            }
-
-            var vertices = FindEdgeVertices(field);
-
-            var entranceCandidates = GetCandidates(field, vertices, entrancePosition);
-            var exitCandidates = GetCandidates(field, vertices, exitPosition);
-
-            var entrance = entranceCandidates[random.Next(entranceCandidates.Count)];
-            if (exitCandidates.Count > 1) exitCandidates.Remove(entrance);
-            var exit = exitCandidates[random.Next(exitCandidates.Count)];
-
-            return new MazeGate(entrance, exit);
+            var gate = await Task.Run(() => Generate(field));
+            return gate;
         }
 
         /// <summary>

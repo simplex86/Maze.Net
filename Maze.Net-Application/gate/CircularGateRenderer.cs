@@ -19,13 +19,13 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green, bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Gold,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
         {
-            var sector = field!.GetVertexSector(vertex);
+            var sector = GetVertexSector(field!, vertex);
 
             var centerX = TransformX(0, bounds, scale, offsetX);
             var centerY = TransformY(0, bounds, scale, offsetY, flipY);
@@ -35,7 +35,6 @@ namespace Maze.TApplication
 
             if (outerR <= 0) return;
 
-            // 角度方向内缩约1px
             var midR = (float)((sector.innerRadius + sector.outerRadius) / 2 * scale);
             var angleShrink = midR > 0 ? 1.0f / midR : 0;
             var adjustedStartAngle = (float)(sector.startAngle + angleShrink);
@@ -71,6 +70,23 @@ namespace Maze.TApplication
                 path.CloseFigure();
                 grap.FillPath(brush, path);
             }
+        }
+
+        private static AnnularSector GetVertexSector(CircularMazeField field, int vertex)
+        {
+            var remaining = vertex;
+            for (var r = 0; r < field.Rings; r++)
+            {
+                if (remaining < field.SectorsPerRing[r])
+                {
+                    var n = field.SectorsPerRing[r];
+                    var angleStep = 2 * Math.PI / n;
+                    var startAngle = remaining * angleStep - Math.PI / 2;
+                    return new AnnularSector(r, r + 1, startAngle, angleStep);
+                }
+                remaining -= field.SectorsPerRing[r];
+            }
+            return new AnnularSector(0, 0, 0, 0);
         }
     }
 }

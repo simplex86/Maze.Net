@@ -27,11 +27,6 @@ namespace SimplexLab.Maze
         /// Y轴是否需要翻转（true表示场地的Y轴朝上，渲染时需翻转为屏幕Y朝下）
         /// </summary>
         bool FlipY { get; }
-
-        /// <summary>
-        /// 当出入口均在边缘时，生成满足对边约束的出入口
-        /// </summary>
-        MazeGate GenerateOppositeEdgeGate(Random random);
     }
 
     /// <summary>
@@ -67,41 +62,6 @@ namespace SimplexLab.Maze
         /// Y轴是否需要翻转（默认false，Y朝下的坐标系）
         /// </summary>
         public virtual bool FlipY => false;
-
-        /// <summary>
-        /// 当出入口均在边缘时，生成满足对边约束的出入口
-        /// 默认实现：无约束随机选取
-        /// </summary>
-        public virtual MazeGate GenerateOppositeEdgeGate(Random random)
-        {
-            var edgeVertices = FindEdgeVertices();
-            var entrance = edgeVertices[random.Next(edgeVertices.Count)];
-            var exitCandidates = new List<int>(edgeVertices);
-            if (exitCandidates.Count > 1) exitCandidates.Remove(entrance);
-            var exit = exitCandidates[random.Next(exitCandidates.Count)];
-
-            return new MazeGate(entrance, exit);
-        }
-
-        /// <summary>
-        /// 查找所有边缘顶点
-        /// </summary>
-        protected List<int> FindEdgeVertices()
-        {
-            var list = new List<int>();
-            for (int v = 0; v < Count; v++)
-            {
-                foreach (var edge in Graph[v])
-                {
-                    if (edge.Neighbor == -1)
-                    {
-                        list.Add(v);
-                        break;
-                    }
-                }
-            }
-            return list;
-        }
 
         /// <summary>
         /// 遍历邻接表中所有边界，计算几何包围盒

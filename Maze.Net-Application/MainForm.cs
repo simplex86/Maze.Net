@@ -60,30 +60,30 @@ namespace Maze.TApplication
             {
                 case EMazeShape.Rectangular:
                     await GenerateRectangularMazeAsync();
+                    await GenerateRectangularGateAsync();
                     break;
                 case EMazeShape.Circular:
                     await GenerateCircularMazeAsync();
+                    await GenerateCircularGateAsync();
                     break;
                 case EMazeShape.Honeycomb:
                     await GenerateHoneycombMazeAsync();
+                    await GenerateHoneycombGateAsync();
                     break;
                 case EMazeShape.Triangular:
                     await GenerateTriangularMazeAsync();
+                    await GenerateTriangularGateAsync();
                     break;
                 case EMazeShape.Hexagonal:
                     await GenerateHexagonalMazeAsync();
+                    await GenerateHexagonalGateAsync();
                     break;
                 case EMazeShape.CircularHexagon:
                     await GenerateCircularHexagonMazeAsync();
+                    await GenerateCircularHexagonGateAsync();
                     break;
                 default:
                     break;
-            }
-
-            if (true)
-            {
-                var generator = new MazeGateGenerator();
-                mazeGate = generator.Generate(mazeField);
             }
 
             canvas.Refresh();
@@ -97,21 +97,27 @@ namespace Maze.TApplication
             {
                 case EMazeShape.Rectangular:
                     DrawRectangularMaze(e.Graphics);
+                    DrawRectangularGate(e.Graphics);
                     break;
                 case EMazeShape.Circular:
                     DrawCircularMaze(e.Graphics);
+                    DrawCircularGate(e.Graphics);
                     break;
                 case EMazeShape.Honeycomb:
                     DrawHoneycombMaze(e.Graphics);
+                    DrawHoneycombGate(e.Graphics);
                     break;
                 case EMazeShape.Triangular:
                     DrawTriangularMaze(e.Graphics);
+                    DrawTriangularGate(e.Graphics);
                     break;
                 case EMazeShape.Hexagonal:
                     DrawHexagonalMaze(e.Graphics);
+                    DrawHexagonalGate(e.Graphics);
                     break;
                 case EMazeShape.CircularHexagon:
                     DrawCircularHexagonMaze(e.Graphics);
+                    DrawCircularHexagonGate(e.Graphics);
                     break;
                 default: 
                     break;
@@ -134,6 +140,12 @@ namespace Maze.TApplication
             mazeField = await genrator.GenerateAsync(width, height, algm);
         }
 
+        private async Task GenerateRectangularGateAsync()
+        {
+            var generator = new RectangularGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as RectangularMazeField);
+        }
+
         private void DrawRectangularMaze(Graphics grap)
         {
             if (mazeField != null)
@@ -143,13 +155,19 @@ namespace Maze.TApplication
                         .SetThickness(rectangularMazeControl.Thickness)
                         .SetField(mazeField as RectangularMazeField)
                         .Draw(grap);
+            }
+        }
 
-                var gateRenderer = new RectangularGateRenderer();
-                gateRenderer.SetSize(canvas.Width, canvas.Height)
-                            .SetThickness(rectangularMazeControl.Thickness)
-                            .SetField(mazeField as RectangularMazeField)
-                            .SetGate(mazeGate)
-                            .Draw(grap);
+        private void DrawRectangularGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new RectangularGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(rectangularMazeControl.Thickness)
+                        .SetField(mazeField as RectangularMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
             }
         }
 
@@ -172,6 +190,12 @@ namespace Maze.TApplication
             mazeField = await genrator.GenerateAsync(rings, sectors, algm, strategy);
         }
 
+        private async Task GenerateCircularGateAsync()
+        {
+            var generator = new CircularGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as CircularMazeField);
+        }
+
         private void DrawCircularMaze(Graphics grap)
         {
             if (mazeField != null)
@@ -181,13 +205,19 @@ namespace Maze.TApplication
                         .SetThickness(circularMazeControl.Thickness)
                         .SetField(mazeField as CircularMazeField)
                         .Draw(grap);
+            }
+        }
 
-                var gateRenderer = new CircularGateRenderer();
-                gateRenderer.SetSize(canvas.Width, canvas.Height)
-                            .SetThickness(circularMazeControl.Thickness)
-                            .SetField(mazeField as CircularMazeField)
-                            .SetGate(mazeGate)
-                            .Draw(grap);
+        private void DrawCircularGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new CircularGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(circularMazeControl.Thickness)
+                        .SetField(mazeField as CircularMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
             }
         }
 
@@ -208,6 +238,12 @@ namespace Maze.TApplication
             mazeField = await genrator.GenerateAsync(length, algm);
         }
 
+        private async Task GenerateHoneycombGateAsync()
+        {
+            var generator = new HoneycombGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as HoneycombMazeField);
+        }
+
         private void DrawHoneycombMaze(Graphics grap)
         {
             if (mazeField != null)
@@ -217,13 +253,19 @@ namespace Maze.TApplication
                         .SetThickness(honeycombMazeControl.Thickness)
                         .SetField(mazeField as HoneycombMazeField)
                         .Draw(grap);
+            }
+        }
 
-                var gateRenderer = new HoneycombGateRenderer();
-                gateRenderer.SetSize(canvas.Width, canvas.Height)
-                            .SetThickness(honeycombMazeControl.Thickness)
-                            .SetField(mazeField as HoneycombMazeField)
-                            .SetGate(mazeGate)
-                            .Draw(grap);
+        private void DrawHoneycombGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new HoneycombGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(honeycombMazeControl.Thickness)
+                        .SetField(mazeField as HoneycombMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
             }
         }
 
@@ -245,6 +287,12 @@ namespace Maze.TApplication
             mazeField = await genrator.GenerateAsync(length, orientation, algm);
         }
 
+        private async Task GenerateTriangularGateAsync()
+        {
+            var generator = new TriangularGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as TriangularMazeField);
+        }
+
         private void DrawTriangularMaze(Graphics grap)
         {
             if (mazeField != null)
@@ -254,13 +302,19 @@ namespace Maze.TApplication
                         .SetThickness(triangularMazeControl.Thickness)
                         .SetField(mazeField as TriangularMazeField)
                         .Draw(grap);
+            }
+        }
 
-                var gateRenderer = new TriangularGateRenderer();
-                gateRenderer.SetSize(canvas.Width, canvas.Height)
-                            .SetThickness(triangularMazeControl.Thickness)
-                            .SetField(mazeField as TriangularMazeField)
-                            .SetGate(mazeGate)
-                            .Draw(grap);
+        private void DrawTriangularGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new TriangularGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(triangularMazeControl.Thickness)
+                        .SetField(mazeField as TriangularMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
             }
         }
 
@@ -281,6 +335,12 @@ namespace Maze.TApplication
             mazeField = await genrator.GenerateAsync(length, algm);
         }
 
+        private async Task GenerateHexagonalGateAsync()
+        {
+            var generator = new HexagonalGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as HexagonalMazeField);
+        }
+
         private void DrawHexagonalMaze(Graphics grap)
         {
             if (mazeField != null)
@@ -290,13 +350,19 @@ namespace Maze.TApplication
                         .SetThickness(hexagonalMazeControl.Thickness)
                         .SetField(mazeField as HexagonalMazeField)
                         .Draw(grap);
+            }
+        }
 
-                var gateRenderer = new HexagonalGateRenderer();
-                gateRenderer.SetSize(canvas.Width, canvas.Height)
-                            .SetThickness(hexagonalMazeControl.Thickness)
-                            .SetField(mazeField as HexagonalMazeField)
-                            .SetGate(mazeGate)
-                            .Draw(grap);
+        private void DrawHexagonalGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new HexagonalGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(hexagonalMazeControl.Thickness)
+                        .SetField(mazeField as HexagonalMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
             }
         }
 
@@ -317,6 +383,12 @@ namespace Maze.TApplication
             mazeField = await genrator.GenerateAsync(rings, algm);
         }
 
+        private async Task GenerateCircularHexagonGateAsync()
+        {
+            var generator = new CircularHexagonGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as CircularHexagonMazeField);
+        }
+
         private void DrawCircularHexagonMaze(Graphics grap)
         {
             if (mazeField != null)
@@ -326,13 +398,19 @@ namespace Maze.TApplication
                         .SetThickness(circularHexagonMazeControl.Thickness)
                         .SetField(mazeField as CircularHexagonMazeField)
                         .Draw(grap);
+            }
+        }
 
-                var gateRenderer = new CircularHexagonGateRenderer();
-                gateRenderer.SetSize(canvas.Width, canvas.Height)
-                            .SetThickness(circularHexagonMazeControl.Thickness)
-                            .SetField(mazeField as CircularHexagonMazeField)
-                            .SetGate(mazeGate)
-                            .Draw(grap);
+        private void DrawCircularHexagonGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new CircularHexagonGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(circularHexagonMazeControl.Thickness)
+                        .SetField(mazeField as CircularHexagonMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
             }
         }
 
