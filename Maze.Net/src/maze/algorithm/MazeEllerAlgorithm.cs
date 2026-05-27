@@ -9,9 +9,9 @@ namespace SimplexLab.Maze
 
         public MazeEllerAlgorithm(Random random) : base(random) { }
 
-        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
-            var spanningTree = new List<(int, int)>();
+            var spanningTree = new List<SpanningTreeEdge>();
             var dsu = new DisjointSet(vertexCount);
 
             var rows = new List<List<int>>();
@@ -52,7 +52,7 @@ namespace SimplexLab.Maze
                     if (!dsu.IsConnected(vA, vB) && (isLastRow || random.Next(2) == 0))
                     {
                         dsu.Union(vA, vB);
-                        spanningTree.Add((vA, vB));
+                        spanningTree.Add(new SpanningTreeEdge(vA, vB));
                     }
                 }
 
@@ -91,7 +91,7 @@ namespace SimplexLab.Maze
                             if (edge.Neighbor != -1 && nextRowSet.Contains(edge.Neighbor))
                             {
                                 dsu.Union(v, edge.Neighbor);
-                                spanningTree.Add((v, edge.Neighbor));
+                                spanningTree.Add(new SpanningTreeEdge(v, edge.Neighbor));
                                 break;
                             }
                         }
@@ -102,7 +102,7 @@ namespace SimplexLab.Maze
             return spanningTree;
         }
 
-        private bool IsNeighbor(List<List<Edge>> graph, int a, int b)
+        private bool IsNeighbor(List<List<Adjacency>> graph, int a, int b)
         {
             foreach (var edge in graph[a])
             {

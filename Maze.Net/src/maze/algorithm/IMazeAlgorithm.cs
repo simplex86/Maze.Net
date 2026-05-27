@@ -54,7 +54,7 @@ namespace SimplexLab.Maze
         /// <param name="vertexCount">顶点数</param>
         /// <param name="graph">邻接表</param>
         /// <returns>生成树边集</returns>
-        List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph);
+        List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph);
     }
 
     /// <summary>
@@ -71,6 +71,6 @@ namespace SimplexLab.Maze
 
         public abstract EMazeAlgorithm algorithm { get; }
 
-        public abstract List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph);
+        public abstract List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph);
     }
 }

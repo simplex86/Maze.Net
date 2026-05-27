@@ -24,8 +24,9 @@ namespace SimplexLab.Maze
                 provider = Utils.CreateAlgorithm(algorithm, random);
             }
 
-            var spanningTree = provider.GenerateSpanningTree(field.count, field.graph);
-            field.RemoveBorders(spanningTree);
+            var spanningTree = provider.GenerateSpanningTree(field.Count, field.Graph);
+            Utils.RemoveAdjacencyBorders(field.Graph, spanningTree);
+
             return field;
         }
     }

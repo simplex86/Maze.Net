@@ -1,9 +1,9 @@
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 邻接表中的边
+    /// 顶点与邻居的邻接关系
     /// </summary>
-    public class Edge
+    public class Adjacency
     {
         /// <summary>
         /// 邻居顶点索引，-1 表示边界
@@ -13,9 +13,9 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 边界几何信息，null 表示边界已被移除（通道）
         /// </summary>
-        public IMazeBorder? Border { get; set; }
+        public IMazeBorder? Border { get; internal set; }
 
-        public Edge(int neighbor, IMazeBorder? border)
+        public Adjacency(int neighbor, IMazeBorder? border)
         {
             Neighbor = neighbor;
             Border = border;

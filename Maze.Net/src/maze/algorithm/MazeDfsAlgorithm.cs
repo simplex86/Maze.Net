@@ -9,9 +9,9 @@ namespace SimplexLab.Maze
 
         public MazeDfsAlgorithm(Random random) : base(random) { }
 
-        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
-            var spanningTree = new List<(int, int)>();
+            var spanningTree = new List<SpanningTreeEdge>();
             var visited = new bool[vertexCount];
 
             int start = random.Next(vertexCount);
@@ -34,7 +34,7 @@ namespace SimplexLab.Maze
                 if (unvisited.Count > 0)
                 {
                     int next = unvisited[random.Next(unvisited.Count)];
-                    spanningTree.Add((current, next));
+                    spanningTree.Add(new SpanningTreeEdge(current, next));
                     visited[next] = true;
                     stack.Push(next);
                 }

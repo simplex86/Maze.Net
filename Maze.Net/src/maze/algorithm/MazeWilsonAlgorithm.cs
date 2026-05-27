@@ -9,9 +9,9 @@ namespace SimplexLab.Maze
 
         public MazeWilsonAlgorithm(Random random) : base(random) { }
 
-        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
-            var spanningTree = new List<(int, int)>();
+            var spanningTree = new List<SpanningTreeEdge>();
             var visited = new bool[vertexCount];
 
             int start = random.Next(vertexCount);
@@ -25,7 +25,7 @@ namespace SimplexLab.Maze
 
                 for (int i = 0; i < path.Count - 1; i++)
                 {
-                    spanningTree.Add((path[i], path[i + 1]));
+                    spanningTree.Add(new SpanningTreeEdge(path[i], path[i + 1]));
                     if (!visited[path[i]])
                     {
                         visited[path[i]] = true;
@@ -55,7 +55,7 @@ namespace SimplexLab.Maze
             return vertex;
         }
 
-        private List<int> RandomWalkToVisited(List<List<Edge>> graph, bool[] visited, int start)
+        private List<int> RandomWalkToVisited(List<List<Adjacency>> graph, bool[] visited, int start)
         {
             var direction = new Dictionary<int, int>();
             int current = start;

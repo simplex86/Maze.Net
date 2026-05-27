@@ -46,9 +46,33 @@ namespace SimplexLab.Maze
             for (int i = list.Count - 1; i > 0; i--)
             {
                 int j = random.Next(i + 1);
-                T temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
+                (list[j], list[i]) = (list[i], list[j]);
+            }
+        }
+
+        /// <summary>
+        /// 根据生成树边集移除邻接表的边界
+        /// </summary>
+        public static void RemoveAdjacencyBorders(List<List<Adjacency>> graph, List<SpanningTreeEdge> spanningTree)
+        {
+            foreach (var edge in spanningTree)
+            {
+                for (int i = 0; i < graph[edge.u].Count; i++)
+                {
+                    if (graph[edge.u][i].Neighbor == edge.v)
+                    {
+                        graph[edge.u][i].Border = null;
+                        break;
+                    }
+                }
+                for (int i = 0; i < graph[edge.v].Count; i++)
+                {
+                    if (graph[edge.v][i].Neighbor == edge.u)
+                    {
+                        graph[edge.v][i].Border = null;
+                        break;
+                    }
+                }
             }
         }
     }

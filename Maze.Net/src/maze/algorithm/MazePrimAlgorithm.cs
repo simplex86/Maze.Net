@@ -9,9 +9,9 @@ namespace SimplexLab.Maze
 
         public MazePrimAlgorithm(Random random) : base(random) { }
 
-        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
-            var spanningTree = new List<(int, int)>();
+            var spanningTree = new List<SpanningTreeEdge>();
             var visited = new bool[vertexCount];
             var frontier = new List<(int from, int to)>();
 
@@ -28,7 +28,7 @@ namespace SimplexLab.Maze
                 if (visited[to])
                     continue;
 
-                spanningTree.Add((from, to));
+                spanningTree.Add(new SpanningTreeEdge(from, to));
                 visited[to] = true;
                 AddFrontier(graph, visited, frontier, to);
             }
@@ -36,7 +36,7 @@ namespace SimplexLab.Maze
             return spanningTree;
         }
 
-        private void AddFrontier(List<List<Edge>> graph, bool[] visited, List<(int from, int to)> frontier, int vertex)
+        private void AddFrontier(List<List<Adjacency>> graph, bool[] visited, List<(int from, int to)> frontier, int vertex)
         {
             foreach (var edge in graph[vertex])
             {

@@ -9,9 +9,9 @@ namespace SimplexLab.Maze
 
         public MazeKruskalAlgorithm(Random random) : base(random) { }
 
-        public override List<(int, int)> GenerateSpanningTree(int vertexCount, List<List<Edge>> graph)
+        public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
-            var spanningTree = new List<(int, int)>();
+            var spanningTree = new List<SpanningTreeEdge>();
 
             var edges = CollectEdges(graph);
             edges.Shuffle(random);
@@ -22,7 +22,7 @@ namespace SimplexLab.Maze
             {
                 if (dsu.Union(a, b))
                 {
-                    spanningTree.Add((a, b));
+                    spanningTree.Add(new SpanningTreeEdge(a, b));
                     if (dsu.Count == 1) break;
                 }
             }
@@ -30,7 +30,7 @@ namespace SimplexLab.Maze
             return spanningTree;
         }
 
-        private List<(int a, int b)> CollectEdges(List<List<Edge>> graph)
+        private List<(int a, int b)> CollectEdges(List<List<Adjacency>> graph)
         {
             var edges = new List<(int a, int b)>();
 
