@@ -14,8 +14,10 @@ namespace SimplexLab.Maze
         public int Sectors { get; }
         public ESectorStrategy Strategy { get; }
 
-        public CircularMazeField(int rings, int maxSectors, ESectorStrategy strategy)
+        internal CircularMazeField(int rings, int maxSectors, ESectorStrategy strategy)
         {
+            Shape = EMazeShape.Circular;
+
             Rings = Math.Max(1, rings);
             Sectors = Math.Max(3, maxSectors);
             Strategy = strategy;
@@ -52,16 +54,16 @@ namespace SimplexLab.Maze
             if (SectorsPerRing[this.Rings - 1] < normalizedMaxSectors)
                 SectorsPerRing[this.Rings - 1] = normalizedMaxSectors;
 
-            Count = 0;
+            VertexCount = 0;
             for (var r = 0; r < this.Rings; r++)
-                Count += SectorsPerRing[r];
+                VertexCount += SectorsPerRing[r];
 
             Graph = BuildGraph();
         }
 
         private List<List<Adjacency>> BuildGraph()
         {
-            var g = new List<List<Adjacency>>(Count);
+            var g = new List<List<Adjacency>>(VertexCount);
 
             for (int r = 0; r < Rings; r++)
             {

@@ -32,29 +32,31 @@ namespace SimplexLab.Maze
 
         private static readonly double Sqrt3Over2 = Math.Sqrt(3) / 2;
 
-        public TriangularMazeField(int order, TriangleOrientation orientation = TriangleOrientation.Upward)
+        internal TriangularMazeField(int order, TriangleOrientation orientation = TriangleOrientation.Upward)
         {
+            Shape = EMazeShape.Triangular;
             Order = Math.Max(1, order);
             Orientation = orientation;
-            Count = Order * Order;
+            VertexCount = Order * Order;
             Graph = BuildGraph();
         }
 
         private List<List<Adjacency>> BuildGraph()
         {
-            var g = new List<List<Adjacency>>(Count);
-            for (int i = 0; i < Count; i++) g.Add(new List<Adjacency>());
+            var g = new List<List<Adjacency>>(VertexCount);
+            for (int i = 0; i < VertexCount; i++) g.Add(new List<Adjacency>());
 
             for (int row = 0; row < Order; row++)
             {
                 var colsInRow = 2 * row + 1;
                 for (int col = 0; col < colsInRow; col++)
                 {
-                    int node = VertexIndex(row, col);
-                    bool upward = (col % 2 == 0);
+                    var node = VertexIndex(row, col);
 
-                    if (upward) AddUpwardEdges(g, row, col, node);
-                    else        AddDownwardEdges(g, row, col, node);
+                    if (col % 2 == 0) 
+                        AddUpwardEdges(g, row, col, node);
+                    else  
+                        AddDownwardEdges(g, row, col, node);
                 }
             }
 

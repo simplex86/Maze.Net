@@ -4,10 +4,10 @@ namespace SimplexLab.Maze
 {
     public class CircularHexagonMazeField : HexagonalMazeField
     {
-        public CircularHexagonMazeField(int size)
+        internal CircularHexagonMazeField(int size)
             : base(size) 
         {
-        
+            Shape = EMazeShape.CircularHexagon;
         }
 
         protected override IMazeBorder GetEdge(int sector, int row, int column, int edge)

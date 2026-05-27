@@ -9,7 +9,7 @@ namespace Maze.TApplication
     {
         public override void Draw(Graphics grap)
         {
-            if (field == null || field.Count == 0) return;
+            if (field == null || field.VertexCount == 0) return;
 
             var bounds = field.Bounds;
             if (bounds.Width <= 0 || bounds.Height <= 0) return;

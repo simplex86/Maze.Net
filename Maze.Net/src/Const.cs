@@ -1,9 +1,9 @@
-﻿namespace Maze.TApplication
+﻿namespace SimplexLab.Maze
 {
     /// <summary>
     /// 迷宫的形状
     /// </summary>
-    internal enum EMazeShape
+    public enum EMazeShape
     {
         /// <summary>
         /// 矩形的

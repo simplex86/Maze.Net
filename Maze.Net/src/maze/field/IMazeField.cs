@@ -9,9 +9,13 @@ namespace SimplexLab.Maze
     public interface IMazeField
     {
         /// <summary>
+        /// 迷宫的形状
+        /// </summary>
+        EMazeShape Shape { get; }
+        /// <summary>
         /// 顶点总数
         /// </summary>
-        int Count { get; }
+        int VertexCount { get; }
 
         /// <summary>
         /// 邻接表（图）
@@ -35,9 +39,14 @@ namespace SimplexLab.Maze
     public class MazeField : IMazeField
     {
         /// <summary>
+        /// 迷宫的形状
+        /// </summary>
+        public EMazeShape Shape { get; protected set; }
+
+        /// <summary>
         /// 顶点总数
         /// </summary>
-        public int Count { get; protected set; }
+        public int VertexCount { get; protected set; }
 
         /// <summary>
         /// 邻接表（图）

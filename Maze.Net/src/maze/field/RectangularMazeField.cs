@@ -11,17 +11,18 @@ namespace SimplexLab.Maze
         public int Width { get; }
         public int Height { get; }
 
-        public RectangularMazeField(int width, int height)
+        internal RectangularMazeField(int width, int height)
         {
+            Shape = EMazeShape.Rectangular;
             Width = Math.Max(1, width);
             Height = Math.Max(1, height);
-            Count = width * height;
+            VertexCount = width * height;
             Graph = BuildGraph();
         }
 
         private List<List<Adjacency>> BuildGraph()
         {
-            var g = new List<List<Adjacency>>(Count);
+            var g = new List<List<Adjacency>>(VertexCount);
 
             for (int y = 0; y < Height; y++)
             {

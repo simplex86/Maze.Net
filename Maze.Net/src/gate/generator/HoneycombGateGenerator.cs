@@ -63,7 +63,7 @@ namespace SimplexLab.Maze
         private static List<int> FindEdgeVertices(HoneycombMazeField field)
         {
             var list = new List<int>();
-            for (int v = 0; v < field.Count; v++)
+            for (int v = 0; v < field.VertexCount; v++)
             {
                 foreach (var edge in field.Graph[v])
                 {

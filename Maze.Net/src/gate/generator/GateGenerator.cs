@@ -67,7 +67,7 @@ namespace SimplexLab.Maze
         private static List<int> FindEdgeVertices(MazeField field)
         {
             var list = new List<int>();
-            for (int v = 0; v < field.Count; v++)
+            for (int v = 0; v < field.VertexCount; v++)
             {
                 foreach (var edge in field.Graph[v])
                 {
@@ -89,8 +89,8 @@ namespace SimplexLab.Maze
             if (position == EGatePosition.Edge)
                 return new List<int>(edgeVertices);
 
-            var list = new List<int>(field.Count);
-            for (int i = 0; i < field.Count; i++)
+            var list = new List<int>(field.VertexCount);
+            for (int i = 0; i < field.VertexCount; i++)
                 list.Add(i);
 
             return list;

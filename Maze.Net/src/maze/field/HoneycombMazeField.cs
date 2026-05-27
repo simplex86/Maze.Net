@@ -28,17 +28,18 @@ namespace SimplexLab.Maze
             new int[] { 0, -1 },
         };
 
-        public HoneycombMazeField(int length)
+        internal HoneycombMazeField(int length)
         {
+            Shape = EMazeShape.Honeycomb;
             Length = Math.Max(1, length);
-            Count = 3 * Length * (Length - 1) + 1;
+            VertexCount = 3 * Length * (Length - 1) + 1;
             Graph = BuildGraph();
         }
 
         private List<List<Adjacency>> BuildGraph()
         {
-            var g = new List<List<Adjacency>>(Count);
-            for (int i = 0; i < Count; i++) g.Add(new List<Adjacency>());
+            var g = new List<List<Adjacency>>(VertexCount);
+            for (int i = 0; i < VertexCount; i++) g.Add(new List<Adjacency>());
 
             for (int u = -Length + 1; u < Length; u++)
             {

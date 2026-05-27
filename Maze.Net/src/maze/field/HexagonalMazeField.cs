@@ -12,17 +12,18 @@ namespace SimplexLab.Maze
         /// </summary>
         public override bool FlipY => true;
 
-        public HexagonalMazeField(int size)
+        internal HexagonalMazeField(int size)
         {
+            Shape = EMazeShape.Hexagonal;
             Size = Math.Max(1, size);
-            Count = 6 * Size * Size;
+            VertexCount = 6 * Size * Size;
             Graph = BuildGraph();
         }
 
         private List<List<Adjacency>> BuildGraph()
         {
-            var g = new List<List<Adjacency>>(Count);
-            for (int i = 0; i < Count; i++)
+            var g = new List<List<Adjacency>>(VertexCount);
+            for (int i = 0; i < VertexCount; i++)
                 g.Add(new List<Adjacency>());
 
             for (int sector = 0; sector < 6; sector++)
