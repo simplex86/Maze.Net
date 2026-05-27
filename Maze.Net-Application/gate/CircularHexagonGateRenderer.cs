@@ -19,8 +19,8 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
@@ -30,12 +30,12 @@ namespace Maze.TApplication
             var centerX = TransformX(0, bounds, scale, offsetX);
             var centerY = TransformY(0, bounds, scale, offsetY, flipY);
 
-            var arcR = (float)(shape.arcRadius * scale) - 1;
+            var arcR = (float)(shape.ArcRadius * scale) - 1;
             if (arcR <= 0) return;
 
             var angleShrink = arcR > 0 ? 1.0f / arcR : 0;
-            var adjustedArcStart = (float)(shape.arcStartAngle + angleShrink);
-            var adjustedArcSweep = (float)(shape.arcSweepAngle - 2 * angleShrink);
+            var adjustedArcStart = (float)(shape.ArcStartAngle + angleShrink);
+            var adjustedArcSweep = (float)(shape.ArcSweepAngle - 2 * angleShrink);
             if (adjustedArcSweep <= 0) return;
 
             var arcStartDeg = 0.0f;
@@ -55,9 +55,9 @@ namespace Maze.TApplication
             using var brush = new SolidBrush(color);
             using var path = new GraphicsPath();
 
-            if (shape.upward)
+            if (shape.Upward)
             {
-                var innerR = shape.innerRadius > 0 ? (float)(shape.innerRadius * scale) + 1 : 0;
+                var innerR = shape.InnerRadius > 0 ? (float)(shape.InnerRadius * scale) + 1 : 0;
 
                 if (innerR <= 0)
                 {
@@ -65,7 +65,7 @@ namespace Maze.TApplication
                 }
                 else
                 {
-                    var innerAngle = (float)shape.innerAngle;
+                    var innerAngle = (float)shape.InnerAngle;
                     var innerX = centerX + innerR * (float)Math.Cos(flipY ? -innerAngle : innerAngle);
                     var innerY = centerY + innerR * (float)Math.Sin(flipY ? -innerAngle : innerAngle);
 
@@ -77,10 +77,10 @@ namespace Maze.TApplication
             }
             else
             {
-                var outerR = (float)(shape.outerRadius * scale) - 1;
+                var outerR = (float)(shape.OuterRadius * scale) - 1;
                 if (outerR <= 0) return;
 
-                var outerAngle = (float)shape.outerAngle;
+                var outerAngle = (float)shape.OuterAngle;
                 var outerX = centerX + outerR * (float)Math.Cos(flipY ? -outerAngle : outerAngle);
                 var outerY = centerY + outerR * (float)Math.Sin(flipY ? -outerAngle : outerAngle);
 

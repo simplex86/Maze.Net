@@ -5,7 +5,7 @@ namespace SimplexLab.Maze
 {
     internal class MazeAldousBroderAlgorithm : MazeAlgorithm
     {
-        public override EMazeAlgorithm algorithm => EMazeAlgorithm.AldousBroder;
+        public override EMazeAlgorithm Algorithm => EMazeAlgorithm.AldousBroder;
 
         public MazeAldousBroderAlgorithm(Random random) 
             : base(random) 
@@ -18,9 +18,9 @@ namespace SimplexLab.Maze
             var spanningTree = new List<SpanningTreeEdge>();
             var visited = new bool[vertexCount];
 
-            int current = random.Next(vertexCount);
+            var current = random.Next(vertexCount);
             visited[current] = true;
-            int visitedCount = 1;
+            var visitedCount = 1;
 
             while (visitedCount < vertexCount)
             {
@@ -31,7 +31,7 @@ namespace SimplexLab.Maze
                         neighbors.Add(edge.Neighbor);
                 }
 
-                int next = neighbors[random.Next(neighbors.Count)];
+                var next = neighbors[random.Next(neighbors.Count)];
 
                 if (!visited[next])
                 {

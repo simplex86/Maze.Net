@@ -5,16 +5,20 @@ namespace SimplexLab.Maze
 {
     internal class MazeDfsAlgorithm : MazeAlgorithm
     {
-        public override EMazeAlgorithm algorithm => EMazeAlgorithm.DFS;
+        public override EMazeAlgorithm Algorithm => EMazeAlgorithm.DFS;
 
-        public MazeDfsAlgorithm(Random random) : base(random) { }
+        public MazeDfsAlgorithm(Random random) 
+            : base(random) 
+        { 
+        
+        }
 
         public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
             var spanningTree = new List<SpanningTreeEdge>();
             var visited = new bool[vertexCount];
 
-            int start = random.Next(vertexCount);
+            var start = random.Next(vertexCount);
             visited[start] = true;
 
             var stack = new Stack<int>();
@@ -22,7 +26,7 @@ namespace SimplexLab.Maze
 
             while (stack.Count > 0)
             {
-                int current = stack.Peek();
+                var current = stack.Peek();
 
                 var unvisited = new List<int>();
                 foreach (var edge in graph[current])
@@ -33,7 +37,7 @@ namespace SimplexLab.Maze
 
                 if (unvisited.Count > 0)
                 {
-                    int next = unvisited[random.Next(unvisited.Count)];
+                    var next = unvisited[random.Next(unvisited.Count)];
                     spanningTree.Add(new SpanningTreeEdge(current, next));
                     visited[next] = true;
                     stack.Push(next);

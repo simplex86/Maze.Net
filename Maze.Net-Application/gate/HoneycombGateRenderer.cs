@@ -18,8 +18,8 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
@@ -33,8 +33,8 @@ namespace Maze.TApplication
             for (int i = 0; i < 6; i++)
             {
                 var angle = (i - 2.5) * Math.PI / 3;
-                var vx = cv.x + shrinkRadius * Math.Cos(angle);
-                var vy = cv.y + shrinkRadius * Math.Sin(angle);
+                var vx = cv.X + shrinkRadius * Math.Cos(angle);
+                var vy = cv.Y + shrinkRadius * Math.Sin(angle);
                 points[i] = new PointF(TransformX(vx, bounds, scale, offsetX), TransformY(vy, bounds, scale, offsetY, flipY));
             }
 

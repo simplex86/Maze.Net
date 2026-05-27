@@ -5,8 +5,8 @@
     /// </summary>
     public struct MazeGate
     {
-        public int entrance;
-        public int exit;
+        public int Entrance;
+        public int Exit;
 
         /// <summary>
         /// 无效索引
@@ -21,14 +21,14 @@
 
         public MazeGate(int entrance, int exit)
         {
-            this.entrance = entrance;
-            this.exit = exit;
+            this.Entrance = entrance;
+            this.Exit = exit;
         }
 
         public void Reset()
         {
-            entrance = INVALID;
-            exit = INVALID;
+            Entrance = INVALID;
+            Exit = INVALID;
         }
     }
 }

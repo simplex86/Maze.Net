@@ -18,19 +18,19 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
         {
             var t = GetVertexTriangle(field!, vertex);
-            var a = t.a;
-            var b = t.b;
-            var c = t.c;
+            var a = t.A;
+            var b = t.B;
+            var c = t.C;
 
-            var centerX = (a.x + b.x + c.x) / 3;
-            var centerY = (a.y + b.y + c.y) / 3;
+            var centerX = (a.X + b.X + c.X) / 3;
+            var centerY = (a.Y + b.Y + c.Y) / 3;
 
             var shrink = 1.0 - 1.0 / scale;
             if (shrink <= 0) return;
@@ -39,8 +39,8 @@ namespace Maze.TApplication
             var vertices = new[] { a, b, c };
             for (int i = 0; i < 3; i++)
             {
-                var vx = centerX + (vertices[i].x - centerX) * shrink;
-                var vy = centerY + (vertices[i].y - centerY) * shrink;
+                var vx = centerX + (vertices[i].X - centerX) * shrink;
+                var vy = centerY + (vertices[i].Y - centerY) * shrink;
                 points[i] = new PointF(TransformX(vx, bounds, scale, offsetX), TransformY(vy, bounds, scale, offsetY, flipY));
             }
 
@@ -104,9 +104,9 @@ namespace Maze.TApplication
             var cosTheta = Math.Cos(theta);
             var sinTheta = Math.Sin(theta);
 
-            return new Triangle(new Vertex(pa.x * cosTheta - pa.y * sinTheta, pa.x * sinTheta + pa.y * cosTheta),
-                                new Vertex(pb.x * cosTheta - pb.y * sinTheta, pb.x * sinTheta + pb.y * cosTheta),
-                                new Vertex(pc.x * cosTheta - pc.y * sinTheta, pc.x * sinTheta + pc.y * cosTheta));
+            return new Triangle(new Vertex(pa.X * cosTheta - pa.Y * sinTheta, pa.X * sinTheta + pa.Y * cosTheta),
+                                new Vertex(pb.X * cosTheta - pb.Y * sinTheta, pb.X * sinTheta + pb.Y * cosTheta),
+                                new Vertex(pc.X * cosTheta - pc.Y * sinTheta, pc.X * sinTheta + pc.Y * cosTheta));
         }
     }
 }

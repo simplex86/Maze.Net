@@ -5,9 +5,13 @@ namespace SimplexLab.Maze
 {
     internal class MazeKruskalAlgorithm : MazeAlgorithm
     {
-        public override EMazeAlgorithm algorithm => EMazeAlgorithm.Kruskal;
+        public override EMazeAlgorithm Algorithm => EMazeAlgorithm.Kruskal;
 
-        public MazeKruskalAlgorithm(Random random) : base(random) { }
+        public MazeKruskalAlgorithm(Random random) 
+            : base(random) 
+        { 
+        
+        }
 
         public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {

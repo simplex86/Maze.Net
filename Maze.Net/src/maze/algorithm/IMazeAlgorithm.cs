@@ -46,7 +46,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 算法类型
         /// </summary>
-        EMazeAlgorithm algorithm { get; }
+        EMazeAlgorithm Algorithm { get; }
 
         /// <summary>
         /// 在给定的图上生成随机生成树
@@ -69,7 +69,7 @@ namespace SimplexLab.Maze
             this.random = random;
         }
 
-        public abstract EMazeAlgorithm algorithm { get; }
+        public abstract EMazeAlgorithm Algorithm { get; }
 
         public abstract List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph);
     }

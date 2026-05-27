@@ -5,9 +5,13 @@ namespace SimplexLab.Maze
 {
     internal class MazeEllerAlgorithm : MazeAlgorithm
     {
-        public override EMazeAlgorithm algorithm => EMazeAlgorithm.Eller;
+        public override EMazeAlgorithm Algorithm => EMazeAlgorithm.Eller;
 
-        public MazeEllerAlgorithm(Random random) : base(random) { }
+        public MazeEllerAlgorithm(Random random) 
+            : base(random) 
+        { 
+        
+        }
 
         public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
@@ -15,8 +19,8 @@ namespace SimplexLab.Maze
             var dsu = new DisjointSet(vertexCount);
 
             var rows = new List<List<int>>();
-            int remaining = vertexCount;
-            int idx = 0;
+            var remaining = vertexCount;
+            var idx = 0;
             while (remaining > 0)
             {
                 var row = new List<int>();
@@ -41,10 +45,10 @@ namespace SimplexLab.Maze
 
                 for (int i = 0; i < row.Count; i++)
                 {
-                    int nextI = (i + 1) % row.Count;
+                    var nextI = (i + 1) % row.Count;
 
-                    int vA = row[i];
-                    int vB = row[nextI];
+                    var vA = row[i];
+                    var vB = row[nextI];
 
                     if (!IsNeighbor(graph, vA, vB))
                         continue;
@@ -85,7 +89,7 @@ namespace SimplexLab.Maze
                     {
                         if (!hasVertical[i]) continue;
 
-                        int v = row[i];
+                        var v = row[i];
                         foreach (var edge in graph[v])
                         {
                             if (edge.Neighbor != -1 && nextRowSet.Contains(edge.Neighbor))

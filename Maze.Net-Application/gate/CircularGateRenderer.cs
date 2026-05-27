@@ -19,8 +19,8 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
@@ -30,15 +30,15 @@ namespace Maze.TApplication
             var centerX = TransformX(0, bounds, scale, offsetX);
             var centerY = TransformY(0, bounds, scale, offsetY, flipY);
 
-            var innerR = sector.innerRadius > 0 ? (float)(sector.innerRadius * scale) + 1 : 0;
-            var outerR = (float)(sector.outerRadius * scale) - 1;
+            var innerR = sector.InnerRadius > 0 ? (float)(sector.InnerRadius * scale) + 1 : 0;
+            var outerR = (float)(sector.OuterRadius * scale) - 1;
 
             if (outerR <= 0) return;
 
-            var midR = (float)((sector.innerRadius + sector.outerRadius) / 2 * scale);
+            var midR = (float)((sector.InnerRadius + sector.OuterRadius) / 2 * scale);
             var angleShrink = midR > 0 ? 1.0f / midR : 0;
-            var adjustedStartAngle = (float)(sector.startAngle + angleShrink);
-            var adjustedSweepAngle = (float)(sector.sweepAngle - 2 * angleShrink);
+            var adjustedStartAngle = (float)(sector.StartAngle + angleShrink);
+            var adjustedSweepAngle = (float)(sector.SweepAngle - 2 * angleShrink);
 
             if (adjustedSweepAngle <= 0) return;
 

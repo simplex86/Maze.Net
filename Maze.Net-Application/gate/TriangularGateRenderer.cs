@@ -18,20 +18,20 @@ namespace Maze.TApplication
             var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
             var flipY = field.FlipY;
 
-            if (gate.entrance >= 0) DrawVertexMarker(grap, gate.entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.exit     >= 0) DrawVertexMarker(grap, gate.exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
         }
 
         private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
         {
             var triangle = GetVertexTriangle(field!, vertex);
 
-            var a = triangle.a;
-            var b = triangle.b;
-            var c = triangle.c;
+            var a = triangle.A;
+            var b = triangle.B;
+            var c = triangle.C;
 
-            var centerX = (a.x + b.x + c.x) / 3;
-            var centerY = (a.y + b.y + c.y) / 3;
+            var centerX = (a.X + b.X + c.X) / 3;
+            var centerY = (a.Y + b.Y + c.Y) / 3;
 
             var shrink = 1.0 - 1.0 / scale;
             if (shrink <= 0) return;
@@ -40,8 +40,8 @@ namespace Maze.TApplication
             var vertices = new[] { a, b, c };
             for (int i = 0; i < 3; i++)
             {
-                var vx = centerX + (vertices[i].x - centerX) * shrink;
-                var vy = centerY + (vertices[i].y - centerY) * shrink;
+                var vx = centerX + (vertices[i].X - centerX) * shrink;
+                var vy = centerY + (vertices[i].Y - centerY) * shrink;
                 points[i] = new PointF(TransformX(vx, bounds, scale, offsetX), TransformY(vy, bounds, scale, offsetY, flipY));
             }
 
@@ -91,9 +91,9 @@ namespace Maze.TApplication
             if (field.Orientation == TriangleOrientation.Downward)
             {
                 var maxY = field.Order * Sqrt3Over2;
-                p1 = new Vertex(p1.x, maxY - p1.y);
-                p2 = new Vertex(p2.x, maxY - p2.y);
-                p3 = new Vertex(p3.x, maxY - p3.y);
+                p1 = new Vertex(p1.X, maxY - p1.Y);
+                p2 = new Vertex(p2.X, maxY - p2.Y);
+                p3 = new Vertex(p3.X, maxY - p3.Y);
             }
 
             return new Triangle(p1, p2, p3);

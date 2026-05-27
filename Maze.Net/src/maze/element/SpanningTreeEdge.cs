@@ -5,13 +5,13 @@
     /// </summary>
     public struct SpanningTreeEdge
     {
-        public int u;
-        public int v;
+        public int U;
+        public int V;
 
         public SpanningTreeEdge(int u, int v)
         {
-            this.u = u;
-            this.v = v;
+            U = u;
+            V = v;
         }
     }
 }

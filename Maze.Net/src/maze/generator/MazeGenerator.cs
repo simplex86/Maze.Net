@@ -19,7 +19,7 @@ namespace SimplexLab.Maze
 
         protected TField Generate(TField field, EMazeAlgorithm algorithm)
         {
-            if (provider == null || provider.algorithm != algorithm)
+            if (provider == null || provider.Algorithm != algorithm)
             {
                 provider = Utils.CreateAlgorithm(algorithm, random);
             }

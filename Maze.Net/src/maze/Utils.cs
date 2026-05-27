@@ -57,19 +57,19 @@ namespace SimplexLab.Maze
         {
             foreach (var edge in spanningTree)
             {
-                for (int i = 0; i < graph[edge.u].Count; i++)
+                for (int i = 0; i < graph[edge.U].Count; i++)
                 {
-                    if (graph[edge.u][i].Neighbor == edge.v)
+                    if (graph[edge.U][i].Neighbor == edge.V)
                     {
-                        graph[edge.u][i].Border = null;
+                        graph[edge.U][i].Border = null;
                         break;
                     }
                 }
-                for (int i = 0; i < graph[edge.v].Count; i++)
+                for (int i = 0; i < graph[edge.V].Count; i++)
                 {
-                    if (graph[edge.v][i].Neighbor == edge.u)
+                    if (graph[edge.V][i].Neighbor == edge.U)
                     {
-                        graph[edge.v][i].Border = null;
+                        graph[edge.V][i].Border = null;
                         break;
                     }
                 }

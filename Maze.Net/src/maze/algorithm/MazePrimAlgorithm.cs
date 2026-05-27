@@ -5,9 +5,13 @@ namespace SimplexLab.Maze
 {
     internal class MazePrimAlgorithm : MazeAlgorithm
     {
-        public override EMazeAlgorithm algorithm => EMazeAlgorithm.Prim;
+        public override EMazeAlgorithm Algorithm => EMazeAlgorithm.Prim;
 
-        public MazePrimAlgorithm(Random random) : base(random) { }
+        public MazePrimAlgorithm(Random random) 
+            : base(random) 
+        { 
+        
+        }
 
         public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
@@ -15,7 +19,7 @@ namespace SimplexLab.Maze
             var visited = new bool[vertexCount];
             var frontier = new List<(int from, int to)>();
 
-            int start = random.Next(vertexCount);
+            var start = random.Next(vertexCount);
             visited[start] = true;
             AddFrontier(graph, visited, frontier, start);
 

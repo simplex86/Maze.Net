@@ -5,22 +5,26 @@ namespace SimplexLab.Maze
 {
     internal class MazeWilsonAlgorithm : MazeAlgorithm
     {
-        public override EMazeAlgorithm algorithm => EMazeAlgorithm.Wilson;
+        public override EMazeAlgorithm Algorithm => EMazeAlgorithm.Wilson;
 
-        public MazeWilsonAlgorithm(Random random) : base(random) { }
+        public MazeWilsonAlgorithm(Random random) 
+            : base(random) 
+        { 
+        
+        }
 
         public override List<SpanningTreeEdge> GenerateSpanningTree(int vertexCount, List<List<Adjacency>> graph)
         {
             var spanningTree = new List<SpanningTreeEdge>();
             var visited = new bool[vertexCount];
 
-            int start = random.Next(vertexCount);
+            var start = random.Next(vertexCount);
             visited[start] = true;
-            int visitedCount = 1;
+            var visitedCount = 1;
 
             while (visitedCount < vertexCount)
             {
-                int walkStart = PickUnvisited(visited, vertexCount);
+                var walkStart = PickUnvisited(visited, vertexCount);
                 var path = RandomWalkToVisited(graph, visited, walkStart);
 
                 for (int i = 0; i < path.Count - 1; i++)
@@ -33,7 +37,7 @@ namespace SimplexLab.Maze
                     }
                 }
 
-                int last = path[path.Count - 1];
+                var last = path[path.Count - 1];
                 if (!visited[last])
                 {
                     visited[last] = true;
@@ -58,7 +62,7 @@ namespace SimplexLab.Maze
         private List<int> RandomWalkToVisited(List<List<Adjacency>> graph, bool[] visited, int start)
         {
             var direction = new Dictionary<int, int>();
-            int current = start;
+            var current = start;
 
             while (!visited[current])
             {
@@ -68,13 +72,13 @@ namespace SimplexLab.Maze
                     if (edge.Neighbor != -1)
                         neighbors.Add(edge.Neighbor);
                 }
-                int next = neighbors[random.Next(neighbors.Count)];
+                var next = neighbors[random.Next(neighbors.Count)];
                 direction[current] = next;
                 current = next;
             }
 
             var path = new List<int>();
-            int trace = start;
+            var trace = start;
             path.Add(trace);
             while (!visited[trace])
             {
