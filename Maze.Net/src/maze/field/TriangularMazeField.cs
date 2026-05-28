@@ -4,21 +4,6 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 三角形朝向
-    /// </summary>
-    public enum TriangleOrientation
-    {
-        /// <summary>
-        /// 朝上
-        /// </summary>
-        Upward = 1,
-        /// <summary>
-        /// 朝下
-        /// </summary>
-        Downward = 2,
-    }
-
-    /// <summary>
     /// 三角形迷宫场地（邻接表方案）
     /// 等边三角形内部由小等边三角形格子填充
     /// 第 i 行有 2i+1 个小三角形（朝上、朝下交替）

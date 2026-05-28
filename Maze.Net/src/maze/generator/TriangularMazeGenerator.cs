@@ -3,6 +3,21 @@ using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
+    /// <summary>
+    /// 三角形朝向
+    /// </summary>
+    public enum TriangleOrientation
+    {
+        /// <summary>
+        /// 朝上
+        /// </summary>
+        Upward = 1,
+        /// <summary>
+        /// 朝下
+        /// </summary>
+        Downward = 2,
+    }
+
     public class TriangularMazeGenerator : MazeGenerator<TriangularMazeField>
     {
         public TriangularMazeGenerator() 

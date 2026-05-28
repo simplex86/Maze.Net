@@ -32,6 +32,7 @@ namespace Maze.TApplication
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            showGates = new CheckBox();
             circularHexagonMazeControl = new CircularHexagonControl();
             hexagonalMazeControl = new HexagonalMazeControl();
             triangularMazeControl = new TriangularMazeControl();
@@ -61,6 +62,7 @@ namespace Maze.TApplication
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(showGates);
             splitContainer1.Panel1.Controls.Add(circularHexagonMazeControl);
             splitContainer1.Panel1.Controls.Add(hexagonalMazeControl);
             splitContainer1.Panel1.Controls.Add(triangularMazeControl);
@@ -79,6 +81,19 @@ namespace Maze.TApplication
             splitContainer1.Size = new Size(1004, 740);
             splitContainer1.SplitterDistance = 291;
             splitContainer1.TabIndex = 0;
+            // 
+            // showGates
+            // 
+            showGates.AutoSize = true;
+            showGates.Checked = true;
+            showGates.CheckState = CheckState.Checked;
+            showGates.Location = new Point(3, 621);
+            showGates.Name = "showGates";
+            showGates.Size = new Size(184, 21);
+            showGates.TabIndex = 30;
+            showGates.Text = "Show the Entrance and Exit";
+            showGates.UseVisualStyleBackColor = true;
+            showGates.CheckedChanged += OnGatesChangedHandler;
             // 
             // circularHexagonMazeControl
             // 
@@ -203,7 +218,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(767, 573);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v0.8.85";
+            Text = "Maze Generator v0.9.88";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -228,5 +243,6 @@ namespace Maze.TApplication
         private TriangularMazeControl triangularMazeControl;
         private HexagonalMazeControl hexagonalMazeControl;
         private CircularHexagonControl circularHexagonMazeControl;
+        private CheckBox showGates;
     }
 }
