@@ -54,7 +54,7 @@
             // 
             thickness.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             thickness.Location = new System.Drawing.Point(89, 54);
-            thickness.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            thickness.Margin = new System.Windows.Forms.Padding(2);
             thickness.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             thickness.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             thickness.Name = "thickness";
@@ -98,8 +98,8 @@
             // 
             // RectangularMazeControl
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             Controls.Add(label10);
             Controls.Add(thickness);
             Controls.Add(height);

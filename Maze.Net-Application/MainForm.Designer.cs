@@ -203,9 +203,9 @@ namespace Maze.TApplication
             // 
             // showMarkers
             // 
-            showMarkers.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            showMarkers.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             showMarkers.AutoSize = true;
-            showMarkers.Location = new Point(282, 717);
+            showMarkers.Location = new Point(193, 717);
             showMarkers.Name = "showMarkers";
             showMarkers.Size = new Size(237, 21);
             showMarkers.TabIndex = 31;
@@ -226,11 +226,11 @@ namespace Maze.TApplication
             // 
             // showGates
             // 
-            showGates.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            showGates.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             showGates.AutoSize = true;
             showGates.Checked = true;
             showGates.CheckState = CheckState.Checked;
-            showGates.Location = new Point(60, 717);
+            showGates.Location = new Point(3, 717);
             showGates.Name = "showGates";
             showGates.Size = new Size(184, 21);
             showGates.TabIndex = 30;
