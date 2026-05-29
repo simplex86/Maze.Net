@@ -7,6 +7,7 @@ namespace Maze.TApplication
     internal class MazeRenderer
     {
         private MazeField field;
+        private MazeGate gate;
         protected CoordinateTransform transform = new CoordinateTransform();
 
         public MazeRenderer SetSize(int width, int height)
@@ -32,6 +33,12 @@ namespace Maze.TApplication
         public MazeRenderer SetField(MazeField field)
         {
             this.field = field;
+            return this;
+        }
+
+        public MazeRenderer SetGate(MazeGate gate)
+        {
+            this.gate = gate;
             return this;
         }
 
@@ -110,6 +117,9 @@ namespace Maze.TApplication
                 foreach (var edge in graph[v])
                 {
                     if (edge.Neighbor != -1 && edge.Neighbor <= v)
+                        continue;
+
+                    if (edge.Neighbor == -1 && (v == gate.Entrance || v == gate.Exit))
                         continue;
 
                     if (edge.Border != null) 

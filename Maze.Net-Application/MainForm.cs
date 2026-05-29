@@ -16,6 +16,9 @@ namespace Maze.TApplication
 
         private List<Control> controls = new List<Control>();
 
+        private int dx = 0;
+        private int dy = 0;
+
         public MainForm()
         {
             InitializeComponent();
@@ -49,6 +52,12 @@ namespace Maze.TApplication
         }
 
         private void OnGatesChangedHandler(object sender, EventArgs e)
+        {
+            showMarkers.Enabled = showGates.Checked;
+            canvas.Refresh();
+        }
+
+        private void OnMarkersChangedHandler(object sender, EventArgs e)
         {
             canvas.Refresh();
         }
@@ -99,7 +108,7 @@ namespace Maze.TApplication
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
             DrawMaze(e.Graphics);
-            DrawGate(e.Graphics);
+            DrawGateMarkers(e.Graphics);
         }
 
         private void DrawMaze(Graphics grap)
@@ -109,37 +118,40 @@ namespace Maze.TApplication
                 var renderer = new MazeRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(triangularMazeControl.Thickness)
+                        .SetOffset(dx, dy)
                         .SetField(mazeField)
+                        .SetGate(showGates.Checked ? mazeGate : new MazeGate())
                         .Draw(grap);
             }
         }
 
-        private void DrawGate(Graphics grap)
+        private void DrawGateMarkers(Graphics grap)
         {
-            if (!showGates.Checked) return;
-
-            switch (mazeShape)
+            if (showGates.Checked && showMarkers.Checked)
             {
-                case EMazeShape.Rectangular:
-                    DrawRectangularGate(grap);
-                    break;
-                case EMazeShape.Circular:
-                    DrawCircularGate(grap);
-                    break;
-                case EMazeShape.Honeycomb:
-                    DrawHoneycombGate(grap);
-                    break;
-                case EMazeShape.Triangular:
-                    DrawTriangularGate(grap);
-                    break;
-                case EMazeShape.Hexagonal:
-                    DrawHexagonalGate(grap);
-                    break;
-                case EMazeShape.CircularHexagon:
-                    DrawCircularHexagonGate(grap);
-                    break;
-                default:
-                    break;
+                switch (mazeShape)
+                {
+                    case EMazeShape.Rectangular:
+                        DrawRectangularGate(grap);
+                        break;
+                    case EMazeShape.Circular:
+                        DrawCircularGate(grap);
+                        break;
+                    case EMazeShape.Honeycomb:
+                        DrawHoneycombGate(grap);
+                        break;
+                    case EMazeShape.Triangular:
+                        DrawTriangularGate(grap);
+                        break;
+                    case EMazeShape.Hexagonal:
+                        DrawHexagonalGate(grap);
+                        break;
+                    case EMazeShape.CircularHexagon:
+                        DrawCircularHexagonGate(grap);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -172,6 +184,7 @@ namespace Maze.TApplication
                 var renderer = new RectangularGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(rectangularMazeControl.Thickness)
+                        .SetOffset(dx, dy)
                         .SetField(mazeField as RectangularMazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);

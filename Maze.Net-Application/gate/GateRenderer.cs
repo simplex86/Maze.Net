@@ -7,14 +7,8 @@ namespace Maze.TApplication
 {
     internal abstract class GateRenderer<TField> where TField : MazeField
     {
-        protected int width;
-        protected int height;
-        protected int thickness;
         protected TField? field;
         protected MazeGate gate;
-        protected int offsetx;
-        protected int offsety;
-
         protected CoordinateTransform transform = new CoordinateTransform();
 
         public GateRenderer<TField> SetSize(int width, int height)

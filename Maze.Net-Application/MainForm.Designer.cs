@@ -32,6 +32,7 @@ namespace Maze.TApplication
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            showMarkers = new CheckBox();
             showGates = new CheckBox();
             circularHexagonMazeControl = new CircularHexagonControl();
             hexagonalMazeControl = new HexagonalMazeControl();
@@ -62,7 +63,6 @@ namespace Maze.TApplication
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(showGates);
             splitContainer1.Panel1.Controls.Add(circularHexagonMazeControl);
             splitContainer1.Panel1.Controls.Add(hexagonalMazeControl);
             splitContainer1.Panel1.Controls.Add(triangularMazeControl);
@@ -77,17 +77,32 @@ namespace Maze.TApplication
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(showMarkers);
             splitContainer1.Panel2.Controls.Add(canvas);
+            splitContainer1.Panel2.Controls.Add(showGates);
             splitContainer1.Size = new Size(1004, 740);
             splitContainer1.SplitterDistance = 291;
             splitContainer1.TabIndex = 0;
+            // 
+            // showMarkers
+            // 
+            showMarkers.AutoSize = true;
+            showMarkers.Checked = true;
+            showMarkers.CheckState = CheckState.Checked;
+            showMarkers.Location = new Point(222, 716);
+            showMarkers.Name = "showMarkers";
+            showMarkers.Size = new Size(237, 21);
+            showMarkers.TabIndex = 31;
+            showMarkers.Text = "Show the Entrance and Exit Markers";
+            showMarkers.UseVisualStyleBackColor = true;
+            showMarkers.CheckedChanged += OnMarkersChangedHandler;
             // 
             // showGates
             // 
             showGates.AutoSize = true;
             showGates.Checked = true;
             showGates.CheckState = CheckState.Checked;
-            showGates.Location = new Point(3, 621);
+            showGates.Location = new Point(0, 716);
             showGates.Name = "showGates";
             showGates.Size = new Size(184, 21);
             showGates.TabIndex = 30;
@@ -204,7 +219,7 @@ namespace Maze.TApplication
             canvas.BackColor = Color.White;
             canvas.Location = new Point(0, 0);
             canvas.Name = "canvas";
-            canvas.Size = new Size(705, 736);
+            canvas.Size = new Size(705, 710);
             canvas.TabIndex = 0;
             canvas.TabStop = false;
             canvas.Paint += OnCanvasPaintHandler;
@@ -222,6 +237,7 @@ namespace Maze.TApplication
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
@@ -244,5 +260,6 @@ namespace Maze.TApplication
         private HexagonalMazeControl hexagonalMazeControl;
         private CircularHexagonControl circularHexagonMazeControl;
         private CheckBox showGates;
+        private CheckBox showMarkers;
     }
 }
