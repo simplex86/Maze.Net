@@ -1,43 +1,42 @@
 using System;
 using System.Drawing;
-using System.Security.Cryptography.Xml;
 using SimplexLab.Maze;
 
 namespace Maze.TApplication
 {
-    internal abstract class GateRenderer<TField> where TField : MazeField
+    internal abstract class MazeGateRenderer<TField> where TField : MazeField
     {
         protected TField? field;
         protected MazeGate gate;
         protected CoordinateTransform transform = new CoordinateTransform();
 
-        public GateRenderer<TField> SetSize(int width, int height)
+        public MazeGateRenderer<TField> SetSize(int width, int height)
         {
             transform.width = width;
             transform.height = height;
             return this;
         }
 
-        public GateRenderer<TField> SetThickness(int thickness)
+        public MazeGateRenderer<TField> SetThickness(int thickness)
         {
             transform.scale = thickness;
             return this;
         }
 
-        public GateRenderer<TField> SetOffset(int dx, int dy)
+        public MazeGateRenderer<TField> SetOffset(int dx, int dy)
         {
             transform.dx = dx;
             transform.dy = dy;
             return this;
         }
 
-        public GateRenderer<TField> SetField(TField? field)
+        public MazeGateRenderer<TField> SetField(TField? field)
         {
             this.field = field;
             return this;
         }
 
-        public GateRenderer<TField> SetGate(MazeGate gate)
+        public MazeGateRenderer<TField> SetGate(MazeGate gate)
         {
             this.gate = gate;
             return this;

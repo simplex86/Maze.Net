@@ -204,19 +204,19 @@ generator.Create(length, MazeAlgorithm.Kruskal);
 ## 圆环-三角格迷宫生成器
 
 ``` csharp
-public class HexagonalMazeGenerator
+public class CircularHexagonMazeGenerator
 ```
 
 #### 同步函数
 
 ``` csharp
-public HexagonalMazeField Create(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
+public CircularHexagonMazeField Create(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
 ```
 
 #### 异步函数
 
 ``` csharp
-public async Task<HexagonalMazeField> CreateAsync(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
+public async Task<CircularHexagonMazeField> CreateAsync(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
 ```
 
 #### 参数
@@ -227,10 +227,10 @@ public async Task<HexagonalMazeField> CreateAsync(int size, EMazeAlgorithm algor
 ### 示例
 
 ``` csharp
-var generator = new HexagonalMazeGenerator();
+var generator = new CircularHexagonMazeGenerator();
 generator.Create(length, MazeAlgorithm.Kruskal);
 ```
 
 ### 效果
 
-![迷宫](./imgs/hexagonal.png)
+![迷宫](./imgs/circularhexagon.png)

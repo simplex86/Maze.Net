@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
-    public class HoneycombGateGenerator : GateGenerator<HoneycombMazeField>
+    public class HoneycombMazeGateGenerator : MazeGateGenerator<HoneycombMazeField>
     {
-        public HoneycombGateGenerator() 
+        public HoneycombMazeGateGenerator() 
         { 
         
         }
 
-        public HoneycombGateGenerator(Random random) 
+        public HoneycombMazeGateGenerator(Random random) 
             : base(random) 
         { 
         

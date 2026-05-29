@@ -22,14 +22,14 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 迷宫出入口
     /// </summary>
-    public abstract class GateGenerator<TField> where TField : IMazeField
+    public abstract class MazeGateGenerator<TField> where TField : IMazeField
     {
         protected Random random = null;
 
         /// <summary>
         /// 迷宫出入口（使用默认随机数生成器）
         /// </summary>
-        public GateGenerator()
+        public MazeGateGenerator()
             : this(Random.Shared)
         {
 
@@ -39,7 +39,7 @@ namespace SimplexLab.Maze
         /// 迷宫出入口
         /// </summary>
         /// <param name="random">随机数生成器</param>
-        public GateGenerator(Random random)
+        public MazeGateGenerator(Random random)
         {
             this.random = random;
         }

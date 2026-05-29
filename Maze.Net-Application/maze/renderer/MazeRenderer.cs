@@ -122,7 +122,7 @@ namespace Maze.TApplication
                     if (edge.Neighbor == -1 && (v == gate.Entrance || v == gate.Exit))
                         continue;
 
-                    if (edge.Border != null) 
+                    if (!edge.IsOpen) 
                         onBorder(edge.Border);
                 }
             }

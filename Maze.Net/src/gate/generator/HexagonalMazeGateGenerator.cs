@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
-    public class HexagonalGateGenerator : GateGenerator<HexagonalMazeField>
+    public class HexagonalMazeGateGenerator : MazeGateGenerator<HexagonalMazeField>
     {
-        public HexagonalGateGenerator() 
+        public HexagonalMazeGateGenerator() 
         { 
         
         }
 
-        public HexagonalGateGenerator(Random random) 
+        public HexagonalMazeGateGenerator(Random random) 
             : base(random) 
         {
         

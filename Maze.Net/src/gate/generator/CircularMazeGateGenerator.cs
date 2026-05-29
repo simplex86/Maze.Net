@@ -2,14 +2,14 @@ using System;
 
 namespace SimplexLab.Maze
 {
-    public class CircularGateGenerator : GateGenerator<CircularMazeField>
+    public class CircularMazeGateGenerator : MazeGateGenerator<CircularMazeField>
     {
-        public CircularGateGenerator() 
+        public CircularMazeGateGenerator() 
         { 
         
         }
 
-        public CircularGateGenerator(Random random) 
+        public CircularMazeGateGenerator(Random random) 
             : base(random) 
         {
         

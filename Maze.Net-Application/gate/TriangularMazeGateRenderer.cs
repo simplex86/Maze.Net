@@ -4,7 +4,7 @@ using SimplexLab.Maze;
 
 namespace Maze.TApplication
 {
-    internal class TriangularGateRenderer : GateRenderer<TriangularMazeField>
+    internal class TriangularMazeGateRenderer : MazeGateRenderer<TriangularMazeField>
     {
         public override void Draw(Graphics grap)
         {

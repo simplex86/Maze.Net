@@ -61,7 +61,7 @@ namespace SimplexLab.Maze
                 {
                     if (graph[edge.U][i].Neighbor == edge.V)
                     {
-                        graph[edge.U][i].Border = null;
+                        graph[edge.U][i].IsOpen = true;
                         break;
                     }
                 }
@@ -69,7 +69,7 @@ namespace SimplexLab.Maze
                 {
                     if (graph[edge.V][i].Neighbor == edge.U)
                     {
-                        graph[edge.V][i].Border = null;
+                        graph[edge.V][i].IsOpen = true;
                         break;
                     }
                 }

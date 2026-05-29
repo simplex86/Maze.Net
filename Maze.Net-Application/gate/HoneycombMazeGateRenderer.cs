@@ -4,7 +4,7 @@ using SimplexLab.Maze;
 
 namespace Maze.TApplication
 {
-    internal class HoneycombGateRenderer : GateRenderer<HoneycombMazeField>
+    internal class HoneycombMazeGateRenderer : MazeGateRenderer<HoneycombMazeField>
     {
         public override void Draw(Graphics grap)
         {
