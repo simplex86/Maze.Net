@@ -34,6 +34,8 @@ namespace Maze.TApplication
             algorithm.SelectedIndex = (int)EMazeAlgorithm.Kruskal - 1;
         }
 
+        #region Handler
+
         private void OnShapeChangedHandler(object sender, EventArgs e)
         {
             mazeShape = (EMazeShape)shape.SelectedIndex;
@@ -154,6 +156,8 @@ namespace Maze.TApplication
                 }
             }
         }
+
+        #endregion
 
         #region Rectangular
 
