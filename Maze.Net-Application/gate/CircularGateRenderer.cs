@@ -14,29 +14,28 @@ namespace Maze.TApplication
             var bounds = field.Bounds;
             if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
-            var scale = thickness;
-            var offsetX = (float)((width - bounds.Width * scale) / 2) + offsetx;
-            var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
-            var flipY = field.FlipY;
+            var offsetx = transform.GetOffsetX(bounds);
+            var offsety = transform.GetOffsetY(bounds);
+            var flipy = field.FlipY;
 
-            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, offsetx, offsety, flipy);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, offsetx, offsety, flipy);
         }
 
-        private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
+        private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float offsetx, float offsety, bool flipy)
         {
             var sector = GetVertexSector(field!, vertex);
 
-            var centerX = TransformX(0, bounds, scale, offsetX);
-            var centerY = TransformY(0, bounds, scale, offsetY, flipY);
+            var centerx = transform.TransformX(0, bounds, offsetx);
+            var centery = transform.TransformY(0, bounds, offsety, flipy);
 
-            var innerR = sector.InnerRadius > 0 ? (float)(sector.InnerRadius * scale) + 1 : 0;
-            var outerR = (float)(sector.OuterRadius * scale) - 1;
+            var innerr = sector.InnerRadius > 0 ? (float)(sector.InnerRadius * transform.scale) + 1 : 0;
+            var outerr = (float)(sector.OuterRadius * transform.scale) - 1;
 
-            if (outerR <= 0) return;
+            if (outerr <= 0) return;
 
-            var midR = (float)((sector.InnerRadius + sector.OuterRadius) / 2 * scale);
-            var angleShrink = midR > 0 ? 1.0f / midR : 0;
+            var midr = (float)((sector.InnerRadius + sector.OuterRadius) / 2 * transform.scale);
+            var angleShrink = midr > 0 ? 1.0f / midr : 0;
             var adjustedStartAngle = (float)(sector.StartAngle + angleShrink);
             var adjustedSweepAngle = (float)(sector.SweepAngle - 2 * angleShrink);
 
@@ -45,7 +44,7 @@ namespace Maze.TApplication
             var startAngleDeg = 0f;
             var sweepAngleDeg = 0f;
 
-            if (flipY)
+            if (flipy)
             {
                 startAngleDeg = (float)(-adjustedStartAngle * 180.0 / Math.PI);
                 sweepAngleDeg = (float)(-adjustedSweepAngle * 180.0 / Math.PI);
@@ -58,15 +57,15 @@ namespace Maze.TApplication
 
             using var brush = new SolidBrush(color);
 
-            if (innerR <= 0)
+            if (innerr <= 0)
             {
-                grap.FillPie(brush, centerX - outerR, centerY - outerR, outerR * 2, outerR * 2, startAngleDeg, sweepAngleDeg);
+                grap.FillPie(brush, centerx - outerr, centery - outerr, outerr * 2, outerr * 2, startAngleDeg, sweepAngleDeg);
             }
             else
             {
                 using var path = new GraphicsPath();
-                path.AddArc(centerX - outerR, centerY - outerR, outerR * 2, outerR * 2, startAngleDeg, sweepAngleDeg);
-                path.AddArc(centerX - innerR, centerY - innerR, innerR * 2, innerR * 2, startAngleDeg + sweepAngleDeg, -sweepAngleDeg);
+                path.AddArc(centerx - outerr, centery - outerr, outerr * 2, outerr * 2, startAngleDeg, sweepAngleDeg);
+                path.AddArc(centerx - innerr, centery - innerr, innerr * 2, innerr * 2, startAngleDeg + sweepAngleDeg, -sweepAngleDeg);
                 path.CloseFigure();
                 grap.FillPath(brush, path);
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Security.Cryptography.Xml;
 using SimplexLab.Maze;
 
 namespace Maze.TApplication
@@ -14,23 +15,25 @@ namespace Maze.TApplication
         protected int offsetx;
         protected int offsety;
 
+        protected CoordinateTransform transform = new CoordinateTransform();
+
         public GateRenderer<TField> SetSize(int width, int height)
         {
-            this.width = width;
-            this.height = height;
+            transform.width = width;
+            transform.height = height;
             return this;
         }
 
         public GateRenderer<TField> SetThickness(int thickness)
         {
-            this.thickness = thickness;
+            transform.scale = thickness;
             return this;
         }
 
-        public GateRenderer<TField> SetOffset(int x, int y)
+        public GateRenderer<TField> SetOffset(int dx, int dy)
         {
-            this.offsetx = x;
-            this.offsety = y;
+            transform.dx = dx;
+            transform.dy = dy;
             return this;
         }
 
@@ -47,16 +50,5 @@ namespace Maze.TApplication
         }
 
         public abstract void Draw(Graphics grap);
-
-        protected float TransformX(double x, CoordinateBounds bounds, float scale, float offsetX)
-        {
-            return (float)((x - bounds.MinX) * scale) + offsetX;
-        }
-
-        protected float TransformY(double y, CoordinateBounds bounds, float scale, float offsetY, bool flipY)
-        {
-            return flipY ? (float)((bounds.MaxY - y) * scale) + offsetY
-                            : (float)((y - bounds.MinY) * scale) + offsetY;
-        }
     }
 }

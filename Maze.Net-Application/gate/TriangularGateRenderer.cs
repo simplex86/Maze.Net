@@ -13,16 +13,15 @@ namespace Maze.TApplication
             var bounds = field.Bounds;
             if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
-            var scale = thickness;
-            var offsetX = (float)((width - bounds.Width * scale) / 2) + offsetx;
-            var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
-            var flipY = field.FlipY;
+            var offsetx = transform.GetOffsetX(bounds);
+            var offsety = transform.GetOffsetY(bounds);
+            var flipy = field.FlipY;
 
-            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, offsetx, offsety, flipy);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, offsetx, offsety, flipy);
         }
 
-        private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
+        private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float offsetx, float offsety, bool flipy)
         {
             var triangle = GetVertexTriangle(field!, vertex);
 
@@ -30,19 +29,23 @@ namespace Maze.TApplication
             var b = triangle.B;
             var c = triangle.C;
 
-            var centerX = (a.X + b.X + c.X) / 3;
-            var centerY = (a.Y + b.Y + c.Y) / 3;
+            var centerx = (a.X + b.X + c.X) / 3;
+            var centery = (a.Y + b.Y + c.Y) / 3;
 
-            var shrink = 1.0 - 1.0 / scale;
+            var shrink = 1.0 - 1.0 / transform.scale;
             if (shrink <= 0) return;
 
             var points = new PointF[3];
             var vertices = new[] { a, b, c };
             for (int i = 0; i < 3; i++)
             {
-                var vx = centerX + (vertices[i].X - centerX) * shrink;
-                var vy = centerY + (vertices[i].Y - centerY) * shrink;
-                points[i] = new PointF(TransformX(vx, bounds, scale, offsetX), TransformY(vy, bounds, scale, offsetY, flipY));
+                var vx = centerx + (vertices[i].X - centerx) * shrink;
+                var vy = centery + (vertices[i].Y - centery) * shrink;
+
+                var xx = transform.TransformX(vx, bounds, offsetx);
+                var yy = transform.TransformY(vy, bounds, offsety, flipy);
+
+                points[i] = new PointF(xx, yy);
             }
 
             using var brush = new SolidBrush(color);

@@ -14,26 +14,25 @@ namespace Maze.TApplication
             var bounds = field.Bounds;
             if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
-            var scale = thickness;
-            var offsetX = (float)((width - bounds.Width * scale) / 2) + offsetx;
-            var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
-            var flipY = field.FlipY;
+            var offsetx = transform.GetOffsetX(bounds);
+            var offsety = transform.GetOffsetY(bounds);
+            var flipy = field.FlipY;
 
-            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, scale, offsetX, offsetY, flipY);
-            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, scale, offsetX, offsetY, flipY);
+            if (gate.Entrance >= 0) DrawVertexMarker(grap, gate.Entrance, Color.Green,  bounds, offsetx, offsety, flipy);
+            if (gate.Exit     >= 0) DrawVertexMarker(grap, gate.Exit,     Color.Yellow, bounds, offsetx, offsety, flipy);
         }
 
-        private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float scale, float offsetX, float offsetY, bool flipY)
+        private void DrawVertexMarker(Graphics grap, int vertex, Color color, CoordinateBounds bounds, float offsetx, float offsety, bool flipy)
         {
             var shape = GetVertexSectorShape(field!, vertex);
 
-            var centerX = TransformX(0, bounds, scale, offsetX);
-            var centerY = TransformY(0, bounds, scale, offsetY, flipY);
+            var centerx = transform.TransformX(0, bounds, offsetx);
+            var centery = transform.TransformY(0, bounds, offsety, flipy);
 
-            var arcR = (float)(shape.ArcRadius * scale) - 1;
-            if (arcR <= 0) return;
+            var arcr = (float)(shape.ArcRadius * transform.scale) - 1;
+            if (arcr <= 0) return;
 
-            var angleShrink = arcR > 0 ? 1.0f / arcR : 0;
+            var angleShrink = arcr > 0 ? 1.0f / arcr : 0;
             var adjustedArcStart = (float)(shape.ArcStartAngle + angleShrink);
             var adjustedArcSweep = (float)(shape.ArcSweepAngle - 2 * angleShrink);
             if (adjustedArcSweep <= 0) return;
@@ -41,7 +40,7 @@ namespace Maze.TApplication
             var arcStartDeg = 0.0f;
             var arcSweepDeg = 0.0f;
 
-            if (flipY)
+            if (flipy)
             {
                 arcStartDeg = (float)(-adjustedArcStart * 180.0 / Math.PI);
                 arcSweepDeg = (float)(-adjustedArcSweep * 180.0 / Math.PI);
@@ -57,35 +56,35 @@ namespace Maze.TApplication
 
             if (shape.Upward)
             {
-                var innerR = shape.InnerRadius > 0 ? (float)(shape.InnerRadius * scale) + 1 : 0;
+                var innerr = shape.InnerRadius > 0 ? (float)(shape.InnerRadius * transform.scale) + 1 : 0;
 
-                if (innerR <= 0)
+                if (innerr <= 0)
                 {
-                    grap.FillPie(brush, centerX - arcR, centerY - arcR, arcR * 2, arcR * 2, arcStartDeg, arcSweepDeg);
+                    grap.FillPie(brush, centerx - arcr, centery - arcr, arcr * 2, arcr * 2, arcStartDeg, arcSweepDeg);
                 }
                 else
                 {
-                    var innerAngle = (float)shape.InnerAngle;
-                    var innerX = centerX + innerR * (float)Math.Cos(flipY ? -innerAngle : innerAngle);
-                    var innerY = centerY + innerR * (float)Math.Sin(flipY ? -innerAngle : innerAngle);
+                    var angle = (float)shape.InnerAngle;
+                    var innerx = centerx + innerr * (float)Math.Cos(flipy ? -angle : angle);
+                    var innery = centery + innerr * (float)Math.Sin(flipy ? -angle : angle);
 
-                    path.AddArc(centerX - arcR, centerY - arcR, arcR * 2, arcR * 2, arcStartDeg, arcSweepDeg);
-                    path.AddLine(innerX, innerY, innerX, innerY);
+                    path.AddArc(centerx - arcr, centery - arcr, arcr * 2, arcr * 2, arcStartDeg, arcSweepDeg);
+                    path.AddLine(innerx, innery, innerx, innery);
                     path.CloseFigure();
                     grap.FillPath(brush, path);
                 }
             }
             else
             {
-                var outerR = (float)(shape.OuterRadius * scale) - 1;
-                if (outerR <= 0) return;
+                var outerr = (float)(shape.OuterRadius * transform.scale) - 1;
+                if (outerr <= 0) return;
 
-                var outerAngle = (float)shape.OuterAngle;
-                var outerX = centerX + outerR * (float)Math.Cos(flipY ? -outerAngle : outerAngle);
-                var outerY = centerY + outerR * (float)Math.Sin(flipY ? -outerAngle : outerAngle);
+                var angle = (float)shape.OuterAngle;
+                var outerx = centerx + outerr * (float)Math.Cos(flipy ? -angle : angle);
+                var outery = centery + outerr * (float)Math.Sin(flipy ? -angle : angle);
 
-                path.AddArc(centerX - arcR, centerY - arcR, arcR * 2, arcR * 2, arcStartDeg, arcSweepDeg);
-                path.AddLine(outerX, outerY, outerX, outerY);
+                path.AddArc(centerx - arcr, centery - arcr, arcr * 2, arcr * 2, arcStartDeg, arcSweepDeg);
+                path.AddLine(outerx, outery, outerx, outery);
                 path.CloseFigure();
                 grap.FillPath(brush, path);
             }

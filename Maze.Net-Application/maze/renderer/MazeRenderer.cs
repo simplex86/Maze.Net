@@ -1,40 +1,35 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using SimplexLab.Maze;
 
 namespace Maze.TApplication
 {
-    internal abstract class MazeRenderer<TField> where TField : MazeField
+    internal class MazeRenderer
     {
-        protected int width;
-        protected int height;
-        protected int thickness;
-        private TField? field;
-        protected int offsetx;
-        protected int offsety;
+        private MazeField field;
+        protected CoordinateTransform transform = new CoordinateTransform();
 
-        public MazeRenderer<TField> SetSize(int width, int height)
+        public MazeRenderer SetSize(int width, int height)
         {
-            this.width = width;
-            this.height = height;
+            transform.width = width;
+            transform.height = height;
             return this;
         }
 
-        public MazeRenderer<TField> SetThickness(int thickness)
+        public MazeRenderer SetThickness(int thickness)
         {
-            this.thickness = thickness;
+            transform.scale = thickness;
             return this;
         }
 
-        public MazeRenderer<TField> SetOffset(int x, int y)
+        public MazeRenderer SetOffset(int dx, int dy)
         {
-            this.offsetx = x;
-            this.offsety = y;
+            transform.dx = dx;
+            transform.dy = dy;
             return this;
         }
 
-        public MazeRenderer<TField> SetField(TField? field)
+        public MazeRenderer SetField(MazeField field)
         {
             this.field = field;
             return this;
@@ -49,7 +44,7 @@ namespace Maze.TApplication
         private void DrawBackground(Graphics grap)
         {
             using var brush = new SolidBrush(Color.White);
-            grap.FillRectangle(brush, 0, 0, width, height);
+            grap.FillRectangle(brush, 0, 0, transform.width, transform.height);
         }
 
         /// <summary>
@@ -62,10 +57,9 @@ namespace Maze.TApplication
             var bounds = field.Bounds;
             if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
-            var scale = thickness;
-            var offsetX = (float)((width - bounds.Width * scale) / 2) + offsetx;
-            var offsetY = (float)((height - bounds.Height * scale) / 2) + offsety;
-            var flipY = field.FlipY;
+            var offsetx = transform.GetOffsetX(bounds);
+            var offsety = transform.GetOffsetY(bounds);
+            var flipy = field.FlipY;
 
             using var pen = new Pen(Color.Black);
 
@@ -73,23 +67,23 @@ namespace Maze.TApplication
             {
                 if (border is LineBorder line)
                 {
-                    var x1 = TransformX(line.X1, bounds, scale, offsetX);
-                    var y1 = TransformY(line.Y1, bounds, scale, offsetY, flipY);
-                    var x2 = TransformX(line.X2, bounds, scale, offsetX);
-                    var y2 = TransformY(line.Y2, bounds, scale, offsetY, flipY);
+                    var x1 = transform.TransformX(line.X1, bounds, offsetx);
+                    var y1 = transform.TransformY(line.Y1, bounds, offsety, flipy);
+                    var x2 = transform.TransformX(line.X2, bounds, offsetx);
+                    var y2 = transform.TransformY(line.Y2, bounds, offsety, flipy);
                     grap.DrawLine(pen, x1, y1, x2, y2);
                 }
                 else if (border is ArcBorder arc)
                 {
-                    var cx = TransformX(arc.CenterX, bounds, scale, offsetX);
-                    var cy = TransformY(arc.CenterY, bounds, scale, offsetY, flipY);
-                    var radius = (float)(arc.Radius * scale);
+                    var cx = transform.TransformX(arc.CenterX, bounds, offsetx);
+                    var cy = transform.TransformY(arc.CenterY, bounds, offsety, flipy);
+                    var radius = (float)(arc.Radius * transform.scale);
                     if (radius <= 0) return;
 
                     var startAngleDeg = 0.0f;
                     var sweepAngleDeg = 0.0f;
 
-                    if (flipY)
+                    if (flipy)
                     {
                         startAngleDeg = (float)(-arc.StartAngle * 180.0 / Math.PI);
                         sweepAngleDeg = (float)(-arc.SweepAngle * 180.0 / Math.PI);
@@ -106,26 +100,9 @@ namespace Maze.TApplication
         }
 
         /// <summary>
-        /// X坐标变换：field坐标 → 屏幕坐标
-        /// </summary>
-        protected float TransformX(double x, CoordinateBounds bounds, float scale, float offsetX)
-        {
-            return (float)((x - bounds.MinX) * scale) + offsetX;
-        }
-
-        /// <summary>
-        /// Y坐标变换：field坐标 → 屏幕坐标
-        /// </summary>
-        protected float TransformY(double y, CoordinateBounds bounds, float scale, float offsetY, bool flipY)
-        {
-            return flipY ? (float)((bounds.MaxY - y) * scale) + offsetY
-                         : (float)((y - bounds.MinY) * scale) + offsetY;
-        }
-
-        /// <summary>
         /// 遍历所有边界（去重：仅绘制 boundary 边和 neighbor > v 的内部边）
         /// </summary>
-        protected void IterateBorders(TField field, Action<IMazeBorder> onBorder)
+        protected void IterateBorders(MazeField field, Action<IMazeBorder> onBorder)
         {
             var graph = field.Graph;
             for (int v = 0; v < graph.Count; v++)
