@@ -35,14 +35,14 @@ namespace Maze.TApplication
             algorithm.SelectedIndex = (int)EMazeAlgorithm.Kruskal - 1;
         }
 
-        private int Thickness
+        private int thickness
         {
             get
             {
                 switch (mazeShape)
                 {
                     case EMazeShape.Rectangular: return rectangularMazeControl.Thickness;
-                    case EMazeShape.Circular: return circularHexagonMazeControl.Thickness;
+                    case EMazeShape.Circular: return circularMazeControl.Thickness;
                     case EMazeShape.Honeycomb: return honeycombMazeControl.Thickness;
                     case EMazeShape.Triangular: return triangularMazeControl.Thickness;
                     case EMazeShape.Hexagonal: return hexagonalMazeControl.Thickness;
@@ -147,7 +147,7 @@ namespace Maze.TApplication
             {
                 var renderer = new MazeRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
-                        .SetThickness(triangularMazeControl.Thickness)
+                        .SetThickness(thickness)
                         .SetOffset(dx, dy)
                         .SetField(mazeField)
                         .SetGate(showGates.Checked ? mazeGate : new MazeGate())
@@ -197,7 +197,7 @@ namespace Maze.TApplication
             {
                 var renderer = new MazeSolutionRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
-                        .SetThickness(Thickness)
+                        .SetThickness(thickness)
                         .SetOffset(dx, dy)
                         .SetField(mazeField)
                         .SetSolution(mazeSolution)
