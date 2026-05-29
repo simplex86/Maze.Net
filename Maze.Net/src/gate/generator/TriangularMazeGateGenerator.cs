@@ -19,7 +19,7 @@ namespace SimplexLab.Maze
         public override MazeGate Generate(TriangularMazeField field)
         {
             var baseVertices = new List<int>();
-            for (int col = 0; col < 2 * field.Order - 1; col++)
+            for (int col = 0; col < 2 * field.Order - 1; col += 2)
                 baseVertices.Add(VertexIndex(field.Order - 1, col));
 
             var apex = VertexIndex(0, 0);
