@@ -191,9 +191,9 @@ namespace Maze.TApplication
             // 
             // showSolution
             // 
-            showSolution.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            showSolution.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             showSolution.AutoSize = true;
-            showSolution.Location = new Point(626, 717);
+            showSolution.Location = new Point(528, 717);
             showSolution.Name = "showSolution";
             showSolution.Size = new Size(131, 21);
             showSolution.TabIndex = 32;
@@ -247,7 +247,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v1.0.92";
+            Text = "Maze Generator v1.0.95";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
