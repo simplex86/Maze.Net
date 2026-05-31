@@ -18,22 +18,28 @@ namespace SimplexLab.Maze
 
         public override MazeGate Generate(HoneycombMazeField field)
         {
+            var L = field.Length;
+
             var sides = new List<int>[6];
             for (int i = 0; i < 6; i++) sides[i] = new List<int>();
 
-            for (int u = -field.Length + 1; u < field.Length; u++)
+            for (int u = -L + 1; u < L; u++)
             {
                 var (vmin, vmax) = field.VExtent(u);
                 for (int v = vmin; v <= vmax; v++)
                 {
+                    var onSides = new List<int>();
+                    if (u == -L + 1) onSides.Add(0);
+                    if (v == L - 1) onSides.Add(1);
+                    if (u + v == L - 1) onSides.Add(2);
+                    if (u == L - 1) onSides.Add(3);
+                    if (v == -L + 1) onSides.Add(4);
+                    if (u + v == -L + 1) onSides.Add(5);
+
+                    if (onSides.Count != 1) continue;
+
                     var node = field.VertexIndex(u, v);
-                    for (int n = 0; n < 6; n++)
-                    {
-                        var uu = u + HoneycombMazeField.Neighbors[n][0];
-                        var vv = v + HoneycombMazeField.Neighbors[n][1];
-                        if (!field.IsValidNode(uu, vv))
-                            sides[n].Add(node);
-                    }
+                    sides[onSides[0]].Add(node);
                 }
             }
 
