@@ -10,12 +10,12 @@
 
 提供多种形状的随机迷宫生成器
 
-- [矩形迷宫生成器](./doc/retangular/retangular_maze.md)
-- [圆形迷宫生成器](./doc/circular/circular_maze.md)
-- [蜂窝迷宫生成器](./doc/honeycomb/honeycomb_maze.md)
-- [三角形迷宫生成器](./doc/triangular/triangular_maze.md)
-- [六边形迷宫生成器](./doc/hexagonal/hexagonal_maze.md)
-- [圆三角格迷宫生成器](./doc/circularhexagon/circularhexagon_maze.md)
+- [矩形迷宫生成器](./doc/reference/retangular/retangular_maze.md)
+- [圆形迷宫生成器](./doc/reference/circular/circular_maze.md)
+- [蜂窝迷宫生成器](./doc/reference/honeycomb/honeycomb_maze.md)
+- [三角形迷宫生成器](./doc/reference/triangular/triangular_maze.md)
+- [六边形迷宫生成器](./doc/reference/hexagonal/hexagonal_maze.md)
+- [圆三角格迷宫生成器](./doc/reference/circularhexagon/circularhexagon_maze.md)
 
 ![](./doc/images/maze.png)
 
@@ -31,16 +31,19 @@
 | **Eller** | 强（水平偏好）| 中等 | ⚡快 | 极低 | 
 | **Aldous-Broder** | 无（均匀）| 均匀 | 🐢🐢极慢 | 低 |
 
+> [!NOTE]  
+> 各算法生成迷宫的特征及性能对比的详情，请看[这里](./doc/comparison/README.md)
+
 ## 出入口生成器
 
 为各种形状的迷宫生成随机出入口
 
-- [矩形迷宫出入口生成器](./doc/retangular/retangular_gate.md)
-- [圆形迷宫出入口生成器](./doc/circular/circular_gate.md)
-- [蜂窝迷宫出入口生成器](./doc/honeycomb/honeycomb_gate.md)
-- [三角形迷宫出入口生成器](./doc/triangular/triangular_gate.md)
-- [六边形迷宫出入口生成器](./doc/hexagonal/hexagonal_gate.md)
-- [圆三角格迷宫出入口生成器](./doc/circularhexagon/circularhexagon_gate.md)
+- [矩形迷宫出入口生成器](./doc/reference/retangular/retangular_gate.md)
+- [圆形迷宫出入口生成器](./doc/reference/circular/circular_gate.md)
+- [蜂窝迷宫出入口生成器](./doc/reference/honeycomb/honeycomb_gate.md)
+- [三角形迷宫出入口生成器](./doc/reference/triangular/triangular_gate.md)
+- [六边形迷宫出入口生成器](./doc/reference/hexagonal/hexagonal_gate.md)
+- [圆三角格迷宫出入口生成器](./doc/reference/circularhexagon/circularhexagon_gate.md)
 
 ![](./doc/images/gate.png)
 
