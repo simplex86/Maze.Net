@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maze.Net", "Maze.Net\Maze.N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maze.Net-Application", "Maze.Net-Application\Maze.Net-Application.csproj", "{9657F2F2-FE93-4BE6-A30C-A1D4AC27C6B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maze.Net-Benchmark", "Maze.Net-Benchmark\Maze.Net-Benchmark.csproj", "{7F988379-D0FC-4136-A393-712D0F324B3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9657F2F2-FE93-4BE6-A30C-A1D4AC27C6B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9657F2F2-FE93-4BE6-A30C-A1D4AC27C6B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9657F2F2-FE93-4BE6-A30C-A1D4AC27C6B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F988379-D0FC-4136-A393-712D0F324B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F988379-D0FC-4136-A393-712D0F324B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F988379-D0FC-4136-A393-712D0F324B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F988379-D0FC-4136-A393-712D0F324B3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
