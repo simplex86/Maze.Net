@@ -18,43 +18,43 @@ namespace Maze.TBenchmark
         [Benchmark]
         public void DFS()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.DFS);
+            generator.Generate(20, 20, EMazeAlgorithm.DFS);
         }
 
         [Benchmark]
         public void BFS()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.BFS);
+            generator.Generate(20, 20, EMazeAlgorithm.BFS);
         }
 
         [Benchmark]
         public void Prim()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.Prim);
+            generator.Generate(20, 20, EMazeAlgorithm.Prim);
         }
 
         [Benchmark]
         public void Kruskal()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.Kruskal);
+            generator.Generate(20, 20, EMazeAlgorithm.Kruskal);
         }
 
         [Benchmark]
         public void Wilson()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.Wilson);
+            generator.Generate(20, 20, EMazeAlgorithm.Wilson);
         }
 
         [Benchmark]
         public void Eller()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.Eller);
+            generator.Generate(20, 20, EMazeAlgorithm.Eller);
         }
 
         [Benchmark]
         public void AldousBroder()
         {
-            generator.Generate(100, 100, EMazeAlgorithm.AldousBroder);
+            generator.Generate(20, 20, EMazeAlgorithm.AldousBroder);
         }
     }
 }
