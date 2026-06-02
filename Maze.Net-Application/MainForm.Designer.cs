@@ -41,7 +41,7 @@ namespace Maze.TApplication
             algorithm = new ComboBox();
             algorithmLabel = new Label();
             shape = new ComboBox();
-            label1 = new Label();
+            shapeLabel = new Label();
             generation = new Button();
             showSolution = new CheckBox();
             showMarkers = new CheckBox();
@@ -73,7 +73,7 @@ namespace Maze.TApplication
             splitContainer1.Panel1.Controls.Add(algorithm);
             splitContainer1.Panel1.Controls.Add(algorithmLabel);
             splitContainer1.Panel1.Controls.Add(shape);
-            splitContainer1.Panel1.Controls.Add(label1);
+            splitContainer1.Panel1.Controls.Add(shapeLabel);
             splitContainer1.Panel1.Controls.Add(generation);
             // 
             // splitContainer1.Panel2
@@ -167,14 +167,14 @@ namespace Maze.TApplication
             shape.TabIndex = 2;
             shape.SelectedIndexChanged += OnShapeChangedHandler;
             // 
-            // label1
+            // shapeLabel
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(7, 15);
-            label1.Name = "label1";
-            label1.Size = new Size(44, 17);
-            label1.TabIndex = 1;
-            label1.Text = "Shape";
+            shapeLabel.AutoSize = true;
+            shapeLabel.Location = new Point(7, 15);
+            shapeLabel.Name = "shapeLabel";
+            shapeLabel.Size = new Size(44, 17);
+            shapeLabel.TabIndex = 1;
+            shapeLabel.Text = "Shape";
             // 
             // generation
             // 
@@ -247,7 +247,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v1.1.105";
+            Text = "Maze Generator v1.1.107";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -261,7 +261,7 @@ namespace Maze.TApplication
         #endregion
 
         private SplitContainer splitContainer1;
-        private Label label1;
+        private Label shapeLabel;
         private Button generation;
         private ComboBox shape;
         private PictureBox canvas;

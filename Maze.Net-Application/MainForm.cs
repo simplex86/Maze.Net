@@ -97,6 +97,35 @@ namespace Maze.TApplication
 
         private async Task OnGenerationClickedHandlerAsync()
         {
+            PrevProcess();
+            {
+                await Generate();
+            }
+            PostProcess();
+        }
+
+        private void PrevProcess()
+        {
+            shape.Enabled = false;
+            shapeLabel.Enabled = false;
+            algorithm.Enabled = false;
+            algorithmLabel.Enabled = false;
+
+            foreach (var v in controls)
+            {
+                v.Enabled = false;
+            }
+
+            generation.Text = "...";
+            generation.Enabled = false;
+
+            showGates.Enabled = false;
+            showMarkers.Enabled = false;
+            showSolution.Enabled = false;
+        }
+
+        private async Task Generate()
+        {
             switch (mazeShape)
             {
                 case EMazeShape.Rectangular:
@@ -128,6 +157,26 @@ namespace Maze.TApplication
             }
 
             await GenerateMazeSolutionAsync();
+        }
+
+        private void PostProcess()
+        {
+            shape.Enabled = true;
+            shapeLabel.Enabled = true;
+            algorithm.Enabled = true;
+            algorithmLabel.Enabled = true;
+
+            foreach (var v in controls)
+            {
+                v.Enabled = true;
+            }
+
+            generation.Text = "Generate";
+            generation.Enabled = true;
+
+            showGates.Enabled = true;
+            showMarkers.Enabled = showGates.Checked;
+            showSolution.Enabled = true;
 
             canvas.Refresh();
         }
