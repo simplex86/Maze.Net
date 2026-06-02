@@ -21,6 +21,14 @@ public class TriangularMazeGenerator
     - Upward 朝上
     - Downward 朝下
 - **algorithm** 生成算法
+    - DFS
+    - BFS
+    - Prim
+    - Kruskal
+    - Wilson
+    - Eller
+    - Aldous-Broder
+    - Hunt and Kill
 
 ## 示例
 

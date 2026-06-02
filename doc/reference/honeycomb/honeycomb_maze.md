@@ -16,6 +16,14 @@ public class HoneycombMazeGenerator
 
 - **size** 边长
 - **algorithm** 生成算法
+    - DFS
+    - BFS
+    - Prim
+    - Kruskal
+    - Wilson
+    - Eller
+    - Aldous-Broder
+    - Hunt and Kill
 
 ## 示例
 

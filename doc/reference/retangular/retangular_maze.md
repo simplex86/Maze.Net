@@ -19,6 +19,14 @@ public class RectangularMazeGenerator
 - **width**  宽度
 - **height** 高度
 - **algorithm** 生成算法
+    - DFS
+    - BFS
+    - Prim
+    - Kruskal
+    - Wilson
+    - Eller
+    - Aldous-Broder
+    - Hunt and Kill
 
 ## 示例
 

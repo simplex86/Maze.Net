@@ -21,6 +21,14 @@ public class CircularMazeGenerator
 - **rings** 环数
 - **sectors** 最大分割数
 - **algorithm** 生成算法
+    - DFS
+    - BFS
+    - Prim
+    - Kruskal
+    - Wilson
+    - Eller
+    - Aldous-Broder
+    - Hunt and Kill
 - **strategy** 分割策略
     - Arc 按弧长分割
     - Area 按面积分割
