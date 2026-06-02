@@ -137,7 +137,7 @@ namespace Maze.TApplication
             algorithm.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             algorithm.DropDownStyle = ComboBoxStyle.DropDownList;
             algorithm.FormattingEnabled = true;
-            algorithm.Items.AddRange(new object[] { "DFS", "BFS", "Prim", "Kruskal", "Wilson", "Eller", "AldousBroder" });
+            algorithm.Items.AddRange(new object[] { "DFS", "BFS", "Prim", "Kruskal", "Wilson", "Eller", "AldousBroder", "HuntAndKill" });
             algorithm.Location = new Point(94, 37);
             algorithm.Margin = new Padding(2);
             algorithm.Name = "algorithm";
@@ -247,7 +247,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v1.0.100";
+            Text = "Maze Generator v1.1.105";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);

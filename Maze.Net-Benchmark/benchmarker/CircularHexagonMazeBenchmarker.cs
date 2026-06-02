@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using BenchmarkDotNet.Attributes;
 using SimplexLab.Maze;
 
@@ -55,6 +55,12 @@ namespace Maze.TBenchmark
         public void AldousBroder()
         {
             generator.Generate(15, EMazeAlgorithm.AldousBroder);
+        }
+
+        [Benchmark]
+        public void HuntAndKill()
+        {
+            generator.Generate(15, EMazeAlgorithm.HuntAndKill);
         }
     }
 }

@@ -36,6 +36,10 @@ namespace SimplexLab.Maze
         /// 
         /// </summary>
         AldousBroder = 7,
+        /// <summary>
+        /// 
+        /// </summary>
+        HuntAndKill = 8,
     }
 
     /// <summary>

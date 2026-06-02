@@ -31,6 +31,8 @@ namespace SimplexLab.Maze
                     return new MazeEllerAlgorithm(random);
                 case EMazeAlgorithm.AldousBroder:
                     return new MazeAldousBroderAlgorithm(random);
+                case EMazeAlgorithm.HuntAndKill:
+                    return new MazeHuntAndKillAlgorithm(random);
                 default:
                     break;
             }
