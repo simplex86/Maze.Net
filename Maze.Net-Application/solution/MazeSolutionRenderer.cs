@@ -64,19 +64,13 @@ namespace Maze.TApplication
 
             var points = new List<PointF>();
 
-            AddGatePoint(gate.Entrance, bounds, offsetx, offsety, flipy, points);
-
-            for (int i = 0; i < solution.Count - 1; i++)
+            foreach (var vertex in solution)
             {
-                if (ComputeBorderMidpoint(solution[i], solution[i + 1], out var mid))
-                {
-                    points.Add(new PointF(
-                        transform.TransformX(mid.X, bounds, offsetx),
-                        transform.TransformY(mid.Y, bounds, offsety, flipy)));
-                }
+                var centroid = ComputeCellCentroid(vertex);
+                points.Add(new PointF(
+                    transform.TransformX(centroid.X, bounds, offsetx),
+                    transform.TransformY(centroid.Y, bounds, offsety, flipy)));
             }
-
-            AddGatePoint(gate.Exit, bounds, offsetx, offsety, flipy, points);
 
             if (points.Count < 2) return;
 
@@ -87,62 +81,36 @@ namespace Maze.TApplication
             }
         }
 
-        private void AddGatePoint(int gateVertex, CoordinateBounds bounds, float offsetx, float offsety, bool flipy, List<PointF> points)
+        /// <summary>
+        /// 计算格子的质心（所有边框端点的平均值）
+        /// </summary>
+        private Vertex ComputeCellCentroid(int vertex)
         {
-            if (gateVertex < 0) return;
+            double sumX = 0, sumY = 0;
+            int count = 0;
 
-            foreach (var edge in field.Graph[gateVertex])
+            foreach (var edge in field.Graph[vertex])
             {
-                if (edge.Neighbor != -1) continue;
-
-                if (ComputeBorderMidpoint(edge.Border, out var mid))
+                if (edge.Border is LineBorder line)
                 {
-                    points.Add(new PointF(
-                        transform.TransformX(mid.X, bounds, offsetx),
-                        transform.TransformY(mid.Y, bounds, offsety, flipy)));
-                    return;
+                    sumX += line.X1 + line.X2;
+                    sumY += line.Y1 + line.Y2;
+                    count += 2;
+                }
+                else if (edge.Border is ArcBorder arc)
+                {
+                    var startX = arc.CenterX + arc.Radius * Math.Cos(arc.StartAngle);
+                    var startY = arc.CenterY + arc.Radius * Math.Sin(arc.StartAngle);
+                    var endAngle = arc.StartAngle + arc.SweepAngle;
+                    var endX = arc.CenterX + arc.Radius * Math.Cos(endAngle);
+                    var endY = arc.CenterY + arc.Radius * Math.Sin(endAngle);
+                    sumX += startX + endX;
+                    sumY += startY + endY;
+                    count += 2;
                 }
             }
-        }
 
-        private bool ComputeBorderMidpoint(int from, int to, out Vertex mid)
-        {
-            foreach (var edge in field.Graph[from])
-            {
-                if (edge.Neighbor == to && edge.IsOpen)
-                {
-                    return ComputeBorderMidpoint(edge.Border, out mid);
-                }
-            }
-
-            mid = new Vertex(0, 0);
-            return false;
-        }
-
-        private bool ComputeBorderMidpoint(IMazeBorder? border, out Vertex mid)
-        {
-            if (border == null)
-            {
-                mid = new Vertex(0, 0);
-                return false;
-            }
-
-            if (border is LineBorder line)
-            {
-                mid = new Vertex((line.X1 + line.X2) / 2, (line.Y1 + line.Y2) / 2);
-                return true;
-            }
-
-            if (border is ArcBorder arc)
-            {
-                var midAngle = arc.StartAngle + arc.SweepAngle / 2;
-                mid = new Vertex(arc.CenterX + arc.Radius * Math.Cos(midAngle),
-                                 arc.CenterY + arc.Radius * Math.Sin(midAngle));
-                return true;
-            }
-
-            mid = new Vertex(0, 0);
-            return false;
+            return count > 0 ? new Vertex(sumX / count, sumY / count) : new Vertex(0, 0);
         }
     }
 }
