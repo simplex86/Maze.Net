@@ -29,5 +29,9 @@
         /// 圆环-三角格
         /// </summary>
         CircularHexagon,
+        /// <summary>
+        /// 阶梯形
+        /// </summary>
+        Stairway,
     }
 }

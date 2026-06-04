@@ -6,7 +6,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 三角形朝向
     /// </summary>
-    public enum TriangleOrientation
+    public enum ETriangleOrientation
     {
         /// <summary>
         /// 朝上
@@ -32,7 +32,7 @@ namespace SimplexLab.Maze
         }
 
         public TriangularMazeField Generate(int order,
-                                            TriangleOrientation orientation = TriangleOrientation.Upward,
+                                            ETriangleOrientation orientation = ETriangleOrientation.Upward,
                                             EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
             var field = new TriangularMazeField(order, orientation);
@@ -40,7 +40,7 @@ namespace SimplexLab.Maze
         }
 
         public async Task<TriangularMazeField> GenerateAsync(int order,
-                                                             TriangleOrientation orientation = TriangleOrientation.Upward,
+                                                             ETriangleOrientation orientation = ETriangleOrientation.Upward,
                                                              EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
             return await Task.Run(() => Generate(order, orientation, algorithm));

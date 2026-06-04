@@ -46,12 +46,6 @@ namespace Maze.TBenchmark
         }
 
         [Benchmark]
-        public void Eller()
-        {
-            generator.Generate(15, EMazeAlgorithm.Eller);
-        }
-
-        [Benchmark]
         public void AldousBroder()
         {
             generator.Generate(15, EMazeAlgorithm.AldousBroder);

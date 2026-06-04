@@ -13,11 +13,11 @@ namespace SimplexLab.Maze
     {
         public int Order { get; }
 
-        public TriangleOrientation Orientation { get; }
+        public ETriangleOrientation Orientation { get; }
 
         private static readonly double Sqrt3Over2 = Math.Sqrt(3) / 2;
 
-        internal TriangularMazeField(int order, TriangleOrientation orientation = TriangleOrientation.Upward)
+        internal TriangularMazeField(int order, ETriangleOrientation orientation = ETriangleOrientation.Upward)
         {
             Shape = EMazeShape.Triangular;
             Order = Math.Max(1, order);
@@ -106,7 +106,7 @@ namespace SimplexLab.Maze
 
         private LineBorder MakeLineBorder(double x1, double y1, double x2, double y2)
         {
-            if (Orientation == TriangleOrientation.Downward)
+            if (Orientation == ETriangleOrientation.Downward)
             {
                 var maxY = Order * Sqrt3Over2;
                 return new LineBorder(x1, maxY - y1, x2, maxY - y2);

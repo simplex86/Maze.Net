@@ -5,56 +5,56 @@ using SimplexLab.Maze;
 namespace Maze.TBenchmark
 {
     [MemoryDiagnoser]
-    public class CircularHexagonMazeBenchmarker
+    public class StairwayMazeBenchmarker
     {
-        private CircularHexagonMazeGenerator generator = null;
+        private StairwayMazeGenerator generator = null;
 
-        public CircularHexagonMazeBenchmarker()
+        public StairwayMazeBenchmarker()
         {
             var random = Common.SharedRandom;
-            generator = new CircularHexagonMazeGenerator(random);
+            generator = new StairwayMazeGenerator(random);
         }
 
         [Benchmark]
         public void DFS()
         {
-            generator.Generate(15, EMazeAlgorithm.DFS);
+            generator.Generate(20, EMazeAlgorithm.DFS);
         }
 
         [Benchmark]
         public void BFS()
         {
-            generator.Generate(15, EMazeAlgorithm.BFS);
+            generator.Generate(20, EMazeAlgorithm.BFS);
         }
 
         [Benchmark]
         public void Prim()
         {
-            generator.Generate(15, EMazeAlgorithm.Prim);
+            generator.Generate(20, EMazeAlgorithm.Prim);
         }
 
         [Benchmark]
         public void Kruskal()
         {
-            generator.Generate(15, EMazeAlgorithm.Kruskal);
+            generator.Generate(20, EMazeAlgorithm.Kruskal);
         }
 
         [Benchmark]
         public void Wilson()
         {
-            generator.Generate(15, EMazeAlgorithm.Wilson);
+            generator.Generate(20, EMazeAlgorithm.Wilson);
         }
 
         [Benchmark]
         public void AldousBroder()
         {
-            generator.Generate(15, EMazeAlgorithm.AldousBroder);
+            generator.Generate(20, EMazeAlgorithm.AldousBroder);
         }
 
         [Benchmark]
         public void HuntAndKill()
         {
-            generator.Generate(15, EMazeAlgorithm.HuntAndKill);
+            generator.Generate(20, EMazeAlgorithm.HuntAndKill);
         }
     }
 }

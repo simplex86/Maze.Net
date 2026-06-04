@@ -30,6 +30,7 @@ namespace Maze.TApplication
             controls.Add(triangularMazeControl);
             controls.Add(hexagonalMazeControl);
             controls.Add(circularHexagonMazeControl);
+            controls.Add(stairwayMazeControl);
 
             shape.SelectedIndex = (int)mazeShape;
             algorithm.SelectedIndex = (int)EMazeAlgorithm.Kruskal - 1;
@@ -47,6 +48,7 @@ namespace Maze.TApplication
                     case EMazeShape.Triangular: return triangularMazeControl.Thickness;
                     case EMazeShape.Hexagonal: return hexagonalMazeControl.Thickness;
                     case EMazeShape.CircularHexagon: return circularHexagonMazeControl.Thickness;
+                    case EMazeShape.Stairway: return stairwayMazeControl.Thickness;
                     default: break;
                 }
 
@@ -65,12 +67,16 @@ namespace Maze.TApplication
                 control.Visible = false;
             }
 
-            var location = algorithmLabel.Location;
-            location.X -= 1;
-            location.Y += 26;
+            var index = (int)mazeShape;
+            if (index < controls.Count)
+            {
+                var location = algorithmLabel.Location;
+                location.X -= 1;
+                location.Y += 26;
 
-            controls[(int)mazeShape].Visible = true;
-            controls[(int)mazeShape].Location = location;
+                controls[index].Visible = true;
+                controls[index].Location = location;
+            }
         }
 
         private void OnGatesChangedHandler(object sender, EventArgs e)
@@ -152,6 +158,10 @@ namespace Maze.TApplication
                     await GenerateCircularHexagonMazeAsync();
                     await GenerateCircularHexagonGateAsync();
                     break;
+                case EMazeShape.Stairway:
+                    await GenerateStairwayMazeAsync();
+                    await GenerateStairwayGateAsync();
+                    break;
                 default:
                     break;
             }
@@ -227,6 +237,9 @@ namespace Maze.TApplication
                         break;
                     case EMazeShape.CircularHexagon:
                         DrawCircularHexagonGate(grap);
+                        break;
+                    case EMazeShape.Stairway:
+                        DrawStairwayGate(grap);
                         break;
                     default:
                         break;
@@ -471,6 +484,42 @@ namespace Maze.TApplication
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(circularHexagonMazeControl.Thickness)
                         .SetField(mazeField as CircularHexagonMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
+            }
+        }
+
+        #endregion
+
+        #region Stairway
+
+        private async Task GenerateStairwayMazeAsync()
+        {
+            var length = stairwayMazeControl.Length;
+            var thickness = stairwayMazeControl.Thickness;
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
+
+            if (length <= 0) length = Math.Min(canvas.Width, canvas.Height) / thickness;
+            length = Math.Max(length, 3);
+
+            var genrator = new StairwayMazeGenerator();
+            mazeField = await genrator.GenerateAsync(length, algm);
+        }
+
+        private async Task GenerateStairwayGateAsync()
+        {
+            var generator = new StairwayMazeGateGenerator();
+            mazeGate = await generator.GenerateAsync(mazeField as StairwayMazeField);
+        }
+
+        private void DrawStairwayGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new StairwayMazeGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(stairwayMazeControl.Thickness)
+                        .SetField(mazeField as StairwayMazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }

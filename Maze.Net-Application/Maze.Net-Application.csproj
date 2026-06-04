@@ -24,6 +24,9 @@
     <Compile Update="maze\control\HexagonalMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="maze\control\StairwayMazeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="maze\control\TriangularMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

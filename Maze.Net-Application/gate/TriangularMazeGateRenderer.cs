@@ -91,7 +91,7 @@ namespace Maze.TApplication
                 p3 = new Vertex(bX, bY);
             }
 
-            if (field.Orientation == TriangleOrientation.Downward)
+            if (field.Orientation == ETriangleOrientation.Downward)
             {
                 var maxY = field.Order * Sqrt3Over2;
                 p1 = new Vertex(p1.X, maxY - p1.Y);

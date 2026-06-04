@@ -32,6 +32,7 @@ namespace Maze.TApplication
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            stairwayMazeControl = new StairwayMazeControl();
             circularHexagonMazeControl = new CircularHexagonControl();
             hexagonalMazeControl = new HexagonalMazeControl();
             triangularMazeControl = new TriangularMazeControl();
@@ -64,6 +65,7 @@ namespace Maze.TApplication
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(stairwayMazeControl);
             splitContainer1.Panel1.Controls.Add(circularHexagonMazeControl);
             splitContainer1.Panel1.Controls.Add(hexagonalMazeControl);
             splitContainer1.Panel1.Controls.Add(triangularMazeControl);
@@ -86,6 +88,13 @@ namespace Maze.TApplication
             splitContainer1.SplitterDistance = 291;
             splitContainer1.TabIndex = 0;
             // 
+            // stairwayMazeControl
+            //
+            stairwayMazeControl.Location = new Point(6, 510);
+            stairwayMazeControl.Name = "stairwayMazeControl";
+            stairwayMazeControl.Size = new Size(284, 82);
+            stairwayMazeControl.TabIndex = 30;
+            // 
             // circularHexagonMazeControl
             // 
             circularHexagonMazeControl.Location = new Point(6, 457);
@@ -102,9 +111,8 @@ namespace Maze.TApplication
             // 
             // triangularMazeControl
             // 
-            triangularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            triangularMazeControl.Location = new Point(6, 308);
-            triangularMazeControl.Name = "triangularMazeControl";
+            triangularMazeControl.Location = new Point(6, 320);
+            triangularMazeControl.Name = "hexagonalMazeControl";
             triangularMazeControl.Size = new Size(284, 82);
             triangularMazeControl.TabIndex = 27;
             // 
@@ -160,7 +168,7 @@ namespace Maze.TApplication
             shape.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             shape.DropDownStyle = ComboBoxStyle.DropDownList;
             shape.FormattingEnabled = true;
-            shape.Items.AddRange(new object[] { "Rectangular", "Circular", "Honeycomb", "Triangular", "Hexagonal", "CircularHexagon" });
+            shape.Items.AddRange(new object[] { "Rectangular", "Circular", "Honeycomb", "Triangular", "Hexagonal", "CircularHexagon", "Stairway" });
             shape.Location = new Point(94, 9);
             shape.Name = "shape";
             shape.Size = new Size(196, 25);
@@ -247,7 +255,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v1.1.108";
+            Text = "Maze Generator v1.2.112";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -273,6 +281,7 @@ namespace Maze.TApplication
         private TriangularMazeControl triangularMazeControl;
         private HexagonalMazeControl hexagonalMazeControl;
         private CircularHexagonControl circularHexagonMazeControl;
+        private StairwayMazeControl stairwayMazeControl;
         private CheckBox showGates;
         private CheckBox showMarkers;
         private CheckBox showSolution;
