@@ -16,13 +16,13 @@ namespace SimplexLab.Maze
         
         }
 
-        public HoneycombMazeField Generate(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
+        public HoneycombMazeField Generate(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
             var field = new HoneycombMazeField(size);
             return Generate(field, algorithm);
         }
 
-        public async Task<HoneycombMazeField> GenerateAsync(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
+        public async Task<HoneycombMazeField> GenerateAsync(int size, EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
             return await Task.Run(() => Generate(size, algorithm));
         }

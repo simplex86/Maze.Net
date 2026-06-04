@@ -16,13 +16,13 @@ namespace SimplexLab.Maze
 
         }
 
-        public RectangularMazeField Generate(int width, int height, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
+        public RectangularMazeField Generate(int width, int height, EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
             var field = new RectangularMazeField(width, height);
             return Generate(field, algorithm);
         }
 
-        public async Task<RectangularMazeField> GenerateAsync(int width, int height, EMazeAlgorithm algorithm = EMazeAlgorithm.Prim)
+        public async Task<RectangularMazeField> GenerateAsync(int width, int height, EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
             return await Task.Run(() => Generate(width, height, algorithm));
         }

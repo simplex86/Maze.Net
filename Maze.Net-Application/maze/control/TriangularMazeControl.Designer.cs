@@ -53,7 +53,7 @@
             // 
             thickness.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             thickness.Location = new System.Drawing.Point(90, 53);
-            thickness.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            thickness.Margin = new System.Windows.Forms.Padding(2);
             thickness.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
             thickness.Minimum = new decimal(new int[] { 15, 0, 0, 0 });
             thickness.Name = "thickness";
@@ -91,10 +91,11 @@
             // orientation
             // 
             orientation.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            orientation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             orientation.FormattingEnabled = true;
             orientation.Items.AddRange(new object[] { "Upward", "Downward" });
             orientation.Location = new System.Drawing.Point(89, 26);
-            orientation.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            orientation.Margin = new System.Windows.Forms.Padding(2);
             orientation.Name = "orientation";
             orientation.Size = new System.Drawing.Size(169, 25);
             orientation.TabIndex = 15;

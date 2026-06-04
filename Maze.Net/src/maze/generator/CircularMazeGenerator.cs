@@ -24,7 +24,7 @@ namespace SimplexLab.Maze
 
         public CircularMazeField Generate(int rings,
                                           int sectors,
-                                          EMazeAlgorithm algorithm = EMazeAlgorithm.DFS,
+                                          EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal,
                                           ESectorStrategy strategy = ESectorStrategy.Arc)
         {
             var field = new CircularMazeField(rings, sectors, strategy);
@@ -33,7 +33,7 @@ namespace SimplexLab.Maze
 
         public async Task<CircularMazeField> GenerateAsync(int rings,
                                                            int sectors,
-                                                           EMazeAlgorithm algorithm = EMazeAlgorithm.DFS,
+                                                           EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal,
                                                            ESectorStrategy strategy = ESectorStrategy.Arc)
         {
             return await Task.Run(() => Generate(rings, sectors, algorithm, strategy));

@@ -19,6 +19,9 @@ namespace SimplexLab.Maze
 
         protected TField Generate(TField field, EMazeAlgorithm algorithm)
         {
+            if (!IsAlgorithmSupported(algorithm))
+                algorithm = EMazeAlgorithm.DFS;
+
             if (provider == null || provider.Algorithm != algorithm)
             {
                 provider = Utils.CreateAlgorithm(algorithm, random);
@@ -29,5 +32,10 @@ namespace SimplexLab.Maze
 
             return field;
         }
+
+        /// <summary>
+        /// 判断当前场地是否支持指定的迷宫生成算法（默认支持所有算法）
+        /// </summary>
+        protected virtual bool IsAlgorithmSupported(EMazeAlgorithm algorithm) => true;
     }
 }
