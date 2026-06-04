@@ -21,9 +21,12 @@ public class CircularHexagonMazeGenerator
     - Prim
     - Kruskal
     - Wilson
-    - Eller
+    - Eller（不支持，会退化为 DFS）
     - Aldous-Broder
     - Hunt and Kill
+
+> [!WARNING]  
+> Eller 算法是基于行扫描的，不支持圆三角格。当选择用 Eller 算法生成圆三角格迷宫时，会退化为 DFS 算法。
 
 ## 示例
 

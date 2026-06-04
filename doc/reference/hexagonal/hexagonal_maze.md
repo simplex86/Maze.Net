@@ -21,9 +21,12 @@ public class HexagonalMazeGenerator
     - Prim
     - Kruskal
     - Wilson
-    - Eller
+    - Eller（不支持，会退化为 DFS）
     - Aldous-Broder
     - Hunt and Kill
+
+> [!WARNING]  
+> Eller 算法是基于行扫描的，不支持六边形。当选择用 Eller 算法生成六边形迷宫时，会退化为 DFS 算法。
 
 ## 示例
 
