@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SimplexLab.Maze
 {
@@ -24,11 +25,11 @@ namespace SimplexLab.Maze
 
             if (provider == null || provider.Algorithm != algorithm)
             {
-                provider = Utils.CreateAlgorithm(algorithm, random);
+                provider = MazeAlgorithmFactory.CreateAlgorithm(algorithm, random);
             }
 
             var spanningTree = provider.GenerateSpanningTree(field.VertexCount, field.Graph);
-            Utils.RemoveAdjacencyBorders(field.Graph, spanningTree);
+            RemoveAdjacencyBorders(field.Graph, spanningTree);
 
             return field;
         }
@@ -37,5 +38,31 @@ namespace SimplexLab.Maze
         /// 判断当前场地是否支持指定的迷宫生成算法（默认支持所有算法）
         /// </summary>
         protected virtual bool IsAlgorithmSupported(EMazeAlgorithm algorithm) => true;
+
+        /// <summary>
+        /// 根据生成树边集移除邻接表的边界
+        /// </summary>
+        private void RemoveAdjacencyBorders(List<List<Adjacency>> graph, List<SpanningTreeEdge> spanningTree)
+        {
+            foreach (var edge in spanningTree)
+            {
+                for (int i = 0; i < graph[edge.U].Count; i++)
+                {
+                    if (graph[edge.U][i].Neighbor == edge.V)
+                    {
+                        graph[edge.U][i].IsOpen = true;
+                        break;
+                    }
+                }
+                for (int i = 0; i < graph[edge.V].Count; i++)
+                {
+                    if (graph[edge.V][i].Neighbor == edge.U)
+                    {
+                        graph[edge.V][i].IsOpen = true;
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

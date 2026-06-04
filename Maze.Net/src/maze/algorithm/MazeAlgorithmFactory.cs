@@ -4,9 +4,9 @@ using System;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 工具类
+    /// 迷宫生成算法工厂类
     /// </summary>
-    internal static class Utils
+    internal static class MazeAlgorithmFactory
     {
         /// <summary>
         /// 创建算法提供者
@@ -38,44 +38,6 @@ namespace SimplexLab.Maze
             }
 
             return new MazeDfsAlgorithm(random);
-        }
-
-        /// <summary>
-        /// Fisher-Yates 洗牌算法
-        /// </summary>
-        public static void Shuffle<T>(this List<T> list, Random random)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = random.Next(i + 1);
-                (list[j], list[i]) = (list[i], list[j]);
-            }
-        }
-
-        /// <summary>
-        /// 根据生成树边集移除邻接表的边界
-        /// </summary>
-        public static void RemoveAdjacencyBorders(List<List<Adjacency>> graph, List<SpanningTreeEdge> spanningTree)
-        {
-            foreach (var edge in spanningTree)
-            {
-                for (int i = 0; i < graph[edge.U].Count; i++)
-                {
-                    if (graph[edge.U][i].Neighbor == edge.V)
-                    {
-                        graph[edge.U][i].IsOpen = true;
-                        break;
-                    }
-                }
-                for (int i = 0; i < graph[edge.V].Count; i++)
-                {
-                    if (graph[edge.V][i].Neighbor == edge.U)
-                    {
-                        graph[edge.V][i].IsOpen = true;
-                        break;
-                    }
-                }
-            }
         }
     }
 }
