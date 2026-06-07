@@ -89,7 +89,7 @@ namespace Maze.TApplication
             splitContainer1.TabIndex = 0;
             // 
             // stairwayMazeControl
-            //
+            // 
             stairwayMazeControl.Location = new Point(6, 510);
             stairwayMazeControl.Name = "stairwayMazeControl";
             stairwayMazeControl.Size = new Size(284, 82);
@@ -112,7 +112,7 @@ namespace Maze.TApplication
             // triangularMazeControl
             // 
             triangularMazeControl.Location = new Point(6, 320);
-            triangularMazeControl.Name = "hexagonalMazeControl";
+            triangularMazeControl.Name = "triangularMazeControl";
             triangularMazeControl.Size = new Size(284, 82);
             triangularMazeControl.TabIndex = 27;
             // 
@@ -255,7 +255,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v1.2.112";
+            Text = "Maze Generator v1.2.115";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);

@@ -316,13 +316,12 @@ namespace Maze.TApplication
             var sectors = circularMazeControl.Sectors;
             var thickness = circularMazeControl.Thickness;
             var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
-            var strategy = circularMazeControl.SectorStrategy;
 
             if (rings <= 0) rings = Math.Min(canvas.Width, canvas.Height) / (2 * thickness);
             rings = Math.Max(rings, 2);
 
             var genrator = new CircularMazeGenerator();
-            mazeField = await genrator.GenerateAsync(rings, sectors, algm, strategy);
+            mazeField = await genrator.GenerateAsync(rings, sectors, algm);
         }
 
         private async Task GenerateCircularGateAsync()

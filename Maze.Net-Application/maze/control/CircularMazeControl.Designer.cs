@@ -1,4 +1,4 @@
-﻿namespace Maze.TApplication
+namespace Maze.TApplication
 {
     partial class CircularMazeControl
     {
@@ -34,8 +34,6 @@
             rings = new System.Windows.Forms.NumericUpDown();
             label2 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
-            strategy = new System.Windows.Forms.ComboBox();
-            label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)thickness).BeginInit();
             ((System.ComponentModel.ISupportInitialize)sectors).BeginInit();
             ((System.ComponentModel.ISupportInitialize)rings).BeginInit();
@@ -43,7 +41,7 @@
             // 
             // label10
             // 
-            label10.Location = new System.Drawing.Point(0, 81);
+            label10.Location = new System.Drawing.Point(0, 59);
             label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label10.Name = "label10";
             label10.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -55,7 +53,7 @@
             // thickness
             // 
             thickness.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            thickness.Location = new System.Drawing.Point(89, 79);
+            thickness.Location = new System.Drawing.Point(89, 57);
             thickness.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             thickness.Minimum = new decimal(new int[] { 15, 0, 0, 0 });
             thickness.Name = "thickness";
@@ -100,35 +98,10 @@
             label1.TabIndex = 8;
             label1.Text = "Rings";
             // 
-            // strategy
-            // 
-            strategy.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            strategy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            strategy.FormattingEnabled = true;
-            strategy.Items.AddRange(new object[] { "Arc", "Area" });
-            strategy.Location = new System.Drawing.Point(89, 52);
-            strategy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            strategy.Name = "strategy";
-            strategy.Size = new System.Drawing.Size(169, 25);
-            strategy.TabIndex = 25;
-            // 
-            // label3
-            // 
-            label3.Location = new System.Drawing.Point(0, 55);
-            label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            label3.Name = "label3";
-            label3.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            label3.Size = new System.Drawing.Size(86, 17);
-            label3.TabIndex = 24;
-            label3.Text = "Strategy";
-            label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // CircularMazeControl
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            Controls.Add(strategy);
-            Controls.Add(label3);
             Controls.Add(label10);
             Controls.Add(thickness);
             Controls.Add(sectors);
@@ -136,7 +109,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "CircularMazeControl";
-            Size = new System.Drawing.Size(258, 107);
+            Size = new System.Drawing.Size(258, 85);
             ((System.ComponentModel.ISupportInitialize)thickness).EndInit();
             ((System.ComponentModel.ISupportInitialize)sectors).EndInit();
             ((System.ComponentModel.ISupportInitialize)rings).EndInit();
@@ -151,7 +124,5 @@
         private System.Windows.Forms.NumericUpDown rings;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox strategy;
-        private System.Windows.Forms.Label label3;
     }
 }

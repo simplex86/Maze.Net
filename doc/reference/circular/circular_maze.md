@@ -6,13 +6,11 @@ public class CircularMazeGenerator
     // 同步函数
     public CircularMazeField Generate(int rings, 
                                       int sectors, 
-                                      MazeAlgorithm algorithm = MazeAlgorithm.DFS, 
-                                      SectorStrategy strategy = SectorStrategy.Arc);
+                                      MazeAlgorithm algorithm = MazeAlgorithm.DFS);
     // 异步函数
     public async Task<CircularMazeField> GenerateAsync(int rings, 
                                                        int sectors, 
-                                                       MazeAlgorithm algorithm = MazeAlgorithm.DFS, 
-                                                       SectorStrategy strategy = SectorStrategy.Arc);
+                                                       MazeAlgorithm algorithm = MazeAlgorithm.DFS);
 }
 ```
 
@@ -29,9 +27,6 @@ public class CircularMazeGenerator
     - Eller
     - Aldous-Broder
     - Hunt and Kill
-- **strategy** 分割策略
-    - Arc 按弧长分割
-    - Area 按面积分割
 
 ## 示例
 

@@ -3,12 +3,6 @@ using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
-    public enum ESectorStrategy
-    {
-        Arc = 1,
-        Area = 2,
-    }
-
     public class CircularMazeGenerator : MazeGenerator<CircularMazeField>
     {
         public CircularMazeGenerator() 
@@ -24,19 +18,17 @@ namespace SimplexLab.Maze
 
         public CircularMazeField Generate(int rings,
                                           int sectors,
-                                          EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal,
-                                          ESectorStrategy strategy = ESectorStrategy.Arc)
+                                          EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
-            var field = new CircularMazeField(rings, sectors, strategy);
+            var field = new CircularMazeField(rings, sectors);
             return Generate(field, algorithm);
         }
 
         public async Task<CircularMazeField> GenerateAsync(int rings,
                                                            int sectors,
-                                                           EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal,
-                                                           ESectorStrategy strategy = ESectorStrategy.Arc)
+                                                           EMazeAlgorithm algorithm = EMazeAlgorithm.Kruskal)
         {
-            return await Task.Run(() => Generate(rings, sectors, algorithm, strategy));
+            return await Task.Run(() => Generate(rings, sectors, algorithm));
         }
     }
 }

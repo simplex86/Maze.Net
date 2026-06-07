@@ -16,16 +16,11 @@ namespace Maze.TApplication
         /// <summary>
         /// 
         /// </summary>
-        public ESectorStrategy SectorStrategy => (ESectorStrategy)(strategy.SelectedIndex + 1);
-        /// <summary>
-        /// 
-        /// </summary>
         public int Thickness => (int)thickness.Value;
 
         public CircularMazeControl()
         {
             InitializeComponent();
-            strategy.SelectedIndex = 0;
         }
     }
 }

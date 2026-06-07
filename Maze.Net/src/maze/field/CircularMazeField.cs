@@ -12,15 +12,13 @@ namespace SimplexLab.Maze
 
         public int Rings { get; }
         public int Sectors { get; }
-        public ESectorStrategy Strategy { get; }
 
-        internal CircularMazeField(int rings, int maxSectors, ESectorStrategy strategy)
+        internal CircularMazeField(int rings, int maxSectors)
         {
             Shape = EMazeShape.Circular;
 
             Rings = Math.Max(1, rings);
             Sectors = Math.Max(3, maxSectors);
-            Strategy = strategy;
 
             SectorsPerRing = new int[this.Rings];
 
@@ -28,27 +26,13 @@ namespace SimplexLab.Maze
             while (normalizedMaxSectors * 2 <= this.Sectors)
                 normalizedMaxSectors *= 2;
 
-            if (strategy == ESectorStrategy.Arc)
+            SectorsPerRing[0] = 3;
+            for (var r = 1; r < this.Rings; r++)
             {
-                SectorsPerRing[0] = 3;
-                for (var r = 1; r < this.Rings; r++)
-                {
-                    SectorsPerRing[r] = SectorsPerRing[r - 1];
-                    var arcLength = (2 * Math.PI * (r + 1)) / SectorsPerRing[r - 1];
-                    if (arcLength > 2.0 && SectorsPerRing[r] * 2 <= normalizedMaxSectors)
-                        SectorsPerRing[r] *= 2;
-                }
-            }
-            else
-            {
-                SectorsPerRing[0] = 3;
-                for (var r = 1; r < this.Rings; r++)
-                {
-                    SectorsPerRing[r] = SectorsPerRing[r - 1];
-                    var area = (Math.PI * (r + 1) * (r + 1)) / SectorsPerRing[r - 1];
-                    if (area > 2.0 && SectorsPerRing[r] * 2 <= normalizedMaxSectors)
-                        SectorsPerRing[r] *= 2;
-                }
+                SectorsPerRing[r] = SectorsPerRing[r - 1];
+                var arcLength = (2 * Math.PI * (r + 1)) / SectorsPerRing[r - 1];
+                if (arcLength > 2.0 && SectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                    SectorsPerRing[r] *= 2;
             }
 
             if (SectorsPerRing[this.Rings - 1] < normalizedMaxSectors)
