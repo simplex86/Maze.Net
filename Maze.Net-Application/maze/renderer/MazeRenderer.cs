@@ -119,7 +119,10 @@ namespace Maze.TApplication
                     if (edge.Neighbor != -1 && edge.Neighbor <= v)
                         continue;
 
-                    if (edge.Neighbor == -1 && (v == gate.Entrance || v == gate.Exit))
+                    if (edge.Neighbor == -1 && v == gate.Entrance && edge.Border == gate.EntranceBorder)
+                        continue;
+
+                    if (edge.Neighbor == -1 && v == gate.Exit && edge.Border == gate.ExitBorder)
                         continue;
 
                     if (!edge.IsOpen) 

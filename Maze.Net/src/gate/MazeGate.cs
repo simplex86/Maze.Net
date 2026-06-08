@@ -1,4 +1,4 @@
-﻿namespace SimplexLab.Maze
+namespace SimplexLab.Maze
 {
     /// <summary>
     /// 迷宫出入口
@@ -7,6 +7,16 @@
     {
         public int Entrance;
         public int Exit;
+
+        /// <summary>
+        /// 入口处打开的朝外墙壁的边框
+        /// </summary>
+        public IMazeBorder? EntranceBorder;
+
+        /// <summary>
+        /// 出口处打开的朝外墙壁的边框
+        /// </summary>
+        public IMazeBorder? ExitBorder;
 
         /// <summary>
         /// 无效索引
@@ -23,12 +33,16 @@
         {
             this.Entrance = entrance;
             this.Exit = exit;
+            this.EntranceBorder = null;
+            this.ExitBorder = null;
         }
 
         public void Reset()
         {
             Entrance = INVALID;
             Exit = INVALID;
+            EntranceBorder = null;
+            ExitBorder = null;
         }
     }
 }

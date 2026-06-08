@@ -25,7 +25,15 @@ namespace SimplexLab.Maze
             var exit = VertexIndex(field, exitSector, 0, field.Size - 1, col);
 
             return (random.Next(2) == 0) ? new MazeGate(exit, entrance)
-                                         : new MazeGate(entrance, exit);
+                                         {
+                                             EntranceBorder = PickOuterBorder(field, exit),
+                                             ExitBorder = PickOuterBorder(field, entrance)
+                                         }
+                                         : new MazeGate(entrance, exit)
+                                         {
+                                             EntranceBorder = PickOuterBorder(field, entrance),
+                                             ExitBorder = PickOuterBorder(field, exit)
+                                         };
         }
 
         private static int VertexIndex(CircularHexagonMazeField field, int sector, int updown, int row, int column)

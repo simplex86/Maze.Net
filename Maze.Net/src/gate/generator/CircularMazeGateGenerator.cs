@@ -24,7 +24,11 @@ namespace SimplexLab.Maze
             var entrance = VertexIndex(field, field.Rings - 1, entranceSector);
             var exit = VertexIndex(field, field.Rings - 1, exitSector);
 
-            return new MazeGate(entrance, exit);
+            return new MazeGate(entrance, exit)
+            {
+                EntranceBorder = PickOuterBorder(field, entrance),
+                ExitBorder = PickOuterBorder(field, exit)
+            };
         }
 
         private static int VertexIndex(CircularMazeField field, int ring, int sector)

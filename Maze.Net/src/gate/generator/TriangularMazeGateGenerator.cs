@@ -25,7 +25,11 @@ namespace SimplexLab.Maze
             var apex = VertexIndex(0, 0);
             var entrance = baseVertices[random.Next(baseVertices.Count)];
 
-            return new MazeGate(entrance, apex);
+            return new MazeGate(entrance, apex)
+            {
+                EntranceBorder = PickOuterBorder(field, entrance),
+                ExitBorder = PickOuterBorder(field, apex)
+            };
         }
 
         private static int VertexIndex(int row, int col)

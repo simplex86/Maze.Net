@@ -45,7 +45,11 @@ namespace SimplexLab.Maze
             var entrance = sides[entranceSide][random.Next(sides[entranceSide].Count)];
             var exit = sides[exitSide][random.Next(sides[exitSide].Count)];
 
-            return new MazeGate(entrance, exit);
+            return new MazeGate(entrance, exit)
+            {
+                EntranceBorder = PickOuterBorder(field, entrance),
+                ExitBorder = PickOuterBorder(field, exit)
+            };
         }
     }
 }

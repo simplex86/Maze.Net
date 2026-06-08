@@ -22,7 +22,11 @@ namespace SimplexLab.Maze
             // 出口：最顶端的格子
             var exit = field.VertexIndex(0, 0);
 
-            return new MazeGate(entrance, exit);
+            return new MazeGate(entrance, exit)
+            {
+                EntranceBorder = PickOuterBorder(field, entrance),
+                ExitBorder = PickOuterBorder(field, exit)
+            };
         }
     }
 }

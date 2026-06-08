@@ -36,7 +36,11 @@ namespace SimplexLab.Maze
             var entrance = entranceCandidates[random.Next(entranceCandidates.Count)];
             var exit = exitCandidates[random.Next(exitCandidates.Count)];
 
-            return new MazeGate(entrance, exit);
+            return new MazeGate(entrance, exit)
+            {
+                EntranceBorder = PickOuterBorder(field, entrance),
+                ExitBorder = PickOuterBorder(field, exit)
+            };
         }
 
         private static int VertexIndex(HexagonalMazeField field, int sector, int updown, int row, int column)

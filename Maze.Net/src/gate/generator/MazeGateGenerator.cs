@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
@@ -43,6 +44,20 @@ namespace SimplexLab.Maze
         {
             var gate = await Task.Run(() => Generate(field));
             return gate;
+        }
+
+        /// <summary>
+        /// 从指定顶点的朝外墙壁中随机选择一个边框
+        /// </summary>
+        protected IMazeBorder? PickOuterBorder(TField field, int vertex)
+        {
+            var candidates = new List<IMazeBorder>();
+            foreach (var edge in field.Graph[vertex])
+            {
+                if (edge.Neighbor == -1 && edge.Border != null)
+                    candidates.Add(edge.Border);
+            }
+            return candidates.Count > 0 ? candidates[random.Next(candidates.Count)] : null;
         }
     }
 }

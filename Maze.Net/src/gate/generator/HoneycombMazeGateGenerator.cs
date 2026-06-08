@@ -57,13 +57,21 @@ namespace SimplexLab.Maze
                 var exitCandidates = new List<int>(edgeVertices);
                 if (exitCandidates.Count > 1) exitCandidates.Remove(entrance);
                 var exit = exitCandidates[random.Next(exitCandidates.Count)];
-                return new MazeGate(entrance, exit);
+                return new MazeGate(entrance, exit)
+                {
+                    EntranceBorder = PickOuterBorder(field, entrance),
+                    ExitBorder = PickOuterBorder(field, exit)
+                };
             }
 
             var gateEntrance = sides[entranceSide][random.Next(sides[entranceSide].Count)];
             var gateExit = sides[exitSide][random.Next(sides[exitSide].Count)];
 
-            return new MazeGate(gateEntrance, gateExit);
+            return new MazeGate(gateEntrance, gateExit)
+            {
+                EntranceBorder = PickOuterBorder(field, gateEntrance),
+                ExitBorder = PickOuterBorder(field, gateExit)
+            };
         }
 
         private static List<int> FindEdgeVertices(HoneycombMazeField field)
