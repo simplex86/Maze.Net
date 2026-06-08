@@ -32,7 +32,7 @@ public class RectangularMazeGenerator
 
 ``` csharp
 var generator = new RectangularMazeGenerator();
-var field = generator.Generate(width, height, MazeAlgorithm.Kruskal);
+var field = generator.Generate(40, 33, MazeAlgorithm.Kruskal);
 ```
 
 ![](./images/maze.png)

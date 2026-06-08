@@ -34,7 +34,7 @@ public class TriangularMazeGenerator
 
 ``` csharp
 var generator = new TriangularMazeGenerator();
-var field = generator.Generate(length, orientation, MazeAlgorithm.Kruskal);
+var field = generator.Generate(50, TriangleOrientation.Upward, MazeAlgorithm.Kruskal);
 ```
 
 ![](./images/maze.png)

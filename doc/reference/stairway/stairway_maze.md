@@ -29,7 +29,7 @@ public class StairwayMazeGenerator
 
 ``` csharp
 var generator = new StairwayMazeGenerator();
-var field = generator.Generate(length, MazeAlgorithm.Kruskal);
+var field = generator.Generate(34, MazeAlgorithm.Kruskal);
 ```
 
 ![](./images/maze.png)

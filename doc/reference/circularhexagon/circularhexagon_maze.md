@@ -32,7 +32,7 @@ public class CircularHexagonMazeGenerator
 
 ``` csharp
 var generator = new CircularHexagonMazeGenerator();
-var field = generator.Generate(size, MazeAlgorithm.Kruskal);
+var field = generator.Generate(15, MazeAlgorithm.Kruskal);
 ```
 
 ![](./images/maze.png)

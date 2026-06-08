@@ -32,7 +32,7 @@ public class CircularMazeGenerator
 
 ``` csharp
 var generator = new CircularMazeGenerator();
-var field = generator.Generate(rings, sectors, MazeAlgorithm.Kruskal, SectorStrategy.Arc);
+var field = generator.Generate(17, 100, MazeAlgorithm.Kruskal, SectorStrategy.Arc);
 ```
 
 ![](./images/maze.png)

@@ -29,7 +29,7 @@ public class HoneycombMazeGenerator
 
 ``` csharp
 var generator = new HoneycombMazeGenerator();
-generator.Generate(length, MazeAlgorithm.Kruskal);
+generator.Generate(11, MazeAlgorithm.Kruskal);
 ```
 
 ![](./images/maze.png)
