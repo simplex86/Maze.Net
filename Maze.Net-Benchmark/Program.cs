@@ -9,3 +9,4 @@ BenchmarkRunner.Run<HoneycombMazeBenchmarker>();
 BenchmarkRunner.Run<TriangularMazeBenchmarker>();
 BenchmarkRunner.Run<CircularHexagonMazeBenchmarker>();
 BenchmarkRunner.Run<HexagonalMazeBenchmarker>();
+BenchmarkRunner.Run<StairwayMazeBenchmarker>();
