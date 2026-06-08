@@ -16,6 +16,7 @@
 - [三角形迷宫生成器](./doc/reference/triangular/triangular_maze.md)
 - [六边形迷宫生成器](./doc/reference/hexagonal/hexagonal_maze.md)
 - [圆三角格迷宫生成器](./doc/reference/circularhexagon/circularhexagon_maze.md)
+- [阶梯形迷宫生成器](./doc/reference/stairway/stairway_maze.md)
 
 ![](./doc/images/maze.png)
 
@@ -48,6 +49,7 @@
 - [三角形迷宫出入口生成器](./doc/reference/triangular/triangular_gate.md)
 - [六边形迷宫出入口生成器](./doc/reference/hexagonal/hexagonal_gate.md)
 - [圆三角格迷宫出入口生成器](./doc/reference/circularhexagon/circularhexagon_gate.md)
+- [阶梯形迷宫出入口生成器](./doc/reference/stairway/stairway_gate.md)
 
 ![](./doc/images/gate.png)
 
@@ -61,6 +63,7 @@
 > | 三角形迷宫 | 不同边 |
 > | 六边形迷宫 | 六边形的对边 |
 > | 圆三角格迷宫 | 同直径的两端 |
+> | 阶梯形迷宫 | 入口在直角点，出口在顶点 |
 
 ## 解法生成器
 
