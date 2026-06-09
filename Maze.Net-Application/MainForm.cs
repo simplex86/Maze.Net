@@ -223,7 +223,7 @@ namespace Maze.TApplication
             {
                 var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
-                        .SetThickness(rectangularMazeControl.Thickness)
+                        .SetThickness(thickness)
                         .SetOffset(dx, dy)
                         .SetField(mazeField)
                         .SetGate(mazeGate)
