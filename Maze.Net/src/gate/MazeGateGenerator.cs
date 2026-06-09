@@ -35,7 +35,7 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="field">迷宫场地</param>
         /// <returns></returns>
-        public MazeGate Generate(IMazeField field)
+        public MazeGate Generate(MazeField field)
         {
             var borderVertices = CollectBorderVertices(field);
 
@@ -66,7 +66,7 @@ namespace SimplexLab.Maze
         /// 创建迷宫出入口（异步）
         /// </summary>
         /// <param name="field">迷宫场地</param>
-        public async Task<MazeGate> GenerateAsync(IMazeField field)
+        public async Task<MazeGate> GenerateAsync(MazeField field)
         {
             var gate = await Task.Run(() => Generate(field));
             return gate;
@@ -75,7 +75,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 收集所有边界顶点（至少有一面 Neighbor == -1 外墙的顶点）
         /// </summary>
-        private static List<int> CollectBorderVertices(IMazeField field)
+        private static List<int> CollectBorderVertices(MazeField field)
         {
             var borderVertices = new List<int>();
 
@@ -97,7 +97,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 从指定顶点做 BFS，在边界顶点中找到图论距离最远的一个
         /// </summary>
-        private static int FindFarthestBorderVertex(IMazeField field, int start, List<int> borderVertices)
+        private static int FindFarthestBorderVertex(MazeField field, int start, List<int> borderVertices)
         {
             var borderSet = new HashSet<int>(borderVertices);
             var distance = new int[field.VertexCount];
@@ -137,7 +137,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 从指定顶点的朝外墙壁中随机选择一个边框
         /// </summary>
-        private IMazeBorder? PickOuterBorder(IMazeField field, int vertex)
+        private IMazeBorder? PickOuterBorder(MazeField field, int vertex)
         {
             var candidates = new List<IMazeBorder>();
             foreach (var edge in field.Graph[vertex])

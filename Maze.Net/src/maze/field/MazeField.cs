@@ -4,39 +4,9 @@ using System.Collections.Generic;
 namespace SimplexLab.Maze
 {
     /// <summary>
-    /// 迷宫场地接口（邻接表方案）
-    /// </summary>
-    public interface IMazeField
-    {
-        /// <summary>
-        /// 迷宫的形状
-        /// </summary>
-        EMazeShape Shape { get; }
-        /// <summary>
-        /// 顶点总数
-        /// </summary>
-        int VertexCount { get; }
-
-        /// <summary>
-        /// 邻接表（图）
-        /// </summary>
-        List<List<Adjacency>> Graph { get; }
-
-        /// <summary>
-        /// 坐标范围，描述迷宫所有边界的几何包围盒
-        /// </summary>
-        CoordinateBounds Bounds { get; }
-
-        /// <summary>
-        /// Y轴是否需要翻转（true表示场地的Y轴朝上，渲染时需翻转为屏幕Y朝下）
-        /// </summary>
-        bool FlipY { get; }
-    }
-
-    /// <summary>
     /// 迷宫场地基类
     /// </summary>
-    public class MazeField : IMazeField
+    public class MazeField
     {
         /// <summary>
         /// 迷宫的形状
