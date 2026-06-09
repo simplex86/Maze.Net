@@ -53,11 +53,11 @@
             thickness.Location = new System.Drawing.Point(90, 28);
             thickness.Margin = new System.Windows.Forms.Padding(2);
             thickness.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
-            thickness.Minimum = new decimal(new int[] { 15, 0, 0, 0 });
+            thickness.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             thickness.Name = "thickness";
             thickness.Size = new System.Drawing.Size(168, 23);
             thickness.TabIndex = 13;
-            thickness.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            thickness.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
             // length
             // 

@@ -54,12 +54,12 @@ namespace Maze.TApplication
             // 
             thickness.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             thickness.Location = new System.Drawing.Point(89, 57);
-            thickness.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            thickness.Minimum = new decimal(new int[] { 15, 0, 0, 0 });
+            thickness.Margin = new System.Windows.Forms.Padding(2);
+            thickness.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
             thickness.Name = "thickness";
             thickness.Size = new System.Drawing.Size(168, 23);
             thickness.TabIndex = 13;
-            thickness.Value = new decimal(new int[] { 20, 0, 0, 0 });
+            thickness.Value = new decimal(new int[] { 30, 0, 0, 0 });
             // 
             // sectors
             // 

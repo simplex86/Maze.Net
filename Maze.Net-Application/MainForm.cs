@@ -31,6 +31,7 @@ namespace Maze.TApplication
             controls.Add(hexagonalMazeControl);
             controls.Add(circularHexagonMazeControl);
             controls.Add(stairwayMazeControl);
+            controls.Add(customizedMazeControl);
 
             shape.SelectedIndex = (int)mazeShape;
             algorithm.SelectedIndex = (int)EMazeAlgorithm.Kruskal - 1;
@@ -49,6 +50,7 @@ namespace Maze.TApplication
                     case EMazeShape.Hexagonal: return hexagonalMazeControl.Thickness;
                     case EMazeShape.CircularHexagon: return circularHexagonMazeControl.Thickness;
                     case EMazeShape.Stairway: return stairwayMazeControl.Thickness;
+                    case EMazeShape.Customized: return customizedMazeControl.Thickness;
                     default: break;
                 }
 
@@ -162,6 +164,10 @@ namespace Maze.TApplication
                     await GenerateStairwayMazeAsync();
                     await GenerateStairwayGateAsync();
                     break;
+                case EMazeShape.Customized:
+                    await GenerateCustomizedMazeAsync();
+                    await GenerateCustomizedGateAsync();
+                    break;
                 default:
                     break;
             }
@@ -241,6 +247,9 @@ namespace Maze.TApplication
                     case EMazeShape.Stairway:
                         DrawStairwayGate(grap);
                         break;
+                    case EMazeShape.Customized:
+                        DrawCustomizedGate(grap);
+                        break;
                     default:
                         break;
                 }
@@ -288,8 +297,11 @@ namespace Maze.TApplication
 
         private async Task GenerateRectangularGateAsync()
         {
-            var generator = new RectangularMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as RectangularMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawRectangularGate(Graphics grap)
@@ -326,8 +338,11 @@ namespace Maze.TApplication
 
         private async Task GenerateCircularGateAsync()
         {
-            var generator = new CircularMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as CircularMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawCircularGate(Graphics grap)
@@ -362,8 +377,11 @@ namespace Maze.TApplication
 
         private async Task GenerateHoneycombGateAsync()
         {
-            var generator = new HoneycombMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as HoneycombMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawHoneycombGate(Graphics grap)
@@ -399,8 +417,11 @@ namespace Maze.TApplication
 
         private async Task GenerateTriangularGateAsync()
         {
-            var generator = new TriangularMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as TriangularMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawTriangularGate(Graphics grap)
@@ -435,8 +456,11 @@ namespace Maze.TApplication
 
         private async Task GenerateHexagonalGateAsync()
         {
-            var generator = new HexagonalMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as HexagonalMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawHexagonalGate(Graphics grap)
@@ -471,8 +495,11 @@ namespace Maze.TApplication
 
         private async Task GenerateCircularHexagonGateAsync()
         {
-            var generator = new CircularHexagonMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as CircularHexagonMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawCircularHexagonGate(Graphics grap)
@@ -507,8 +534,11 @@ namespace Maze.TApplication
 
         private async Task GenerateStairwayGateAsync()
         {
-            var generator = new StairwayMazeGateGenerator();
-            mazeGate = await generator.GenerateAsync(mazeField as StairwayMazeField);
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
         }
 
         private void DrawStairwayGate(Graphics grap)
@@ -519,6 +549,47 @@ namespace Maze.TApplication
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(stairwayMazeControl.Thickness)
                         .SetField(mazeField as StairwayMazeField)
+                        .SetGate(mazeGate)
+                        .Draw(grap);
+            }
+        }
+
+        #endregion
+
+        #region Customized
+
+        private async Task GenerateCustomizedMazeAsync()
+        {
+            if (string.IsNullOrEmpty(customizedMazeControl.FileName))
+            {
+                MessageBox.Show("The Mask File Can Not Be Empty!");
+                return;
+            }
+
+            var mask = CustomizedMazeMaskLoader.Load(customizedMazeControl.FileName);
+            var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
+
+            var genrator = new CustomizedMazeGenerator();
+            mazeField = await genrator.GenerateAsync(mask, algm);
+        }
+
+        private async Task GenerateCustomizedGateAsync()
+        {
+            if (mazeField != null)
+            {
+                var generator = new MazeGateGenerator();
+                mazeGate = await generator.GenerateAsync(mazeField);
+            }
+        }
+
+        private void DrawCustomizedGate(Graphics grap)
+        {
+            if (mazeField != null)
+            {
+                var renderer = new CustomizedMazeGateRenderer();
+                renderer.SetSize(canvas.Width, canvas.Height)
+                        .SetThickness(stairwayMazeControl.Thickness)
+                        .SetField(mazeField as CustomizedMazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }

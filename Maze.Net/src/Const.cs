@@ -33,5 +33,9 @@
         /// 阶梯形
         /// </summary>
         Stairway,
+        /// <summary>
+        /// 自定义
+        /// </summary>
+        Customized,
     }
 }
