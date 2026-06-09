@@ -43,18 +43,18 @@ namespace Maze.TApplication
             {
                 switch (mazeShape)
                 {
-                    case EMazeShape.Rectangular: return rectangularMazeControl.Thickness;
-                    case EMazeShape.Circular: return circularMazeControl.Thickness;
-                    case EMazeShape.Honeycomb: return honeycombMazeControl.Thickness;
-                    case EMazeShape.Triangular: return triangularMazeControl.Thickness;
-                    case EMazeShape.Hexagonal: return hexagonalMazeControl.Thickness;
+                    case EMazeShape.Rectangular:     return rectangularMazeControl.Thickness;
+                    case EMazeShape.Circular:        return circularMazeControl.Thickness;
+                    case EMazeShape.Honeycomb:       return honeycombMazeControl.Thickness;
+                    case EMazeShape.Triangular:      return triangularMazeControl.Thickness;
+                    case EMazeShape.Hexagonal:       return hexagonalMazeControl.Thickness;
                     case EMazeShape.CircularHexagon: return circularHexagonMazeControl.Thickness;
-                    case EMazeShape.Stairway: return stairwayMazeControl.Thickness;
-                    case EMazeShape.Customized: return customizedMazeControl.Thickness;
+                    case EMazeShape.Stairway:        return stairwayMazeControl.Thickness;
+                    case EMazeShape.Customized:      return customizedMazeControl.Thickness;
                     default: break;
                 }
 
-                return 1;
+                return 3;
             }
         }
 
@@ -70,15 +70,7 @@ namespace Maze.TApplication
             }
 
             var index = (int)mazeShape;
-            if (index < controls.Count)
-            {
-                var location = algorithmLabel.Location;
-                location.X -= 1;
-                location.Y += 26;
-
-                controls[index].Visible = true;
-                controls[index].Location = location;
-            }
+            if (index < controls.Count) controls[index].Visible = true;
         }
 
         private void OnGatesChangedHandler(object sender, EventArgs e)
@@ -562,7 +554,7 @@ namespace Maze.TApplication
         {
             if (string.IsNullOrEmpty(customizedMazeControl.FileName))
             {
-                MessageBox.Show("The Mask File Can Not Be Empty!");
+                MessageBox.Show("The Mask Path Can Not Be Empty!", "Error");
                 return;
             }
 
