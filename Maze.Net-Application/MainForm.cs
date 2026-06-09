@@ -581,7 +581,7 @@ namespace Maze.TApplication
             {
                 var renderer = new CustomizedMazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
-                        .SetThickness(stairwayMazeControl.Thickness)
+                        .SetThickness(customizedMazeControl.Thickness)
                         .SetField(mazeField as CustomizedMazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
