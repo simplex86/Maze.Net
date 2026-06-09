@@ -38,4 +38,19 @@
         /// </summary>
         Customized,
     }
+
+    /// <summary>
+    /// 三角形朝向
+    /// </summary>
+    public enum ETriangleOrientation
+    {
+        /// <summary>
+        /// 朝上
+        /// </summary>
+        Upward = 1,
+        /// <summary>
+        /// 朝下
+        /// </summary>
+        Downward = 2,
+    }
 }

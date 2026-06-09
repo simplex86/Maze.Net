@@ -1,27 +1,43 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimplexLab.Maze
 {
-    public abstract class MazeGenerator<TField> where TField : IMazeField
+    /// <summary>
+    /// 
+    /// </summary>
+    public class MazeGenerator
     {
         private Random random = null;
         private IMazeAlgorithm provider = null;
 
-        protected MazeGenerator()
+        /// <summary>
+        /// 
+        /// </summary>
+        public MazeGenerator()
             : this(Random.Shared)
         {
         }
 
-        protected MazeGenerator(Random random)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="random"></param>
+        public MazeGenerator(Random random)
         {
             this.random = random;
         }
 
-        protected TField Generate(TField field, EMazeAlgorithm algorithm)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        public MazeField Generate(MazeField field, EMazeAlgorithm algorithm)
         {
-            if (!IsAlgorithmSupported(algorithm))
-                algorithm = EMazeAlgorithm.DFS;
+            algorithm = CheckSupportedAlgorithm(field.Shape, algorithm);
 
             if (provider == null || provider.Algorithm != algorithm)
             {
@@ -35,9 +51,30 @@ namespace SimplexLab.Maze
         }
 
         /// <summary>
-        /// 判断当前场地是否支持指定的迷宫生成算法（默认支持所有算法）
+        /// 
         /// </summary>
-        protected virtual bool IsAlgorithmSupported(EMazeAlgorithm algorithm) => true;
+        /// <param name="field"></param>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        public async Task<MazeField> GenerateAsync(MazeField field, EMazeAlgorithm algorithm)
+        {
+            return await Task.Run(() => Generate(field, algorithm));
+        }
+
+        /// <summary>
+        /// 矫正当前场地不支持的迷宫生成算法
+        /// </summary>
+        private EMazeAlgorithm CheckSupportedAlgorithm(EMazeShape shape, EMazeAlgorithm algorithm)
+        {
+            if (shape == EMazeShape.Circular        || 
+                shape == EMazeShape.CircularHexagon ||
+                shape == EMazeShape.Customized)
+            {
+                if (algorithm == EMazeAlgorithm.Eller) algorithm = EMazeAlgorithm.DFS;
+            }
+
+            return algorithm;
+        }
 
         /// <summary>
         /// 根据生成树边集移除邻接表的边界

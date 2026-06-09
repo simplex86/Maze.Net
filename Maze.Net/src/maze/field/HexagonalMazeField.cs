@@ -12,7 +12,7 @@ namespace SimplexLab.Maze
         /// </summary>
         public override bool FlipY => true;
 
-        internal HexagonalMazeField(int size)
+        public HexagonalMazeField(int size)
         {
             Shape = EMazeShape.Hexagonal;
             Size = Math.Max(1, size);

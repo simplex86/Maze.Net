@@ -18,7 +18,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 
         /// </summary>
-        internal static readonly int[][] Neighbors = new int[][]
+        private static readonly int[][] Neighbors = new int[][]
         {
             new int[] { -1, 0 },
             new int[] { -1, 1 },
@@ -28,7 +28,7 @@ namespace SimplexLab.Maze
             new int[] { 0, -1 },
         };
 
-        internal HoneycombMazeField(int length)
+        public HoneycombMazeField(int length)
         {
             Shape = EMazeShape.Honeycomb;
             Length = Math.Max(1, length);

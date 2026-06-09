@@ -11,7 +11,7 @@ namespace SimplexLab.Maze
         public int Width { get; }
         public int Height { get; }
 
-        internal RectangularMazeField(int width, int height)
+        public RectangularMazeField(int width, int height)
         {
             Shape = EMazeShape.Rectangular;
             Width = Math.Max(1, width);

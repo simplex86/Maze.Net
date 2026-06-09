@@ -13,7 +13,7 @@ namespace SimplexLab.Maze
     {
         public int Steps { get; }
 
-        internal StairwayMazeField(int steps)
+        public StairwayMazeField(int steps)
         {
             Shape = EMazeShape.Stairway;
             Steps = Math.Max(1, steps);

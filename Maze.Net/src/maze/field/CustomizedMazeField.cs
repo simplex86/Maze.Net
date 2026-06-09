@@ -24,7 +24,7 @@ namespace SimplexLab.Maze
         /// </summary>
         private readonly int[,] vertexMap;
 
-        internal CustomizedMazeField(CustomizedMazeMask mask)
+        public CustomizedMazeField(CustomizedMazeMask mask)
         {
             Mask = mask ?? throw new ArgumentNullException(nameof(mask));
             Width = mask.Width;

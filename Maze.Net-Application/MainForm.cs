@@ -11,6 +11,7 @@ namespace Maze.TApplication
     public partial class MainForm : Form
     {
         private EMazeShape mazeShape = EMazeShape.Rectangular;
+        private MazeGenerator mazeGenerator = new MazeGenerator();
         private MazeField mazeField = null;
         private MazeGate mazeGate;
         private MazeSolution mazeSolution;
@@ -280,11 +281,11 @@ namespace Maze.TApplication
             var thickness = rectangularMazeControl.Thickness;
             var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
-            if (width < 3) width = canvas.Width / thickness;
+            if (width  < 3) width  = canvas.Width  / thickness;
             if (height < 3) height = canvas.Height / thickness;
 
-            var genrator = new RectangularMazeGenerator();
-            mazeField = await genrator.GenerateAsync(width, height, algm);
+            mazeField = new RectangularMazeField(width, height);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateRectangularGateAsync()
@@ -324,8 +325,8 @@ namespace Maze.TApplication
             if (rings <= 0) rings = Math.Min(canvas.Width, canvas.Height) / (2 * thickness);
             rings = Math.Max(rings, 2);
 
-            var genrator = new CircularMazeGenerator();
-            mazeField = await genrator.GenerateAsync(rings, sectors, algm);
+            mazeField = new CircularMazeField(rings, sectors);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateCircularGateAsync()
@@ -363,8 +364,8 @@ namespace Maze.TApplication
             if (length <= 0) length = (int)Math.Min(canvas.Width / (thickness * 3.464), canvas.Height / (1.732 * thickness));
             length = Math.Max(length, 2);
 
-            var genrator = new HoneycombMazeGenerator();
-            mazeField = await genrator.GenerateAsync(length, algm);
+            mazeField = new HoneycombMazeField(length);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateHoneycombGateAsync()
@@ -403,8 +404,8 @@ namespace Maze.TApplication
             if (length <= 0) length = (int)Math.Min(canvas.Width, canvas.Height / 0.866) / thickness;
             length = Math.Max(length, 2);
 
-            var genrator = new TriangularMazeGenerator();
-            mazeField = await genrator.GenerateAsync(length, orientation, algm);
+            mazeField = new TriangularMazeField(length, orientation);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateTriangularGateAsync()
@@ -442,8 +443,8 @@ namespace Maze.TApplication
             if (length <= 0) length = (int)Math.Min(canvas.Width, canvas.Height / 0.866) / (2 * thickness);
             length = Math.Max(length, 2);
 
-            var genrator = new HexagonalMazeGenerator();
-            mazeField = await genrator.GenerateAsync(length, algm);
+            mazeField = new HexagonalMazeField(length);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateHexagonalGateAsync()
@@ -481,8 +482,8 @@ namespace Maze.TApplication
             if (rings <= 0) rings = Math.Min(canvas.Width, canvas.Height) / (2 * thickness);
             rings = Math.Max(rings, 2);
 
-            var genrator = new CircularHexagonMazeGenerator();
-            mazeField = await genrator.GenerateAsync(rings, algm);
+            mazeField = new CircularHexagonMazeField(rings);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateCircularHexagonGateAsync()
@@ -520,8 +521,8 @@ namespace Maze.TApplication
             if (length <= 0) length = Math.Min(canvas.Width, canvas.Height) / thickness;
             length = Math.Max(length, 3);
 
-            var genrator = new StairwayMazeGenerator();
-            mazeField = await genrator.GenerateAsync(length, algm);
+            mazeField = new StairwayMazeField(length);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateStairwayGateAsync()
@@ -561,8 +562,8 @@ namespace Maze.TApplication
             var mask = CustomizedMazeMaskLoader.Load(customizedMazeControl.FileName);
             var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
-            var genrator = new CustomizedMazeGenerator();
-            mazeField = await genrator.GenerateAsync(mask, algm);
+            mazeField = new CustomizedMazeField(mask);
+            mazeField = await mazeGenerator.GenerateAsync(mazeField, algm);
         }
 
         private async Task GenerateCustomizedGateAsync()

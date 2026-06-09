@@ -13,7 +13,7 @@ namespace SimplexLab.Maze
         public int Rings { get; }
         public int Sectors { get; }
 
-        internal CircularMazeField(int rings, int maxSectors)
+        public CircularMazeField(int rings, int maxSectors)
         {
             Shape = EMazeShape.Circular;
 

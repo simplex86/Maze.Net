@@ -4,7 +4,7 @@ namespace SimplexLab.Maze
 {
     public class CircularHexagonMazeField : HexagonalMazeField
     {
-        internal CircularHexagonMazeField(int size)
+        public CircularHexagonMazeField(int size)
             : base(size) 
         {
             Shape = EMazeShape.CircularHexagon;

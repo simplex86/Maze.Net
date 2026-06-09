@@ -17,7 +17,7 @@ namespace SimplexLab.Maze
 
         private static readonly double Sqrt3Over2 = Math.Sqrt(3) / 2;
 
-        internal TriangularMazeField(int order, ETriangleOrientation orientation = ETriangleOrientation.Upward)
+        public TriangularMazeField(int order, ETriangleOrientation orientation = ETriangleOrientation.Upward)
         {
             Shape = EMazeShape.Triangular;
             Order = Math.Max(1, order);
