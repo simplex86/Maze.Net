@@ -61,6 +61,28 @@ namespace SimplexLab.Maze
             return vertexMap[y, x];
         }
 
+        public override CellShape GetCellShape(int vertex)
+        {
+            // 从顶点索引反推 (x, y) 坐标
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (vertexMap[y, x] == vertex)
+                    {
+                        return CellShape.Polygon(new Vertex[]
+                        {
+                            new Vertex(x, y),
+                            new Vertex(x + 1, y),
+                            new Vertex(x + 1, y + 1),
+                            new Vertex(x, y + 1),
+                        });
+                    }
+                }
+            }
+            return CellShape.Polygon(new Vertex[0]);
+        }
+
         private List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);

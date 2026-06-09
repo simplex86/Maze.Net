@@ -250,7 +250,7 @@ namespace Maze.TApplication
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Maze Generator v1.3.123";
+            Text = "Maze Generator v1.4.125";
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);

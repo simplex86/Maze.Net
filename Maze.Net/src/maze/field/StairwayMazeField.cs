@@ -74,5 +74,24 @@ namespace SimplexLab.Maze
         {
             return row * (row + 1) / 2 + col;
         }
+
+        public override CellShape GetCellShape(int vertex)
+        {
+            var row = 0;
+            var remaining = vertex;
+            while (remaining >= row + 1)
+            {
+                remaining -= row + 1;
+                row++;
+            }
+            var col = remaining;
+            return CellShape.Polygon(new Vertex[]
+            {
+                new Vertex(col, row),
+                new Vertex(col + 1, row),
+                new Vertex(col + 1, row + 1),
+                new Vertex(col, row + 1),
+            });
+        }
     }
 }

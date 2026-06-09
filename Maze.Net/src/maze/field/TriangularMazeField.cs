@@ -170,5 +170,53 @@ namespace SimplexLab.Maze
             var trY = tlY;
             return MakeLineBorder(tlX, tlY, trX, trY);
         }
+
+        public override CellShape GetCellShape(int vertex)
+        {
+            var row = 0;
+            while ((row + 1) * (row + 1) <= vertex)
+                row++;
+
+            var col = vertex - row * row;
+            var upward = (col % 2 == 0);
+
+            Vertex p1, p2, p3;
+
+            if (upward)
+            {
+                var topX = (Order - row) / 2.0 + col / 2.0;
+                var topY = row * Sqrt3Over2;
+                var blX = (Order - row - 1) / 2.0 + col / 2.0;
+                var blY = (row + 1) * Sqrt3Over2;
+                var brX = blX + 1;
+                var brY = blY;
+                p1 = new Vertex(topX, topY);
+                p2 = new Vertex(blX, blY);
+                p3 = new Vertex(brX, brY);
+            }
+            else
+            {
+                var k = (col - 1) / 2;
+                var tlX = (Order - row) / 2.0 + k;
+                var tlY = row * Sqrt3Over2;
+                var trX = tlX + 1;
+                var trY = tlY;
+                var bX = (Order - row - 1) / 2.0 + k + 1;
+                var bY = (row + 1) * Sqrt3Over2;
+                p1 = new Vertex(tlX, tlY);
+                p2 = new Vertex(trX, trY);
+                p3 = new Vertex(bX, bY);
+            }
+
+            if (Orientation == ETriangleOrientation.Downward)
+            {
+                var maxY = Order * Sqrt3Over2;
+                p1 = new Vertex(p1.X, maxY - p1.Y);
+                p2 = new Vertex(p2.X, maxY - p2.Y);
+                p3 = new Vertex(p3.X, maxY - p3.Y);
+            }
+
+            return CellShape.Polygon(new Vertex[] { p1, p2, p3 });
+        }
     }
 }

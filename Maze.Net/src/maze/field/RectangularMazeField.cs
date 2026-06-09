@@ -20,6 +20,19 @@ namespace SimplexLab.Maze
             Graph = BuildGraph();
         }
 
+        public override CellShape GetCellShape(int vertex)
+        {
+            var cx = vertex % Width;
+            var cy = vertex / Width;
+            return CellShape.Polygon(new Vertex[]
+            {
+                new Vertex(cx, cy),
+                new Vertex(cx + 1, cy),
+                new Vertex(cx + 1, cy + 1),
+                new Vertex(cx, cy + 1),
+            });
+        }
+
         private List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);

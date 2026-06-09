@@ -73,6 +73,17 @@ namespace SimplexLab.Maze
         public virtual bool FlipY => false;
 
         /// <summary>
+        /// 获取指定顶点对应格子的几何形状，用于渲染出入口标记。
+        /// 子类应覆写此方法以提供特定形状的格子几何信息。
+        /// </summary>
+        /// <param name="vertex">顶点索引</param>
+        /// <returns>格子的几何形状</returns>
+        public virtual CellShape GetCellShape(int vertex)
+        {
+            return CellShape.Polygon(new Vertex[0]);
+        }
+
+        /// <summary>
         /// 遍历邻接表中所有边界，计算几何包围盒
         /// </summary>
         private CoordinateBounds ComputeBounds()

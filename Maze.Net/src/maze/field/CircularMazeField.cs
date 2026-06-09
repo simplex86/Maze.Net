@@ -123,5 +123,22 @@ namespace SimplexLab.Maze
 
             return index + sector;
         }
+
+        public override CellShape GetCellShape(int vertex)
+        {
+            var remaining = vertex;
+            for (var r = 0; r < Rings; r++)
+            {
+                if (remaining < SectorsPerRing[r])
+                {
+                    var n = SectorsPerRing[r];
+                    var angleStep = 2 * Math.PI / n;
+                    var startAngle = remaining * angleStep - Math.PI / 2;
+                    return CellShape.AnnularSectorShape(new AnnularSector(r, r + 1, startAngle, angleStep));
+                }
+                remaining -= SectorsPerRing[r];
+            }
+            return CellShape.AnnularSectorShape(new AnnularSector(0, 0, 0, 0));
+        }
     }
 }

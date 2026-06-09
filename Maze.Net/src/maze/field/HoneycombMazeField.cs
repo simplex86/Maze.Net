@@ -113,5 +113,61 @@ namespace SimplexLab.Maze
                                   cx + Math.Cos(theta2), 
                                   cy + Math.Sin(theta2));
         }
+
+        public override CellShape GetCellShape(int vertex)
+        {
+            var totalUp = Length * (3 * Length - 1) / 2;
+            var remaining = vertex;
+
+            if (remaining < totalUp)
+            {
+                for (int u = -Length + 1; u <= 0; u++)
+                {
+                    var (vmin, vmax) = VExtent(u);
+                    var rowSize = vmax - vmin + 1;
+                    if (remaining < rowSize)
+                    {
+                        int v = vmin + remaining;
+                        return CellShape.Polygon(ComputeHexagonVertices(u, v));
+                    }
+                    remaining -= rowSize;
+                }
+            }
+            else
+            {
+                remaining -= totalUp;
+                for (int u = 1; u < Length; u++)
+                {
+                    var (vmin, vmax) = VExtent(u);
+                    int rowSize = vmax - vmin + 1;
+                    if (remaining < rowSize)
+                    {
+                        int v = vmin + remaining;
+                        return CellShape.Polygon(ComputeHexagonVertices(u, v));
+                    }
+                    remaining -= rowSize;
+                }
+            }
+            return CellShape.Polygon(new Vertex[0]);
+        }
+
+        private Vertex[] ComputeHexagonVertices(int u, int v)
+        {
+            var dxu = Math.Sqrt(3) / 2;
+            var dyu = 1.5;
+            var dxv = Math.Sqrt(3);
+            var dyv = 0;
+
+            var cx = dxu * u + dxv * v;
+            var cy = dyu * u + dyv * v;
+
+            var vertices = new Vertex[6];
+            for (int i = 0; i < 6; i++)
+            {
+                var angle = (i - 2.5) * Math.PI / 3;
+                vertices[i] = new Vertex(cx + Math.Cos(angle), cy + Math.Sin(angle));
+            }
+            return vertices;
+        }
     }
 }

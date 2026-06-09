@@ -301,11 +301,11 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new RectangularMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(rectangularMazeControl.Thickness)
                         .SetOffset(dx, dy)
-                        .SetField(mazeField as RectangularMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -342,10 +342,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new CircularMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(circularMazeControl.Thickness)
-                        .SetField(mazeField as CircularMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -381,10 +381,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new HoneycombMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(honeycombMazeControl.Thickness)
-                        .SetField(mazeField as HoneycombMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -421,10 +421,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new TriangularMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(triangularMazeControl.Thickness)
-                        .SetField(mazeField as TriangularMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -460,10 +460,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new HexagonalMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(hexagonalMazeControl.Thickness)
-                        .SetField(mazeField as HexagonalMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -499,10 +499,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new CircularHexagonMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(circularHexagonMazeControl.Thickness)
-                        .SetField(mazeField as CircularHexagonMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -538,10 +538,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new StairwayMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(stairwayMazeControl.Thickness)
-                        .SetField(mazeField as StairwayMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
@@ -579,10 +579,10 @@ namespace Maze.TApplication
         {
             if (mazeField != null)
             {
-                var renderer = new CustomizedMazeGateRenderer();
+                var renderer = new MazeGateRenderer();
                 renderer.SetSize(canvas.Width, canvas.Height)
                         .SetThickness(customizedMazeControl.Thickness)
-                        .SetField(mazeField as CustomizedMazeField)
+                        .SetField(mazeField)
                         .SetGate(mazeGate)
                         .Draw(grap);
             }
