@@ -88,7 +88,9 @@
                             </Grid>
                             <Grid ColumnDefinitions="80,*" Margin="0,6">
                                 <TextBlock Grid.Column="0" Text="Orientation" VerticalAlignment="Center"/>
-                                <ComboBox Grid.Column="1" x:Name="TriOrientationComboBox" SelectedIndex="{Binding TriOrientationIndex}">
+                                <ComboBox Grid.Column="1" x:Name="TriOrientationComboBox"
+                                  HorizontalAlignment="Stretch"
+                                  SelectedIndex="{Binding TriOrientationIndex}">
                                     <ComboBoxItem Content="Upward"/>
                                     <ComboBoxItem Content="Downward"/>
                                 </ComboBox>
@@ -165,22 +167,22 @@
             </Grid>
         </Border>
 
-        <!-- Right canvas area -->
-        <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
-                ClipToBounds="True" Margin="290,0,0,0"/>
-
-        <!-- Bottom checkboxes, aligned with canvas left edge -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="298,4" Spacing="24">
-            <CheckBox x:Name="ShowGatesCheckBox" Content="Show the Entrance and Exit"
-                      IsChecked="{Binding ShowGates}"
-                      IsCheckedChanged="OnShowGatesChanged"/>
-            <CheckBox x:Name="ShowMarkersCheckBox" Content="Show the Entrance and Exit Markers"
-                      IsChecked="{Binding ShowMarkers}"
-                      IsEnabled="{Binding ShowGates}"
-                      IsCheckedChanged="OnShowMarkersChanged"/>
-            <CheckBox x:Name="ShowSolutionCheckBox" Content="Show the Solution"
-                      IsChecked="{Binding ShowSolution}"
-                      IsCheckedChanged="OnShowSolutionChanged"/>
-        </StackPanel>
+        <!-- Right side content -->
+        <Grid Margin="290,0,0,0" RowDefinitions="*,Auto">
+            <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
+                    ClipToBounds="True"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,4" Spacing="24">
+                <CheckBox x:Name="ShowGatesCheckBox" Content="Show the Entrance and Exit"
+                          IsChecked="{Binding ShowGates}"
+                          IsCheckedChanged="OnShowGatesChanged"/>
+                <CheckBox x:Name="ShowMarkersCheckBox" Content="Show the Entrance and Exit Markers"
+                          IsChecked="{Binding ShowMarkers}"
+                          IsEnabled="{Binding ShowGates}"
+                          IsCheckedChanged="OnShowMarkersChanged"/>
+                <CheckBox x:Name="ShowSolutionCheckBox" Content="Show the Solution"
+                          IsChecked="{Binding ShowSolution}"
+                          IsCheckedChanged="OnShowSolutionChanged"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
