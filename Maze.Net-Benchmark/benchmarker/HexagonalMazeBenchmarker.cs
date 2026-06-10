@@ -7,54 +7,61 @@ namespace Maze.TBenchmark
     [MemoryDiagnoser]
     public class HexagonalMazeBenchmarker
     {
-        private HexagonalMazeGenerator generator = null;
+        private MazeGenerator generator = null;
 
         public HexagonalMazeBenchmarker()
         {
             var random = Common.SharedRandom;
-            generator = new HexagonalMazeGenerator(random);
+            generator = new MazeGenerator(random);
         }
 
         [Benchmark]
         public void DFS()
         {
-            generator.Generate(15, EMazeAlgorithm.DFS);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.DFS);
         }
 
         [Benchmark]
         public void BFS()
         {
-            generator.Generate(15, EMazeAlgorithm.BFS);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.BFS);
         }
 
         [Benchmark]
         public void Prim()
         {
-            generator.Generate(15, EMazeAlgorithm.Prim);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.Prim);
         }
 
         [Benchmark]
         public void Kruskal()
         {
-            generator.Generate(15, EMazeAlgorithm.Kruskal);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.Kruskal);
         }
 
         [Benchmark]
         public void Wilson()
         {
-            generator.Generate(15, EMazeAlgorithm.Wilson);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.Wilson);
         }
 
         [Benchmark]
         public void AldousBroder()
         {
-            generator.Generate(15, EMazeAlgorithm.AldousBroder);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.AldousBroder);
         }
 
         [Benchmark]
         public void HuntAndKill()
         {
-            generator.Generate(15, EMazeAlgorithm.HuntAndKill);
+            var field = new HexagonalMazeField(15);
+            generator.Generate(field, EMazeAlgorithm.HuntAndKill);
         }
     }
 }

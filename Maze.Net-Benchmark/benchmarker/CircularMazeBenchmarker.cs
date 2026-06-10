@@ -7,60 +7,68 @@ namespace Maze.TBenchmark
     [MemoryDiagnoser]
     public class CircularMazeBenchmarker
     {
-        private CircularMazeGenerator generator = null;
+        private MazeGenerator generator = null;
 
         public CircularMazeBenchmarker()
         {
             var random = Common.SharedRandom;
-            generator = new CircularMazeGenerator(random);
+            generator = new MazeGenerator(random);
         }
 
         [Benchmark]
         public void DFS()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.DFS);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.DFS);
         }
 
         [Benchmark]
         public void BFS()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.BFS);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.BFS);
         }
 
         [Benchmark]
         public void Prim()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.Prim);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.Prim);
         }
 
         [Benchmark]
         public void Kruskal()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.Kruskal);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.Kruskal);
         }
 
         [Benchmark]
         public void Wilson()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.Wilson);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.Wilson);
         }
 
         [Benchmark]
         public void Eller()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.Eller);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.Eller);
         }
 
         [Benchmark]
         public void AldousBroder()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.AldousBroder);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.AldousBroder);
         }
 
         [Benchmark]
         public void HuntAndKill()
         {
-            generator.Generate(20, 100, EMazeAlgorithm.HuntAndKill);
+            var field = new CircularMazeField(20, 100);
+            generator.Generate(field, EMazeAlgorithm.HuntAndKill);
         }
     }
 }
