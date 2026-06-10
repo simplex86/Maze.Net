@@ -124,7 +124,7 @@ public partial class MainWindow : Window
     {
         var length = _vm.HoneyLength;
         var thickness = _vm.HoneyThickness;
-        if (length <= 0) length = (int)Math.Min(canvasW / (thickness * 3.464), canvasH / (1.732 * thickness));
+        if (length <= 0) length = (int)Math.Min(canvasW / (thickness * 3.464), canvasH / (thickness * 3.0));
         length = Math.Max(length, 2);
         return new HoneycombMazeField(length);
     }

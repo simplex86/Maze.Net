@@ -298,7 +298,7 @@ namespace Maze.TApplication
             var thickness = honeycombMazeControl.Thickness;
             var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
-            if (length <= 0) length = (int)Math.Min(canvas.Width / (thickness * 3.464), canvas.Height / (1.732 * thickness));
+            if (length <= 0) length = (int)Math.Min(canvas.Width / (thickness * 3.464), canvas.Height / (thickness * 3.0));
             length = Math.Max(length, 2);
 
             mazeField = new HoneycombMazeField(length);
