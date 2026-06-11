@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -9,52 +8,15 @@ namespace SimplexLab.Maze
     /// </summary>
     public class CircularMazeField : MazeField
     {
-        protected override uint WriteBody(MemoryStream stream)
-        {
-            stream.WriteByte((byte)Rings);
-            stream.WriteByte((byte)Sectors);
-            return 2;
+        internal int[] SectorsPerRing { get; set; }
+
+        public int Rings { get; internal protected set; }
+        public int Sectors { get; internal protected set; }
+
+        internal CircularMazeField() 
+        { 
+
         }
-
-        protected override bool ReadBody(MemoryStream stream, ref uint size)
-        {
-            var rings = stream.ReadByte();
-            var sectors = stream.ReadByte();
-            if (rings <= 0 || sectors < 3) return false;
-
-            Rings = rings;
-            Sectors = sectors;
-
-            // 重新计算SectorsPerRing
-            SectorsPerRing = new int[Rings];
-            var normalizedMaxSectors = 3;
-            while (normalizedMaxSectors * 2 <= Sectors)
-                normalizedMaxSectors *= 2;
-
-            SectorsPerRing[0] = 3;
-            for (var r = 1; r < Rings; r++)
-            {
-                SectorsPerRing[r] = SectorsPerRing[r - 1];
-                var arcLength = (2 * Math.PI * (r + 1)) / SectorsPerRing[r - 1];
-                if (arcLength > 2.0 && SectorsPerRing[r] * 2 <= normalizedMaxSectors)
-                    SectorsPerRing[r] *= 2;
-            }
-            if (SectorsPerRing[Rings - 1] < normalizedMaxSectors)
-                SectorsPerRing[Rings - 1] = normalizedMaxSectors;
-
-            VertexCount = 0;
-            for (var r = 0; r < Rings; r++)
-                VertexCount += SectorsPerRing[r];
-
-            Graph = BuildGraph();
-            size += 2;
-            return true;
-        }
-
-        public int[] SectorsPerRing { get; protected set; }
-
-        public int Rings { get; protected set; }
-        public int Sectors { get; protected set; }
 
         public CircularMazeField(int rings, int maxSectors)
         {
@@ -88,9 +50,7 @@ namespace SimplexLab.Maze
             Graph = BuildGraph();
         }
 
-        internal CircularMazeField() { }
-
-        private List<List<Adjacency>> BuildGraph()
+        internal List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);
 

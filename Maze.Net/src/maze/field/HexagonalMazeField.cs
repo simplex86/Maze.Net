@@ -1,32 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SimplexLab.Maze
 {
     public class HexagonalMazeField : MazeField
     {
-        protected override uint WriteBody(MemoryStream stream)
-        {
-            stream.WriteByte((byte)Size);
-            stream.WriteByte(0);
-            return 2;
-        }
-
-        protected override bool ReadBody(MemoryStream stream, ref uint size)
-        {
-            var sz = stream.ReadByte();
-            var padding = stream.ReadByte();
-            if (sz <= 0) return false;
-
-            Size = sz;
-            VertexCount = 6 * Size * Size;
-            Graph = BuildGraph();
-            size += 2;
-            return true;
-        }
-
-        public int Size { get; protected set; }
+        public int Size { get; internal protected set; }
 
         /// <summary>
         /// Y轴朝上
@@ -43,7 +22,7 @@ namespace SimplexLab.Maze
 
         internal HexagonalMazeField() { }
 
-        private List<List<Adjacency>> BuildGraph()
+        internal List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);
             for (int i = 0; i < VertexCount; i++)

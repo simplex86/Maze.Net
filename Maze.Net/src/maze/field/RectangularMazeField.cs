@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -9,29 +8,8 @@ namespace SimplexLab.Maze
     /// </summary>
     public class RectangularMazeField : MazeField
     {
-        protected override uint WriteBody(MemoryStream stream)
-        {
-            stream.WriteByte((byte)Width);
-            stream.WriteByte((byte)Height);
-            return 2;
-        }
-
-        protected override bool ReadBody(MemoryStream stream, ref uint size)
-        {
-            var w = stream.ReadByte();
-            var h = stream.ReadByte();
-            if (w <= 0 || h <= 0) return false;
-
-            Width = w;
-            Height = h;
-            VertexCount = Width * Height;
-            Graph = BuildGraph();
-            size += 2;
-            return true;
-        }
-
-        public int Width { get; protected set; }
-        public int Height { get; protected set; }
+        public int Width { get; internal protected set; }
+        public int Height { get; internal protected set; }
 
         public RectangularMazeField(int width, int height)
         {
@@ -57,7 +35,7 @@ namespace SimplexLab.Maze
             });
         }
 
-        private List<List<Adjacency>> BuildGraph()
+        internal List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);
 

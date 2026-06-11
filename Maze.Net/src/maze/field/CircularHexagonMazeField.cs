@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -12,13 +11,6 @@ namespace SimplexLab.Maze
         }
 
         internal CircularHexagonMazeField() { }
-
-        protected override bool ReadBody(MemoryStream stream, ref uint size)
-        {
-            if (!base.ReadBody(stream, ref size)) return false;
-            Shape = EMazeShape.CircularHexagon;
-            return true;
-        }
 
         internal override IMazeBorder GetEdge(int sector, int row, int column, int edge)
         {

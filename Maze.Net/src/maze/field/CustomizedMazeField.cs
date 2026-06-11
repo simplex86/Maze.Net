@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -12,18 +11,18 @@ namespace SimplexLab.Maze
     public class CustomizedMazeField : MazeField
     {
         /// <summary>遮罩宽度（列数）</summary>
-        public int Width { get; protected set; }
+        public int Width { get; internal protected set; }
 
         /// <summary>遮罩高度（行数）</summary>
-        public int Height { get; protected set; }
+        public int Height { get; internal protected set; }
 
         /// <summary>遮罩数据</summary>
-        public CustomizedMazeMask Mask { get; protected set; }
+        public CustomizedMazeMask Mask { get; internal protected set; }
 
         /// <summary>
         /// 坐标映射表：(x, y) → 顶点索引。仅白色位置有有效索引。
         /// </summary>
-        private int[,] vertexMap;
+        internal int[,] VertexMap;
 
         public CustomizedMazeField(CustomizedMazeMask mask)
         {
@@ -33,7 +32,7 @@ namespace SimplexLab.Maze
             Shape = EMazeShape.Customized;
 
             // 构建坐标到顶点索引的映射
-            vertexMap = new int[Height, Width];
+            VertexMap = new int[Height, Width];
             int vertexCount = 0;
             for (int y = 0; y < Height; y++)
             {
@@ -41,11 +40,11 @@ namespace SimplexLab.Maze
                 {
                     if (mask[y, x])
                     {
-                        vertexMap[y, x] = vertexCount++;
+                        VertexMap[y, x] = vertexCount++;
                     }
                     else
                     {
-                        vertexMap[y, x] = -1;
+                        VertexMap[y, x] = -1;
                     }
                 }
             }
@@ -57,7 +56,7 @@ namespace SimplexLab.Maze
         internal CustomizedMazeField()
         {
             Mask = null!;
-            vertexMap = null!;
+            VertexMap = null!;
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace SimplexLab.Maze
         /// </summary>
         public int GetVertexIndex(int x, int y)
         {
-            return vertexMap[y, x];
+            return VertexMap[y, x];
         }
 
         internal override CellShape GetCellShape(int vertex)
@@ -75,7 +74,7 @@ namespace SimplexLab.Maze
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (vertexMap[y, x] == vertex)
+                    if (VertexMap[y, x] == vertex)
                     {
                         return CellShape.Polygon(new Vertex[]
                         {
@@ -90,7 +89,7 @@ namespace SimplexLab.Maze
             return CellShape.Polygon(new Vertex[0]);
         }
 
-        private List<List<Adjacency>> BuildGraph()
+        internal List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);
 
@@ -106,13 +105,13 @@ namespace SimplexLab.Maze
                 {
                     if (!Mask[y, x]) continue;
 
-                    int v = vertexMap[y, x];
+                    int v = VertexMap[y, x];
                     var edges = new List<Adjacency>();
 
                     // 右邻居
                     if (x < Width - 1 && Mask[y, x + 1])
                     {
-                        edges.Add(new Adjacency(vertexMap[y, x + 1], new LineBorder(x + 1, y, x + 1, y + 1)));
+                        edges.Add(new Adjacency(VertexMap[y, x + 1], new LineBorder(x + 1, y, x + 1, y + 1)));
                     }
                     else
                     {
@@ -123,7 +122,7 @@ namespace SimplexLab.Maze
                     // 左邻居
                     if (x > 0 && Mask[y, x - 1])
                     {
-                        edges.Add(new Adjacency(vertexMap[y, x - 1], new LineBorder(x, y, x, y + 1)));
+                        edges.Add(new Adjacency(VertexMap[y, x - 1], new LineBorder(x, y, x, y + 1)));
                     }
                     else
                     {
@@ -133,7 +132,7 @@ namespace SimplexLab.Maze
                     // 下邻居
                     if (y < Height - 1 && Mask[y + 1, x])
                     {
-                        edges.Add(new Adjacency(vertexMap[y + 1, x], new LineBorder(x, y + 1, x + 1, y + 1)));
+                        edges.Add(new Adjacency(VertexMap[y + 1, x], new LineBorder(x, y + 1, x + 1, y + 1)));
                     }
                     else
                     {
@@ -143,7 +142,7 @@ namespace SimplexLab.Maze
                     // 上邻居
                     if (y > 0 && Mask[y - 1, x])
                     {
-                        edges.Add(new Adjacency(vertexMap[y - 1, x], new LineBorder(x, y, x + 1, y)));
+                        edges.Add(new Adjacency(VertexMap[y - 1, x], new LineBorder(x, y, x + 1, y)));
                     }
                     else
                     {
@@ -155,88 +154,6 @@ namespace SimplexLab.Maze
             }
 
             return g;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        protected override uint WriteBody(MemoryStream stream)
-        {
-            stream.WriteByte((byte)Width);
-            stream.WriteByte((byte)Height);
-
-            // 写入Mask数据：每个格子1个bit，true=可用，打包为字节数组
-            int totalCells = Width * Height;
-            int byteCount = (totalCells + 7) / 8;
-            var maskData = new byte[byteCount];
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (Mask[y, x])
-                    {
-                        int bitIndex = y * Width + x;
-                        maskData[bitIndex / 8] |= (byte)(1 << (bitIndex % 8));
-                    }
-                }
-            }
-            stream.Write(maskData, 0, maskData.Length);
-
-            return 2 + (uint)maskData.Length;
-        }
-
-        protected override bool ReadBody(MemoryStream stream, ref uint size)
-        {
-            var w = stream.ReadByte();
-            var h = stream.ReadByte();
-            if (w <= 0 || h <= 0) return false;
-
-            Width = w;
-            Height = h;
-
-            // 读取Mask数据
-            int totalCells = Width * Height;
-            int byteCount = (totalCells + 7) / 8;
-            var maskData = new byte[byteCount];
-            if (stream.Read(maskData, 0, byteCount) < byteCount) return false;
-
-            // 从位图还原Mask
-            var data = new bool[Height][];
-            for (int y = 0; y < Height; y++)
-            {
-                data[y] = new bool[Width];
-                for (int x = 0; x < Width; x++)
-                {
-                    int bitIndex = y * Width + x;
-                    data[y][x] = (maskData[bitIndex / 8] & (1 << (bitIndex % 8))) != 0;
-                }
-            }
-            Mask = new CustomizedMazeMask(data);
-
-            // 构建坐标到顶点索引的映射
-            vertexMap = new int[Height, Width];
-            int vertexCount = 0;
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (Mask[y, x])
-                    {
-                        vertexMap[y, x] = vertexCount++;
-                    }
-                    else
-                    {
-                        vertexMap[y, x] = -1;
-                    }
-                }
-            }
-
-            VertexCount = vertexCount;
-            Graph = BuildGraph();
-            size += 2 + (uint)byteCount;
-            return true;
         }
     }
 }

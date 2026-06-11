@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -12,27 +11,7 @@ namespace SimplexLab.Maze
     /// </summary>
     public class StairwayMazeField : MazeField
     {
-        protected override uint WriteBody(MemoryStream stream)
-        {
-            stream.WriteByte((byte)Steps);
-            stream.WriteByte(0);
-            return 2;
-        }
-
-        protected override bool ReadBody(MemoryStream stream, ref uint size)
-        {
-            var steps = stream.ReadByte();
-            var padding = stream.ReadByte();
-            if (steps <= 0) return false;
-
-            Steps = steps;
-            VertexCount = Steps * (Steps + 1) / 2;
-            Graph = BuildGraph();
-            size += 2;
-            return true;
-        }
-
-        public int Steps { get; protected set; }
+        public int Steps { get; internal protected set; }
 
         public StairwayMazeField(int steps)
         {
@@ -44,7 +23,7 @@ namespace SimplexLab.Maze
 
         internal StairwayMazeField() { }
 
-        private List<List<Adjacency>> BuildGraph()
+        internal List<List<Adjacency>> BuildGraph()
         {
             var g = new List<List<Adjacency>>(VertexCount);
 
