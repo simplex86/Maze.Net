@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Maze.TApplication
@@ -49,71 +49,76 @@ namespace Maze.TApplication
             canvas = new PictureBox();
             showGates = new CheckBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
+            mainTabControl = new TabControl();
+            generationTabPage = new TabPage();
+            reconstructionTabPage = new TabPage();
             ((System.ComponentModel.ISupportInitialize)canvas).BeginInit();
             flowLayoutPanel1.SuspendLayout();
+            generationTabPage.SuspendLayout();
+            mainTabControl.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // customizedMazeControl
-            // 
+            //
             customizedMazeControl.Location = new Point(3, 548);
             customizedMazeControl.Name = "customizedMazeControl";
             customizedMazeControl.Size = new Size(284, 61);
             customizedMazeControl.TabIndex = 31;
-            // 
+            //
             // stairwayMazeControl
-            // 
+            //
             stairwayMazeControl.Location = new Point(3, 479);
             stairwayMazeControl.Name = "stairwayMazeControl";
             stairwayMazeControl.Size = new Size(284, 63);
             stairwayMazeControl.TabIndex = 30;
-            // 
+            //
             // circularHexagonMazeControl
-            // 
+            //
             circularHexagonMazeControl.Location = new Point(3, 410);
             circularHexagonMazeControl.Name = "circularHexagonMazeControl";
             circularHexagonMazeControl.Size = new Size(284, 63);
             circularHexagonMazeControl.TabIndex = 29;
-            // 
+            //
             // hexagonalMazeControl
-            // 
+            //
             hexagonalMazeControl.Location = new Point(3, 343);
             hexagonalMazeControl.Name = "hexagonalMazeControl";
             hexagonalMazeControl.Size = new Size(284, 61);
             hexagonalMazeControl.TabIndex = 28;
-            // 
+            //
             // triangularMazeControl
-            // 
+            //
             triangularMazeControl.Location = new Point(3, 255);
             triangularMazeControl.Name = "triangularMazeControl";
             triangularMazeControl.Size = new Size(284, 82);
             triangularMazeControl.TabIndex = 27;
-            // 
+            //
             // honeycombMazeControl
-            // 
+            //
             honeycombMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             honeycombMazeControl.Location = new Point(3, 187);
             honeycombMazeControl.Name = "honeycombMazeControl";
             honeycombMazeControl.Size = new Size(284, 62);
             honeycombMazeControl.TabIndex = 26;
-            // 
+            //
             // circularMazeControl
-            // 
+            //
             circularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             circularMazeControl.Location = new Point(3, 91);
             circularMazeControl.Name = "circularMazeControl";
             circularMazeControl.Size = new Size(284, 90);
             circularMazeControl.TabIndex = 1;
-            // 
+            //
             // rectangularMazeControl
-            // 
+            //
             rectangularMazeControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             rectangularMazeControl.Location = new Point(3, 3);
             rectangularMazeControl.Name = "rectangularMazeControl";
             rectangularMazeControl.Size = new Size(284, 82);
             rectangularMazeControl.TabIndex = 0;
-            // 
+            //
             // algorithm
-            // 
+            //
             algorithm.DropDownStyle = ComboBoxStyle.DropDownList;
             algorithm.FormattingEnabled = true;
             algorithm.Items.AddRange(new object[] { "DFS", "BFS", "Prim", "Kruskal", "Wilson", "Eller", "AldousBroder", "HuntAndKill" });
@@ -122,9 +127,9 @@ namespace Maze.TApplication
             algorithm.Name = "algorithm";
             algorithm.Size = new Size(194, 25);
             algorithm.TabIndex = 25;
-            // 
+            //
             // algorithmLabel
-            // 
+            //
             algorithmLabel.Location = new Point(7, 34);
             algorithmLabel.Margin = new Padding(2, 0, 2, 0);
             algorithmLabel.Name = "algorithmLabel";
@@ -133,9 +138,9 @@ namespace Maze.TApplication
             algorithmLabel.TabIndex = 24;
             algorithmLabel.Text = "Algorithm";
             algorithmLabel.TextAlign = ContentAlignment.MiddleLeft;
-            // 
+            //
             // shape
-            // 
+            //
             shape.DropDownStyle = ComboBoxStyle.DropDownList;
             shape.FormattingEnabled = true;
             shape.Items.AddRange(new object[] { "Rectangular", "Circular", "Honeycomb", "Triangular", "Hexagonal", "CircularHexagon", "Stairway", "Customized" });
@@ -144,18 +149,18 @@ namespace Maze.TApplication
             shape.Size = new Size(194, 25);
             shape.TabIndex = 2;
             shape.SelectedIndexChanged += OnShapeChangedHandler;
-            // 
+            //
             // shapeLabel
-            // 
+            //
             shapeLabel.AutoSize = true;
             shapeLabel.Location = new Point(7, 9);
             shapeLabel.Name = "shapeLabel";
             shapeLabel.Size = new Size(44, 17);
             shapeLabel.TabIndex = 1;
             shapeLabel.Text = "Shape";
-            // 
+            //
             // generation
-            // 
+            //
             generation.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             generation.BackColor = Color.SkyBlue;
             generation.Font = new Font("Microsoft YaHei UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 134);
@@ -166,9 +171,9 @@ namespace Maze.TApplication
             generation.Text = "Generate";
             generation.UseVisualStyleBackColor = false;
             generation.Click += OnGenerationClickedHandler;
-            // 
+            //
             // showSolution
-            // 
+            //
             showSolution.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             showSolution.AutoSize = true;
             showSolution.Location = new Point(834, 758);
@@ -178,9 +183,9 @@ namespace Maze.TApplication
             showSolution.Text = "Show the Solution";
             showSolution.UseVisualStyleBackColor = true;
             showSolution.CheckedChanged += OnSolutionChangedHandler;
-            // 
+            //
             // showMarkers
-            // 
+            //
             showMarkers.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             showMarkers.AutoSize = true;
             showMarkers.Location = new Point(496, 758);
@@ -190,9 +195,9 @@ namespace Maze.TApplication
             showMarkers.Text = "Show the Entrance and Exit Markers";
             showMarkers.UseVisualStyleBackColor = true;
             showMarkers.CheckedChanged += OnMarkersChangedHandler;
-            // 
+            //
             // canvas
-            // 
+            //
             canvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             canvas.BackColor = Color.White;
             canvas.Location = new Point(296, 3);
@@ -201,9 +206,9 @@ namespace Maze.TApplication
             canvas.TabIndex = 0;
             canvas.TabStop = false;
             canvas.Paint += OnCanvasPaintHandler;
-            // 
+            //
             // showGates
-            // 
+            //
             showGates.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             showGates.AutoSize = true;
             showGates.Checked = true;
@@ -215,9 +220,9 @@ namespace Maze.TApplication
             showGates.Text = "Show the Entrance and Exit";
             showGates.UseVisualStyleBackColor = true;
             showGates.CheckedChanged += OnGatesChangedHandler;
-            // 
+            //
             // flowLayoutPanel1
-            // 
+            //
             flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             flowLayoutPanel1.Controls.Add(rectangularMazeControl);
             flowLayoutPanel1.Controls.Add(circularMazeControl);
@@ -231,30 +236,64 @@ namespace Maze.TApplication
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new Size(291, 622);
             flowLayoutPanel1.TabIndex = 33;
-            // 
+            //
+            // generationTabPage
+            //
+            generationTabPage.Controls.Add(flowLayoutPanel1);
+            generationTabPage.Controls.Add(canvas);
+            generationTabPage.Controls.Add(showMarkers);
+            generationTabPage.Controls.Add(showSolution);
+            generationTabPage.Controls.Add(showGates);
+            generationTabPage.Controls.Add(generation);
+            generationTabPage.Controls.Add(shapeLabel);
+            generationTabPage.Controls.Add(shape);
+            generationTabPage.Controls.Add(algorithm);
+            generationTabPage.Controls.Add(algorithmLabel);
+            generationTabPage.Location = new Point(4, 26);
+            generationTabPage.Name = "generationTabPage";
+            generationTabPage.Padding = new Padding(3);
+            generationTabPage.Size = new Size(1176, 751);
+            generationTabPage.TabIndex = 0;
+            generationTabPage.Text = "Generation";
+            generationTabPage.UseVisualStyleBackColor = true;
+            //
+            // reconstructionTabPage
+            //
+            reconstructionTabPage.Location = new Point(4, 26);
+            reconstructionTabPage.Name = "reconstructionTabPage";
+            reconstructionTabPage.Padding = new Padding(3);
+            reconstructionTabPage.Size = new Size(1176, 751);
+            reconstructionTabPage.TabIndex = 1;
+            reconstructionTabPage.Text = "Reconstruction";
+            reconstructionTabPage.UseVisualStyleBackColor = true;
+            //
+            // mainTabControl
+            //
+            mainTabControl.Controls.Add(generationTabPage);
+            mainTabControl.Controls.Add(reconstructionTabPage);
+            mainTabControl.Dock = DockStyle.Fill;
+            mainTabControl.Location = new Point(0, 0);
+            mainTabControl.Name = "mainTabControl";
+            mainTabControl.SelectedIndex = 0;
+            mainTabControl.Size = new Size(1184, 781);
+            mainTabControl.TabIndex = 0;
+            //
             // MainForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 781);
-            Controls.Add(flowLayoutPanel1);
-            Controls.Add(canvas);
-            Controls.Add(showMarkers);
-            Controls.Add(showSolution);
-            Controls.Add(showGates);
-            Controls.Add(generation);
-            Controls.Add(shapeLabel);
-            Controls.Add(shape);
-            Controls.Add(algorithm);
-            Controls.Add(algorithmLabel);
+            Controls.Add(mainTabControl);
             MinimumSize = new Size(1080, 780);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Maze Generator v1.4.125";
             ((System.ComponentModel.ISupportInitialize)canvas).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
+            generationTabPage.ResumeLayout(false);
+            generationTabPage.PerformLayout();
+            mainTabControl.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -276,5 +315,8 @@ namespace Maze.TApplication
         private CheckBox showSolution;
         private CustomizedMazeControl customizedMazeControl;
         private FlowLayoutPanel flowLayoutPanel1;
+        private TabControl mainTabControl;
+        private TabPage generationTabPage;
+        private TabPage reconstructionTabPage;
     }
 }

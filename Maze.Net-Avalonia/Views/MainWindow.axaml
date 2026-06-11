@@ -3,194 +3,341 @@
         xmlns:vm="using:Maze.Avalonia.ViewModels"
         x:Class="Maze.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="SimplexLab-Maze v1.6.141"
+        Title="SimplexLab-Maze v1.6.145"
         Width="1184" Height="781"
         MinWidth="1080" MinHeight="780"
         WindowStartupLocation="CenterScreen">
 
-    <Grid RowDefinitions="*,Auto">
-        <!-- Vertical separator spanning entire height -->
-        <Border Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="0,0,1,0"
-                HorizontalAlignment="Left" Width="290"/>
+    <TabControl x:Name="MainTabControl" Padding="2">
+        <!-- Generation Tab -->
+        <TabItem Header="Generation">
+            <Grid RowDefinitions="*,Auto">
+                <!-- Vertical separator spanning entire height -->
+                <Border Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="0,0,1,0"
+                        HorizontalAlignment="Left" Width="290"/>
 
-        <!-- Left panel spanning full height (direct child of outer Grid) -->
-        <Border Grid.RowSpan="2" HorizontalAlignment="Left" Width="290" Padding="6">
-            <Grid RowDefinitions="Auto,Auto,*,Auto">
-                <!-- Shape selector -->
-                <Grid Grid.Row="0" ColumnDefinitions="80,*" Margin="0,0,0,8">
-                    <TextBlock Grid.Column="0" Text="Shape" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" x:Name="ShapeComboBox"
-                              HorizontalAlignment="Stretch"
-                              SelectedIndex="{Binding SelectedShapeIndex}"
-                              SelectionChanged="OnShapeSelectionChanged"/>
+                <!-- Left panel spanning full height (direct child of outer Grid) -->
+                <Border Grid.RowSpan="2" HorizontalAlignment="Left" Width="290" Padding="6">
+                    <Grid RowDefinitions="Auto,Auto,*,Auto">
+                        <!-- Shape selector -->
+                        <Grid Grid.Row="0" ColumnDefinitions="80,*" Margin="0,0,0,8">
+                            <TextBlock Grid.Column="0" Text="Shape" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" x:Name="ShapeComboBox"
+                                      HorizontalAlignment="Stretch"
+                                      SelectedIndex="{Binding SelectedShapeIndex}"
+                                      SelectionChanged="OnShapeSelectionChanged"/>
+                        </Grid>
+
+                        <!-- Algorithm selector -->
+                        <Grid Grid.Row="1" ColumnDefinitions="80,*" Margin="0,0,0,8">
+                            <TextBlock Grid.Column="0" Text="Algorithm" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" x:Name="AlgorithmComboBox"
+                                      HorizontalAlignment="Stretch"
+                                      SelectedIndex="{Binding SelectedAlgorithmIndex}"/>
+                        </Grid>
+
+                        <!-- Parameter panels (stacked, only one visible at a time) -->
+                        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="ParameterPanels">
+                                <!-- Rectangular -->
+                                <StackPanel x:Name="RectangularPanel" IsVisible="True">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Width" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" x:Name="RectWidthInput" Minimum="0" Maximum="100" Value="{Binding RectWidth}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Height" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" x:Name="RectHeightInput" Minimum="0" Maximum="100" Value="{Binding RectHeight}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding RectThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Circular -->
+                                <StackPanel x:Name="CircularPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Rings" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding CircRings}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Sectors" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="360" Value="{Binding CircSectors}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="100" Value="{Binding CircThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Honeycomb -->
+                                <StackPanel x:Name="HoneycombPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HoneyLength}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding HoneyThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Triangular -->
+                                <StackPanel x:Name="TriangularPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding TriLength}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Orientation" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="1" x:Name="TriOrientationComboBox"
+                                          HorizontalAlignment="Stretch"
+                                          SelectedIndex="{Binding TriOrientationIndex}">
+                                            <ComboBoxItem Content="Upward"/>
+                                            <ComboBoxItem Content="Downward"/>
+                                        </ComboBox>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="15" Maximum="50" Value="{Binding TriThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Hexagonal -->
+                                <StackPanel x:Name="HexagonalPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HexLength}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding HexThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- CircularHexagon -->
+                                <StackPanel x:Name="CircularHexagonPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Rings" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding CircHexRings}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding CircHexThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Stairway -->
+                                <StackPanel x:Name="StairwayPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding StairLength}"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding StairThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Customized -->
+                                <StackPanel x:Name="CustomizedPanel" IsVisible="False">
+                                    <Grid ColumnDefinitions="80,*,Auto" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Mask Path" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="1" x:Name="CustomFileNameInput" IsReadOnly="True" Text="{Binding CustomFileName}"/>
+                                        <Button Grid.Column="2" Content="..." Margin="4,0,0,0" Click="OnBrowseClick"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding CustomThickness}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Generate button at the bottom of left panel -->
+                        <Button Grid.Row="3" x:Name="GenerateButton"
+                                Content="Generate"
+                                Background="#87CEEB"
+                                FontSize="19"
+                                FontFamily="Microsoft YaHei UI"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Height="60"
+                                HorizontalAlignment="Stretch"
+                                Margin="2,8,2,2"
+                                Click="OnGenerateClick"/>
+                    </Grid>
+                </Border>
+
+                <!-- Right side content -->
+                <Grid Margin="290,0,0,0" RowDefinitions="*,Auto">
+                    <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
+                            ClipToBounds="True"/>
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,4" Spacing="24">
+                            <CheckBox x:Name="ShowGatesCheckBox" Content="Show the Entrance and Exit"
+                                      IsChecked="{Binding ShowGates}"
+                                      IsCheckedChanged="OnShowGatesChanged"/>
+                            <CheckBox x:Name="ShowMarkersCheckBox" Content="Show the Entrance and Exit Markers"
+                                      IsChecked="{Binding ShowMarkers}"
+                                      IsEnabled="{Binding ShowGates}"
+                                      IsCheckedChanged="OnShowMarkersChanged"/>
+                            <CheckBox x:Name="ShowSolutionCheckBox" Content="Show the Solution"
+                                      IsChecked="{Binding ShowSolution}"
+                                      IsCheckedChanged="OnShowSolutionChanged"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" x:Name="SaveButton" Content="Save"
+                                HorizontalAlignment="Right" VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                Background="#87CEEB"
+                                Width="80" Height="40" Margin="0,4,8,4"
+                                Click="OnSaveClick"/>
+                    </Grid>
                 </Grid>
-
-                <!-- Algorithm selector -->
-                <Grid Grid.Row="1" ColumnDefinitions="80,*" Margin="0,0,0,8">
-                    <TextBlock Grid.Column="0" Text="Algorithm" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" x:Name="AlgorithmComboBox"
-                              HorizontalAlignment="Stretch"
-                              SelectedIndex="{Binding SelectedAlgorithmIndex}"/>
-                </Grid>
-
-                <!-- Parameter panels (stacked, only one visible at a time) -->
-                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="ParameterPanels">
-                        <!-- Rectangular -->
-                        <StackPanel x:Name="RectangularPanel" IsVisible="True">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Width" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" x:Name="RectWidthInput" Minimum="0" Maximum="100" Value="{Binding RectWidth}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Height" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" x:Name="RectHeightInput" Minimum="0" Maximum="100" Value="{Binding RectHeight}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding RectThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- Circular -->
-                        <StackPanel x:Name="CircularPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Rings" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding CircRings}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Sectors" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="360" Value="{Binding CircSectors}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="100" Value="{Binding CircThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- Honeycomb -->
-                        <StackPanel x:Name="HoneycombPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HoneyLength}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding HoneyThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- Triangular -->
-                        <StackPanel x:Name="TriangularPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding TriLength}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Orientation" VerticalAlignment="Center"/>
-                                <ComboBox Grid.Column="1" x:Name="TriOrientationComboBox"
-                                  HorizontalAlignment="Stretch"
-                                  SelectedIndex="{Binding TriOrientationIndex}">
-                                    <ComboBoxItem Content="Upward"/>
-                                    <ComboBoxItem Content="Downward"/>
-                                </ComboBox>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="15" Maximum="50" Value="{Binding TriThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- Hexagonal -->
-                        <StackPanel x:Name="HexagonalPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HexLength}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding HexThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- CircularHexagon -->
-                        <StackPanel x:Name="CircularHexagonPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Rings" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding CircHexRings}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding CircHexThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- Stairway -->
-                        <StackPanel x:Name="StairwayPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding StairLength}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding StairThickness}"/>
-                            </Grid>
-                        </StackPanel>
-
-                        <!-- Customized -->
-                        <StackPanel x:Name="CustomizedPanel" IsVisible="False">
-                            <Grid ColumnDefinitions="80,*,Auto" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Mask Path" VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" x:Name="CustomFileNameInput" IsReadOnly="True" Text="{Binding CustomFileName}"/>
-                                <Button Grid.Column="2" Content="..." Margin="4,0,0,0" Click="OnBrowseClick"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding CustomThickness}"/>
-                            </Grid>
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
-
-                <!-- Generate button at the bottom of left panel -->
-                <Button Grid.Row="3" x:Name="GenerateButton"
-                        Content="Generate"
-                        Background="#87CEEB"
-                        FontSize="19"
-                        FontFamily="Microsoft YaHei UI"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Height="60"
-                        HorizontalAlignment="Stretch"
-                        Margin="2,8,2,2"
-                        Click="OnGenerateClick"/>
             </Grid>
-        </Border>
+        </TabItem>
 
-        <!-- Right side content -->
-        <Grid Margin="290,0,0,0" RowDefinitions="*,Auto">
-            <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
-                    ClipToBounds="True"/>
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,4" Spacing="24">
-                    <CheckBox x:Name="ShowGatesCheckBox" Content="Show the Entrance and Exit"
-                              IsChecked="{Binding ShowGates}"
-                              IsCheckedChanged="OnShowGatesChanged"/>
-                    <CheckBox x:Name="ShowMarkersCheckBox" Content="Show the Entrance and Exit Markers"
-                              IsChecked="{Binding ShowMarkers}"
-                              IsEnabled="{Binding ShowGates}"
-                              IsCheckedChanged="OnShowMarkersChanged"/>
-                    <CheckBox x:Name="ShowSolutionCheckBox" Content="Show the Solution"
-                              IsChecked="{Binding ShowSolution}"
-                              IsCheckedChanged="OnShowSolutionChanged"/>
+        <!-- Reconstruction Tab -->
+        <TabItem Header="Reconstruction">
+            <Grid RowDefinitions="Auto,*,Auto" Margin="4">
+                <!-- Row 0: File selector -->
+                <Grid ColumnDefinitions="80,*,Auto" Margin="6,0,0,4">
+                    <TextBlock Grid.Column="0" Text="File" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" x:Name="ReconFileNameInput" IsReadOnly="True"
+                             Text="{Binding ReconFileName}"/>
+                    <Button Grid.Column="2" x:Name="ReconBrowseButton" Content="..."
+                            Margin="4,0,0,0" Background="#87CEEB"
+                            VerticalAlignment="Stretch"
+                            Click="OnReconBrowseClick"/>
+                </Grid>
+
+                <!-- Row 1: Left params panel + Right canvas -->
+                <Grid Grid.Row="1" ColumnDefinitions="290,*">
+                    <!-- Vertical separator spanning entire height -->
+                    <Border BorderBrush="LightGray" BorderThickness="0,0,1,0"
+                            HorizontalAlignment="Left" Width="290"/>
+
+                    <!-- Left: read-only maze parameters (mirrors Generation page layout) -->
+                    <Border HorizontalAlignment="Left" Width="290" Padding="6">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            <!-- Shape selector (read-only) -->
+                            <Grid Grid.Row="0" ColumnDefinitions="80,*" Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0" Text="Shape" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Column="1" x:Name="ReconShapeComboBox"
+                                          HorizontalAlignment="Stretch"
+                                          IsEnabled="False"
+                                          SelectedIndex="{Binding ReconShapeIndex}"/>
+                            </Grid>
+
+                            <!-- Parameter panels (stacked, only one visible at a time) -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="ReconParamsPanel">
+                                    <!-- Rectangular -->
+                                    <StackPanel x:Name="ReconRectPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Width" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconRectWidthInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconRectWidth}"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Height" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconRectHeightInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconRectHeight}"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Circular -->
+                                    <StackPanel x:Name="ReconCircPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Rings" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconCircRingsInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconCircRings}"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Sectors" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconCircSectorsInput" IsReadOnly="True" Minimum="3" Maximum="360" Value="{Binding ReconCircSectors}"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Honeycomb -->
+                                    <StackPanel x:Name="ReconHoneyPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconHoneyLengthInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconHoneyLength}"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Triangular -->
+                                    <StackPanel x:Name="ReconTriPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Order" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconTriOrderInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconTriOrder}"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Orientation" VerticalAlignment="Center"/>
+                                            <ComboBox Grid.Column="1" x:Name="ReconTriOrientationComboBox"
+                                                      HorizontalAlignment="Stretch"
+                                                      IsEnabled="False"
+                                                      SelectedIndex="{Binding ReconTriOrientationIndex}">
+                                                <ComboBoxItem Content="Upward"/>
+                                                <ComboBoxItem Content="Downward"/>
+                                            </ComboBox>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Hexagonal -->
+                                    <StackPanel x:Name="ReconHexPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Size" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconHexSizeInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconHexSize}"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- CircularHexagon -->
+                                    <StackPanel x:Name="ReconCircHexPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Size" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconCircHexSizeInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconCircHexSize}"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Stairway -->
+                                    <StackPanel x:Name="ReconStairPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Steps" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconStairStepsInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconStairSteps}"/>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Customized -->
+                                    <StackPanel x:Name="ReconCustomPanel" IsVisible="False">
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Width" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconCustomWidthInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconCustomWidth}"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="80,*" Margin="0,6">
+                                            <TextBlock Grid.Column="0" Text="Height" VerticalAlignment="Center"/>
+                                            <NumericUpDown Grid.Column="1" x:Name="ReconCustomHeightInput" IsReadOnly="True" Minimum="0" Maximum="1000" Value="{Binding ReconCustomHeight}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <!-- Right: Canvas -->
+                    <Canvas Grid.Column="1" Background="White" x:Name="ReconCanvas"
+                            ClipToBounds="True" SizeChanged="OnReconCanvasSizeChanged"/>
+                </Grid>
+
+                <!-- Row 2: Checkboxes -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6,4,0,0" Spacing="24">
+                    <CheckBox x:Name="ReconShowGatesCheckBox" Content="Show the Entrance and Exit"
+                              IsChecked="{Binding ReconShowGates}"
+                              IsCheckedChanged="OnReconShowGatesChanged"/>
+                    <CheckBox x:Name="ReconShowSolutionCheckBox" Content="Show the Solution"
+                              IsChecked="{Binding ReconShowSolution}"
+                              IsCheckedChanged="OnReconShowSolutionChanged"/>
                 </StackPanel>
-                <Button Grid.Column="1" x:Name="SaveButton" Content="Save"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-						Background="#87CEEB"
-                        Width="80" Height="40" Margin="0,4,8,4"
-                        Click="OnSaveClick"/>
             </Grid>
-        </Grid>
-    </Grid>
+        </TabItem>
+    </TabControl>
 </Window>

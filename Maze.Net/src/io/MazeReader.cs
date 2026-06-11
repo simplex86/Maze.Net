@@ -15,18 +15,19 @@ namespace SimplexLab.Maze
         /// <param name="stream"></param>
         /// <param name="field"></param>
         /// <returns></returns>
-        public static MazeField? Read(MemoryStream stream)
+        public static (MazeField field, MazeGate gate) Read(MemoryStream stream)
         {
-            MazeField field = null;
+            MazeField? field = null;
+            MazeGate? gate = null;
 
             try
             {
                 // 读取并验证魔数
-                if (stream.ReadByte() != (byte)'M') return null;
+                if (stream.ReadByte() != (byte)'M') return (null, null);
 
                 // 读取迷宫类型
                 int shapeByte = stream.ReadByte();
-                if (shapeByte < 0 || shapeByte > (int)EMazeShape.Customized) return null;
+                if (shapeByte < 0 || shapeByte > (int)EMazeShape.Customized) return (null, null);
                 var shape = (EMazeShape)shapeByte;
 
                 // 根据类型创建空白实例
@@ -42,22 +43,28 @@ namespace SimplexLab.Maze
                     EMazeShape.Customized => new CustomizedMazeField(),
                     _ => null!
                 };
-                if (field == null!) return null;
+                if (field == null!) return (null, null);
                 field.Shape = shape;
+
+                gate = new MazeGate();
 
                 var size = 2u;
                 // 读取Body数据
-                if (!ReadBody(field, stream, ref size)) return null;
+                if (!ReadBody(field, stream, ref size)) return (null, null);
                 // 读取邻接表数据
-                if (!ReadGrap(field, stream, ref size)) return null;
+                if (!ReadGrap(field, stream, ref size)) return (null, null);
+                // 读取Gate数据
+                if (!ReadGate(gate, stream, ref size)) return (null, null);
                 // 读取并验证总字节数
-                if (!ReadSize(stream, size)) return null;
+                if (!ReadSize(stream, size)) return (null, null);
             }
             catch (Exception ex)
             {
+                field = null;
+                gate = null;
             }
 
-            return field;
+            return (field, gate);
         }
 
         /// <summary>
@@ -65,7 +72,7 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static async Task<MazeField?> ReadAsync(MemoryStream stream)
+        public static async Task<(MazeField field, MazeGate gate)> ReadAsync(MemoryStream stream)
         {
             return await Task.Run(() => Read(stream));
         }
@@ -279,6 +286,27 @@ namespace SimplexLab.Maze
                     bitIndex++;
                 }
             }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gate"></param>
+        /// <param name="stream"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        private static bool ReadGate(MazeGate gate, MemoryStream stream, ref uint size)
+        {
+            if (stream.Position + 12 > stream.Length) return false;
+
+            var gateBytes = new byte[8];
+            if (stream.Read(gateBytes, 0, 8) != 8) return false;
+
+            gate.Entrance = gateBytes[0] | (gateBytes[1] << 8) | (gateBytes[2] << 16) | (gateBytes[3] << 24);
+            gate.Exit = gateBytes[4] | (gateBytes[5] << 8) | (gateBytes[6] << 16) | (gateBytes[7] << 24);
+            size += 8;
 
             return true;
         }

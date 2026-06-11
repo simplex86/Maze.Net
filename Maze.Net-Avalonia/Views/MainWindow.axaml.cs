@@ -23,6 +23,12 @@ public partial class MainWindow : Window
     private MazeGate _mazeGate;
     private MazeSolution _mazeSolution;
 
+    private MazeField? _reconField;
+    private MazeGate _reconGate;
+    private MazeSolution _reconSolution;
+
+    private readonly List<StackPanel> _reconPanels = new();
+
     public MainWindow()
     {
         InitializeComponent();
@@ -38,6 +44,17 @@ public partial class MainWindow : Window
         _panels.Add(CircularHexagonPanel);
         _panels.Add(StairwayPanel);
         _panels.Add(CustomizedPanel);
+
+        _reconPanels.Add(ReconRectPanel);
+        _reconPanels.Add(ReconCircPanel);
+        _reconPanels.Add(ReconHoneyPanel);
+        _reconPanels.Add(ReconTriPanel);
+        _reconPanels.Add(ReconHexPanel);
+        _reconPanels.Add(ReconCircHexPanel);
+        _reconPanels.Add(ReconStairPanel);
+        _reconPanels.Add(ReconCustomPanel);
+
+        ReconShapeComboBox.ItemsSource = _vm.Shapes;
 
         DataContext = _vm;
     }
@@ -342,14 +359,283 @@ public partial class MainWindow : Window
         try
         {
             using var ms = new MemoryStream();
-            if (!MazeWriter.Write(_mazeField, ms)) return;
-            ms.Position = 0;
-            await using var fs = new FileStream(result.Path.LocalPath, FileMode.Create, FileAccess.Write);
-            await ms.CopyToAsync(fs);
+            bool ok = _vm.ShowGates
+                ? MazeWriter.Write(_mazeField, _mazeGate, ms)
+                : MazeWriter.Write(_mazeField, ms);
+            if (!ok) return;
+            var data = ms.ToArray();
+            await File.WriteAllBytesAsync(result.Path.LocalPath, data);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Save error: {ex.Message}");
         }
+    }
+
+    private async void OnReconBrowseClick(object? sender, RoutedEventArgs e)
+    {
+        var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
+        if (storageProvider == null) return;
+
+        var result = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Open Maze File",
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Maze Files")
+                {
+                    Patterns = new[] { "*.maze" }
+                }
+            }
+        });
+
+        if (result.Count > 0)
+        {
+            _vm.ReconFileName = result[0].Path.LocalPath;
+            ReconFileNameInput.Text = _vm.ReconFileName;
+
+            try
+            {
+                var data = await File.ReadAllBytesAsync(_vm.ReconFileName);
+                using var ms = new MemoryStream(data);
+
+                var (field, gate) = await MazeReader.ReadAsync(ms);
+                _reconField = field;
+                _reconGate = gate;
+                if (_reconField != null)
+                {
+                    bool hasGate = gate.Entrance != MazeGate.INVALID && gate.Exit != MazeGate.INVALID;
+                    ReconShowGatesCheckBox.IsEnabled = hasGate;
+                    ReconShowSolutionCheckBox.IsEnabled = hasGate;
+                    if (!hasGate)
+                    {
+                        _vm.ReconShowGates = false;
+                        _vm.ReconShowSolution = false;
+                        ReconShowGatesCheckBox.IsChecked = false;
+                        ReconShowSolutionCheckBox.IsChecked = false;
+                    }
+
+                    if (hasGate)
+                        _reconSolution = await new MazeSolutionGenerator().GenerateAsync(_reconField, _reconGate);
+
+                    UpdateReconParams();
+                    // Defer redraw to next layout pass so canvas has valid bounds
+                    global::Avalonia.Threading.Dispatcher.UIThread.Post(() => RedrawReconCanvas());
+                }
+                else
+                {
+                    Console.WriteLine("Failed to read maze file.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Read error: {ex.Message}");
+            }
+        }
+    }
+
+    private void UpdateReconParams()
+    {
+        if (_reconField == null) return;
+
+        var shape = _reconField.Shape;
+        _vm.ReconShapeIndex = (int)shape;
+
+        // Hide all param panels
+        foreach (var panel in _reconPanels)
+            panel.IsVisible = false;
+
+        // Show the relevant panel
+        var index = (int)shape;
+        if (index < _reconPanels.Count)
+            _reconPanels[index].IsVisible = true;
+
+        switch (shape)
+        {
+            case EMazeShape.Rectangular:
+                var rect = (RectangularMazeField)_reconField;
+                _vm.ReconRectWidth = rect.Width;
+                _vm.ReconRectHeight = rect.Height;
+                break;
+            case EMazeShape.Circular:
+                var circ = (CircularMazeField)_reconField;
+                _vm.ReconCircRings = circ.Rings;
+                _vm.ReconCircSectors = circ.Sectors;
+                break;
+            case EMazeShape.Honeycomb:
+                var honey = (HoneycombMazeField)_reconField;
+                _vm.ReconHoneyLength = honey.Length;
+                break;
+            case EMazeShape.Triangular:
+                var tri = (TriangularMazeField)_reconField;
+                _vm.ReconTriOrder = tri.Order;
+                _vm.ReconTriOrientationIndex = (int)tri.Orientation - 1;
+                break;
+            case EMazeShape.Hexagonal:
+                var hex = (HexagonalMazeField)_reconField;
+                _vm.ReconHexSize = hex.Size;
+                break;
+            case EMazeShape.CircularHexagon:
+                var circHex = (CircularHexagonMazeField)_reconField;
+                _vm.ReconCircHexSize = circHex.Size;
+                break;
+            case EMazeShape.Stairway:
+                var stair = (StairwayMazeField)_reconField;
+                _vm.ReconStairSteps = stair.Steps;
+                break;
+            case EMazeShape.Customized:
+                var custom = (CustomizedMazeField)_reconField;
+                _vm.ReconCustomWidth = custom.Width;
+                _vm.ReconCustomHeight = custom.Height;
+                break;
+        }
+
+        _vm.ReconVertexCount = _reconField.VertexCount;
+    }
+
+    private int GetReconThickness()
+    {
+        if (_reconField == null) return 3;
+
+        var canvasW = (int)ReconCanvas.Bounds.Width;
+        var canvasH = (int)ReconCanvas.Bounds.Height;
+        if (canvasW <= 0 || canvasH <= 0) return 30;
+
+        return _reconField.Shape switch
+        {
+            EMazeShape.Rectangular => CalcRectThickness(canvasW, canvasH),
+            EMazeShape.Circular => CalcCircularThickness(canvasW, canvasH),
+            EMazeShape.Honeycomb => CalcHoneycombThickness(canvasW, canvasH),
+            EMazeShape.Triangular => CalcTriangularThickness(canvasW, canvasH),
+            EMazeShape.Hexagonal => CalcHexagonalThickness(canvasW, canvasH),
+            EMazeShape.CircularHexagon => CalcCircularHexagonThickness(canvasW, canvasH),
+            EMazeShape.Stairway => CalcStairwayThickness(canvasW, canvasH),
+            EMazeShape.Customized => CalcCustomizedThickness(canvasW, canvasH),
+            _ => 30
+        };
+    }
+
+    private int CalcRectThickness(int canvasW, int canvasH)
+    {
+        var rect = (RectangularMazeField)_reconField!;
+        int tw = rect.Width > 0 ? canvasW / rect.Width : 30;
+        int th = rect.Height > 0 ? canvasH / rect.Height : 30;
+        return Math.Max(3, Math.Min(tw, th));
+    }
+
+    private int CalcCircularThickness(int canvasW, int canvasH)
+    {
+        var circ = (CircularMazeField)_reconField!;
+        int rings = circ.Rings > 0 ? circ.Rings : 2;
+        return Math.Max(3, Math.Min(canvasW, canvasH) / (2 * rings));
+    }
+
+    private int CalcHoneycombThickness(int canvasW, int canvasH)
+    {
+        var honey = (HoneycombMazeField)_reconField!;
+        int length = honey.Length > 0 ? honey.Length : 2;
+        var tw = (int)(canvasW / (length * 3.464));
+        var th = (int)(canvasH / (length * 3.0));
+        return Math.Max(3, Math.Min(tw, th));
+    }
+
+    private int CalcTriangularThickness(int canvasW, int canvasH)
+    {
+        var tri = (TriangularMazeField)_reconField!;
+        int order = tri.Order > 0 ? tri.Order : 2;
+        return Math.Max(3, (int)Math.Min(canvasW, canvasH / 0.866) / order);
+    }
+
+    private int CalcHexagonalThickness(int canvasW, int canvasH)
+    {
+        var hex = (HexagonalMazeField)_reconField!;
+        int size = hex.Size > 0 ? hex.Size : 2;
+        return Math.Max(3, (int)Math.Min(canvasW, canvasH / 0.866) / (2 * size));
+    }
+
+    private int CalcCircularHexagonThickness(int canvasW, int canvasH)
+    {
+        var circHex = (CircularHexagonMazeField)_reconField!;
+        int size = circHex.Size > 0 ? circHex.Size : 2;
+        return Math.Max(3, Math.Min(canvasW, canvasH) / (2 * size));
+    }
+
+    private int CalcStairwayThickness(int canvasW, int canvasH)
+    {
+        var stair = (StairwayMazeField)_reconField!;
+        int steps = stair.Steps > 0 ? stair.Steps : 3;
+        return Math.Max(3, Math.Min(canvasW, canvasH) / steps);
+    }
+
+    private int CalcCustomizedThickness(int canvasW, int canvasH)
+    {
+        var custom = (CustomizedMazeField)_reconField!;
+        int tw = custom.Width > 0 ? canvasW / custom.Width : 9;
+        int th = custom.Height > 0 ? canvasH / custom.Height : 9;
+        return Math.Max(3, Math.Min(tw, th));
+    }
+
+    private void RedrawReconCanvas()
+    {
+        ReconCanvas.Children.Clear();
+
+        if (_reconField == null || _reconField.VertexCount == 0) return;
+
+        var canvasW = (int)ReconCanvas.Bounds.Width;
+        var canvasH = (int)ReconCanvas.Bounds.Height;
+        if (canvasW <= 0 || canvasH <= 0) return;
+
+        var thickness = GetReconThickness();
+
+        var drawingGroup = new DrawingGroup();
+        using (var context = drawingGroup.Open())
+        {
+            var gc = new GraphicsContext(context);
+
+            new MazeRenderer()
+                .SetSize(canvasW, canvasH)
+                .SetThickness(thickness)
+                .SetOffset(0, 0)
+                .SetField(_reconField)
+                .SetGate(_vm.ReconShowGates ? _reconGate : new MazeGate())
+                .Draw(gc);
+
+            if (_vm.ReconShowSolution)
+            {
+                new MazeSolutionRenderer()
+                    .SetSize(canvasW, canvasH)
+                    .SetThickness(thickness)
+                    .SetOffset(0, 0)
+                    .SetField(_reconField)
+                    .SetSolution(_reconSolution)
+                    .SetGate(_reconGate)
+                    .Draw(gc);
+            }
+        }
+
+        var drawingImage = new DrawingImage(drawingGroup);
+        var image = new Image { Source = drawingImage };
+        Canvas.SetLeft(image, 0);
+        Canvas.SetTop(image, 0);
+        ReconCanvas.Children.Add(image);
+    }
+
+    private void OnReconShowGatesChanged(object? sender, RoutedEventArgs e)
+    {
+        _vm.ReconShowGates = ReconShowGatesCheckBox.IsChecked == true;
+        RedrawReconCanvas();
+    }
+
+    private void OnReconShowSolutionChanged(object? sender, RoutedEventArgs e)
+    {
+        _vm.ReconShowSolution = ReconShowSolutionCheckBox.IsChecked == true;
+        RedrawReconCanvas();
+    }
+
+    private void OnReconCanvasSizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        if (_reconField != null)
+            RedrawReconCanvas();
     }
 }

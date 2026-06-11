@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 迷宫出入口
     /// </summary>
-    public struct MazeGate
+    public class MazeGate
     {
         public int Entrance;
         public int Exit;

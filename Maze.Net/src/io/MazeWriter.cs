@@ -46,6 +46,44 @@ namespace SimplexLab.Maze
         }
 
         /// <summary>
+        /// 将迷宫数据写入内存流中
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="gate"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static bool Write(MazeField field, MazeGate gate, MemoryStream stream)
+        {
+            var size = 0u;
+            try
+            {
+                size += WriteHead(field, stream);
+                size += WriteBody(field, stream);
+                size += WriteGrap(field, stream);
+                size += WriteGate(gate, stream);
+                WriteSize(stream, size);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 将迷宫数据写入内存流中
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="gate"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static async Task<bool> WriteAsync(MazeField field, MazeGate gate, MemoryStream stream)
+        {
+            return await Task.Run(() => Write(field, gate, stream));
+        }
+
+        /// <summary>
         /// 写入头部数据
         /// </summary>
         private static uint WriteHead(MazeField field, MemoryStream stream)
@@ -176,6 +214,27 @@ namespace SimplexLab.Maze
             stream.Write(datas, 0, datas.Length);
 
             return 4 + (uint)datas.Length;
+        }
+
+        /// <summary>
+        /// 写入出入口数据
+        /// </summary>
+        /// <param name="gate"></param>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        private static uint WriteGate(MazeGate gate, MemoryStream stream)
+        {
+            stream.WriteByte((byte)(gate.Entrance & 0xFF));
+            stream.WriteByte((byte)((gate.Entrance >> 8) & 0xFF));
+            stream.WriteByte((byte)((gate.Entrance >> 16) & 0xFF));
+            stream.WriteByte((byte)((gate.Entrance >> 24) & 0xFF));
+
+            stream.WriteByte((byte)(gate.Exit & 0xFF));
+            stream.WriteByte((byte)((gate.Exit >> 8) & 0xFF));
+            stream.WriteByte((byte)((gate.Exit >> 16) & 0xFF));
+            stream.WriteByte((byte)((gate.Exit >> 24) & 0xFF));
+
+            return 8u;
         }
 
         /// <summary>
