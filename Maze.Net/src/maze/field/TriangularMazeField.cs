@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -11,9 +12,32 @@ namespace SimplexLab.Maze
     /// </summary>
     public class TriangularMazeField : MazeField
     {
-        public int Order { get; }
+        protected override uint WriteBody(MemoryStream stream)
+        {
+            stream.WriteByte((byte)Order);
+            stream.WriteByte((byte)Orientation);
+            return 2;
+        }
 
-        public ETriangleOrientation Orientation { get; }
+        protected override bool ReadBody(MemoryStream stream, ref uint size)
+        {
+            var order = stream.ReadByte();
+            var orientation = stream.ReadByte();
+            if (order <= 0) return false;
+            if (orientation != (int)ETriangleOrientation.Upward &&
+                orientation != (int)ETriangleOrientation.Downward) return false;
+
+            Order = order;
+            Orientation = (ETriangleOrientation)orientation;
+            VertexCount = Order * Order;
+            Graph = BuildGraph();
+            size += 2;
+            return true;
+        }
+
+        public int Order { get; protected set; }
+
+        public ETriangleOrientation Orientation { get; protected set; }
 
         private static readonly double Sqrt3Over2 = Math.Sqrt(3) / 2;
 
@@ -25,6 +49,8 @@ namespace SimplexLab.Maze
             VertexCount = Order * Order;
             Graph = BuildGraph();
         }
+
+        internal TriangularMazeField() { }
 
         private List<List<Adjacency>> BuildGraph()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -8,7 +9,27 @@ namespace SimplexLab.Maze
     /// </summary>
     public class HoneycombMazeField : MazeField
     {
-        public int Length { get; }
+        protected override uint WriteBody(MemoryStream stream)
+        {
+            stream.WriteByte((byte)Length);
+            stream.WriteByte(0);
+            return 2;
+        }
+
+        protected override bool ReadBody(MemoryStream stream, ref uint size)
+        {
+            var length = stream.ReadByte();
+            var padding = stream.ReadByte();
+            if (length <= 0) return false;
+
+            Length = length;
+            VertexCount = 3 * Length * (Length - 1) + 1;
+            Graph = BuildGraph();
+            size += 2;
+            return true;
+        }
+
+        public int Length { get; protected set; }
 
         /// <summary>
         /// Y轴朝上
@@ -35,6 +56,8 @@ namespace SimplexLab.Maze
             VertexCount = 3 * Length * (Length - 1) + 1;
             Graph = BuildGraph();
         }
+
+        internal HoneycombMazeField() { }
 
         private List<List<Adjacency>> BuildGraph()
         {

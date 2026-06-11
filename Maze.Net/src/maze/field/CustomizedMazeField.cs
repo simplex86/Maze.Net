@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SimplexLab.Maze
 {
@@ -11,18 +12,18 @@ namespace SimplexLab.Maze
     public class CustomizedMazeField : MazeField
     {
         /// <summary>遮罩宽度（列数）</summary>
-        public int Width { get; }
+        public int Width { get; protected set; }
 
         /// <summary>遮罩高度（行数）</summary>
-        public int Height { get; }
+        public int Height { get; protected set; }
 
         /// <summary>遮罩数据</summary>
-        public CustomizedMazeMask Mask { get; }
+        public CustomizedMazeMask Mask { get; protected set; }
 
         /// <summary>
         /// 坐标映射表：(x, y) → 顶点索引。仅白色位置有有效索引。
         /// </summary>
-        private readonly int[,] vertexMap;
+        private int[,] vertexMap;
 
         public CustomizedMazeField(CustomizedMazeMask mask)
         {
@@ -51,6 +52,12 @@ namespace SimplexLab.Maze
 
             VertexCount = vertexCount;
             Graph = BuildGraph();
+        }
+
+        internal CustomizedMazeField()
+        {
+            Mask = null!;
+            vertexMap = null!;
         }
 
         /// <summary>
@@ -148,6 +155,88 @@ namespace SimplexLab.Maze
             }
 
             return g;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        protected override uint WriteBody(MemoryStream stream)
+        {
+            stream.WriteByte((byte)Width);
+            stream.WriteByte((byte)Height);
+
+            // 写入Mask数据：每个格子1个bit，true=可用，打包为字节数组
+            int totalCells = Width * Height;
+            int byteCount = (totalCells + 7) / 8;
+            var maskData = new byte[byteCount];
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (Mask[y, x])
+                    {
+                        int bitIndex = y * Width + x;
+                        maskData[bitIndex / 8] |= (byte)(1 << (bitIndex % 8));
+                    }
+                }
+            }
+            stream.Write(maskData, 0, maskData.Length);
+
+            return 2 + (uint)maskData.Length;
+        }
+
+        protected override bool ReadBody(MemoryStream stream, ref uint size)
+        {
+            var w = stream.ReadByte();
+            var h = stream.ReadByte();
+            if (w <= 0 || h <= 0) return false;
+
+            Width = w;
+            Height = h;
+
+            // 读取Mask数据
+            int totalCells = Width * Height;
+            int byteCount = (totalCells + 7) / 8;
+            var maskData = new byte[byteCount];
+            if (stream.Read(maskData, 0, byteCount) < byteCount) return false;
+
+            // 从位图还原Mask
+            var data = new bool[Height][];
+            for (int y = 0; y < Height; y++)
+            {
+                data[y] = new bool[Width];
+                for (int x = 0; x < Width; x++)
+                {
+                    int bitIndex = y * Width + x;
+                    data[y][x] = (maskData[bitIndex / 8] & (1 << (bitIndex % 8))) != 0;
+                }
+            }
+            Mask = new CustomizedMazeMask(data);
+
+            // 构建坐标到顶点索引的映射
+            vertexMap = new int[Height, Width];
+            int vertexCount = 0;
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (Mask[y, x])
+                    {
+                        vertexMap[y, x] = vertexCount++;
+                    }
+                    else
+                    {
+                        vertexMap[y, x] = -1;
+                    }
+                }
+            }
+
+            VertexCount = vertexCount;
+            Graph = BuildGraph();
+            size += 2 + (uint)byteCount;
+            return true;
         }
     }
 }
