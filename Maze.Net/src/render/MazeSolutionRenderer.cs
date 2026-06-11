@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using SimplexLab.Maze;
 
-namespace Maze.TApplication
+namespace SimplexLab.Maze
 {
-    internal class MazeSolutionRenderer
+    public class MazeSolutionRenderer
     {
         private MazeField field;
         private MazeSolution solution;
         private MazeGate gate;
-        protected CoordinateTransform transform = new CoordinateTransform();
+        private CoordinateTransform transform = new CoordinateTransform();
 
         public MazeSolutionRenderer SetField(MazeField field)
         {
@@ -32,25 +30,25 @@ namespace Maze.TApplication
 
         public MazeSolutionRenderer SetSize(int width, int height)
         {
-            transform.width = width;
-            transform.height = height;
+            transform.Width = width;
+            transform.Height = height;
             return this;
         }
 
         public MazeSolutionRenderer SetThickness(int thickness)
         {
-            transform.scale = thickness;
+            transform.Scale = thickness;
             return this;
         }
 
         public MazeSolutionRenderer SetOffset(int dx, int dy)
         {
-            transform.dx = dx;
-            transform.dy = dy;
+            transform.Dx = dx;
+            transform.Dy = dy;
             return this;
         }
 
-        public void Draw(Graphics grap)
+        public void Draw(IGraphicsContext context)
         {
             if (field == null || field.VertexCount == 0) return;
             if (solution.Count < 2) return;
@@ -62,28 +60,25 @@ namespace Maze.TApplication
             var offsety = transform.GetOffsetY(bounds);
             var flipy = field.FlipY;
 
-            var points = new List<PointF>();
+            var points = new List<MazePoint>();
 
             foreach (var vertex in solution)
             {
                 var centroid = ComputeCellCentroid(vertex);
-                points.Add(new PointF(
+                points.Add(new MazePoint(
                     transform.TransformX(centroid.X, bounds, offsetx),
                     transform.TransformY(centroid.Y, bounds, offsety, flipy)));
             }
 
             if (points.Count < 2) return;
 
-            using var pen = new Pen(Color.Red, Math.Max(2f, Math.Min(transform.scale, 2)));
+            var width = Math.Max(2f, Math.Min(transform.Scale, 2));
             for (int i = 1; i < points.Count; i++)
             {
-                grap.DrawLine(pen, points[i - 1], points[i]);
+                context.DrawLine(points[i - 1], points[i], MazeColor.Red, width);
             }
         }
 
-        /// <summary>
-        /// 计算格子的质心（所有边框端点的平均值）
-        /// </summary>
         private Vertex ComputeCellCentroid(int vertex)
         {
             double sumX = 0, sumY = 0;

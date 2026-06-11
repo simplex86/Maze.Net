@@ -207,6 +207,8 @@ public partial class MainWindow : Window
         var drawingGroup = new DrawingGroup();
         using (var context = drawingGroup.Open())
         {
+            var gc = new GraphicsContext(context);
+
             // Draw maze walls
             new MazeRenderer()
                 .SetSize(canvasW, canvasH)
@@ -214,7 +216,7 @@ public partial class MainWindow : Window
                 .SetOffset(0, 0)
                 .SetField(_mazeField)
                 .SetGate(_vm.ShowGates ? _mazeGate : new MazeGate())
-                .Draw(context);
+                .Draw(gc);
 
             // Draw gate markers
             if (_vm.ShowGates && _vm.ShowMarkers)
@@ -225,7 +227,7 @@ public partial class MainWindow : Window
                     .SetOffset(0, 0)
                     .SetField(_mazeField)
                     .SetGate(_mazeGate)
-                    .Draw(context);
+                    .Draw(gc);
             }
 
             // Draw solution
@@ -238,7 +240,7 @@ public partial class MainWindow : Window
                     .SetField(_mazeField)
                     .SetSolution(_mazeSolution)
                     .SetGate(_mazeGate)
-                    .Draw(context);
+                    .Draw(gc);
             }
         }
 

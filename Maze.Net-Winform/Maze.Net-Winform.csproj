@@ -15,25 +15,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="maze\control\CircularMazeControl.cs">
+    <Compile Update="control\CircularMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="maze\control\CircularHexagonMazeControl.cs">
+    <Compile Update="control\CircularHexagonMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="maze\control\HexagonalMazeControl.cs">
+    <Compile Update="control\HexagonalMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="maze\control\CustomizedMazeControl.cs">
+    <Compile Update="control\CustomizedMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="maze\control\StairwayMazeControl.cs">
+    <Compile Update="control\StairwayMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="maze\control\TriangularMazeControl.cs">
+    <Compile Update="control\TriangularMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="maze\control\HoneycombMazeControl.cs">
+    <Compile Update="control\HoneycombMazeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>

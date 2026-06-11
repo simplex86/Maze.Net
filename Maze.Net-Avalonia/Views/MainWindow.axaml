@@ -3,7 +3,7 @@
         xmlns:vm="using:Maze.Avalonia.ViewModels"
         x:Class="Maze.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Maze Generator v1.4.135"
+        Title="Maze Generator v1.5.139"
         Width="1184" Height="781"
         MinWidth="1080" MinHeight="780"
         WindowStartupLocation="CenterScreen">

@@ -187,12 +187,13 @@ namespace Maze.TApplication
         {
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
-            DrawMaze(e.Graphics);
-            DrawGateMarkers(e.Graphics);
-            DrawSolution(e.Graphics);
+            var gc = new GraphicsContext(e.Graphics);
+            DrawMaze(gc);
+            DrawGateMarkers(gc);
+            DrawSolution(gc);
         }
 
-        private void DrawMaze(Graphics grap)
+        private void DrawMaze(IGraphicsContext gc)
         {
             if (mazeField != null)
             {
@@ -202,7 +203,7 @@ namespace Maze.TApplication
                         .SetOffset(dx, dy)
                         .SetField(mazeField)
                         .SetGate(showGates.Checked ? mazeGate : new MazeGate())
-                        .Draw(grap);
+                        .Draw(gc);
             }
         }
 
@@ -215,7 +216,7 @@ namespace Maze.TApplication
             }
         }
 
-        private void DrawGateMarkers(Graphics grap)
+        private void DrawGateMarkers(IGraphicsContext gc)
         {
             if (mazeField != null &&
                 showGates.Checked &&
@@ -227,7 +228,7 @@ namespace Maze.TApplication
                         .SetOffset(dx, dy)
                         .SetField(mazeField)
                         .SetGate(mazeGate)
-                        .Draw(grap);
+                        .Draw(gc);
             }
         }
 
@@ -237,7 +238,7 @@ namespace Maze.TApplication
             mazeSolution = await generator.GenerateAsync(mazeField, mazeGate);
         }
 
-        private void DrawSolution(Graphics grap)
+        private void DrawSolution(IGraphicsContext gc)
         {
             if (showSolution.Checked)
             {
@@ -248,7 +249,7 @@ namespace Maze.TApplication
                         .SetField(mazeField)
                         .SetSolution(mazeSolution)
                         .SetGate(mazeGate)
-                        .Draw(grap);
+                        .Draw(gc);
             }
         }
 
