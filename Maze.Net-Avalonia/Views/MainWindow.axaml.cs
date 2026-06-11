@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -305,6 +306,7 @@ public partial class MainWindow : Window
         ShapeComboBox.IsEnabled = enabled;
         AlgorithmComboBox.IsEnabled = enabled;
         GenerateButton.IsEnabled = enabled;
+        SaveButton.IsEnabled = enabled;
         ShowGatesCheckBox.IsEnabled = enabled;
         ShowMarkersCheckBox.IsEnabled = enabled && _vm.ShowGates;
         ShowSolutionCheckBox.IsEnabled = enabled;
@@ -312,6 +314,42 @@ public partial class MainWindow : Window
         foreach (var panel in _panels)
         {
             panel.IsEnabled = enabled;
+        }
+    }
+
+    private async void OnSaveClick(object? sender, RoutedEventArgs e)
+    {
+        if (_mazeField == null) return;
+
+        var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
+        if (storageProvider == null) return;
+
+        var result = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Save Maze",
+            DefaultExtension = "maze",
+            FileTypeChoices = new[]
+            {
+                new FilePickerFileType("Maze Files")
+                {
+                    Patterns = new[] { "*.maze" }
+                }
+            }
+        });
+
+        if (result == null) return;
+
+        try
+        {
+            using var ms = new MemoryStream();
+            if (!MazeWriter.Write(_mazeField, ms)) return;
+            ms.Position = 0;
+            await using var fs = new FileStream(result.Path.LocalPath, FileMode.Create, FileAccess.Write);
+            await ms.CopyToAsync(fs);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Save error: {ex.Message}");
         }
     }
 }

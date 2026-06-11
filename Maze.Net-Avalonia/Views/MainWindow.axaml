@@ -3,7 +3,7 @@
         xmlns:vm="using:Maze.Avalonia.ViewModels"
         x:Class="Maze.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Maze Generator v1.5.139"
+        Title="SimplexLab-Maze v1.6.141"
         Width="1184" Height="781"
         MinWidth="1080" MinHeight="780"
         WindowStartupLocation="CenterScreen">
@@ -171,18 +171,26 @@
         <Grid Margin="290,0,0,0" RowDefinitions="*,Auto">
             <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
                     ClipToBounds="True"/>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8,4" Spacing="24">
-                <CheckBox x:Name="ShowGatesCheckBox" Content="Show the Entrance and Exit"
-                          IsChecked="{Binding ShowGates}"
-                          IsCheckedChanged="OnShowGatesChanged"/>
-                <CheckBox x:Name="ShowMarkersCheckBox" Content="Show the Entrance and Exit Markers"
-                          IsChecked="{Binding ShowMarkers}"
-                          IsEnabled="{Binding ShowGates}"
-                          IsCheckedChanged="OnShowMarkersChanged"/>
-                <CheckBox x:Name="ShowSolutionCheckBox" Content="Show the Solution"
-                          IsChecked="{Binding ShowSolution}"
-                          IsCheckedChanged="OnShowSolutionChanged"/>
-            </StackPanel>
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,4" Spacing="24">
+                    <CheckBox x:Name="ShowGatesCheckBox" Content="Show the Entrance and Exit"
+                              IsChecked="{Binding ShowGates}"
+                              IsCheckedChanged="OnShowGatesChanged"/>
+                    <CheckBox x:Name="ShowMarkersCheckBox" Content="Show the Entrance and Exit Markers"
+                              IsChecked="{Binding ShowMarkers}"
+                              IsEnabled="{Binding ShowGates}"
+                              IsCheckedChanged="OnShowMarkersChanged"/>
+                    <CheckBox x:Name="ShowSolutionCheckBox" Content="Show the Solution"
+                              IsChecked="{Binding ShowSolution}"
+                              IsCheckedChanged="OnShowSolutionChanged"/>
+                </StackPanel>
+                <Button Grid.Column="1" x:Name="SaveButton" Content="Save"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"
+						HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+						Background="#87CEEB"
+                        Width="80" Height="40" Margin="0,4,8,4"
+                        Click="OnSaveClick"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
