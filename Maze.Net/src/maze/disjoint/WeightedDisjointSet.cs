@@ -4,7 +4,7 @@ namespace SimplexLab.Maze
     /// 带权重的并查集 (Weighted Disjoint Set)
     /// 扩展普通并查集，支持记录元素到根节点的权重（相对关系）
     /// </summary>
-    public class WeightedDisjointSet
+    internal class WeightedDisjointSet
     {
         /// <summary>
         /// 父节点数组，parent[i]表示元素i的父节点

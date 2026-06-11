@@ -114,7 +114,7 @@ namespace SimplexLab.Maze
                                   cy + Math.Sin(theta2));
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var totalUp = Length * (3 * Length - 1) / 2;
             var remaining = vertex;

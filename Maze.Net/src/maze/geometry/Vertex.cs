@@ -3,7 +3,7 @@
     /// <summary>
     /// 顶点
     /// </summary>
-    public struct Vertex
+    internal struct Vertex
     {
         public double X;
         public double Y;

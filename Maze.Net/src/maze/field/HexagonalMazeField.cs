@@ -83,7 +83,7 @@ namespace SimplexLab.Maze
             return g;
         }
 
-        protected virtual IMazeBorder GetEdge(int sector, int row, int column, int edge)
+        internal virtual IMazeBorder GetEdge(int sector, int row, int column, int edge)
         {
             var x1 = 0;
             var y1 = 0;
@@ -142,7 +142,7 @@ namespace SimplexLab.Maze
             return index;
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var sectorSize = Size * Size;
             var sector = vertex / sectorSize;

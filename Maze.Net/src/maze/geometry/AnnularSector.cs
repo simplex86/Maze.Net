@@ -3,7 +3,7 @@
     /// <summary>
     /// 环形扇区
     /// </summary>
-    public struct AnnularSector
+    internal struct AnnularSector
     {
         public double InnerRadius;
         public double OuterRadius;

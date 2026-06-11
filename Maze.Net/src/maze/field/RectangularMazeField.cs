@@ -20,7 +20,7 @@ namespace SimplexLab.Maze
             Graph = BuildGraph();
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var cx = vertex % Width;
             var cy = vertex / Width;

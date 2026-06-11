@@ -1,6 +1,6 @@
 namespace SimplexLab.Maze
 {
-    public class Adjacency
+    internal class Adjacency
     {
         public int Neighbor { get; }
 

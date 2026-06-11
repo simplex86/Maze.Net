@@ -124,7 +124,7 @@ namespace SimplexLab.Maze
             return index + sector;
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var remaining = vertex;
             for (var r = 0; r < Rings; r++)

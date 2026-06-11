@@ -10,7 +10,7 @@ namespace SimplexLab.Maze
             Shape = EMazeShape.CircularHexagon;
         }
 
-        protected override IMazeBorder GetEdge(int sector, int row, int column, int edge)
+        internal override IMazeBorder GetEdge(int sector, int row, int column, int edge)
         {
             if (edge == 0)
             {
@@ -48,7 +48,7 @@ namespace SimplexLab.Maze
             return new LineBorder(ex1, ey1, ex2, ey2);
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var sectorSize = Size * Size;
             var sector = vertex / sectorSize;

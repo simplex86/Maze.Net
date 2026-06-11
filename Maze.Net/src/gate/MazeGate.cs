@@ -11,12 +11,12 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 入口处打开的朝外墙壁的边框
         /// </summary>
-        public IMazeBorder? EntranceBorder;
+        internal IMazeBorder? EntranceBorder;
 
         /// <summary>
         /// 出口处打开的朝外墙壁的边框
         /// </summary>
-        public IMazeBorder? ExitBorder;
+        internal IMazeBorder? ExitBorder;
 
         /// <summary>
         /// 无效索引

@@ -4,7 +4,7 @@ namespace SimplexLab.Maze
     /// 格子的几何形状，用于渲染出入口标记。
     /// 支持两种形状：多边形（由顶点列表定义）和环形扇区（由弧线参数定义）。
     /// </summary>
-    public struct CellShape
+    internal struct CellShape
     {
         /// <summary>
         /// 形状类型

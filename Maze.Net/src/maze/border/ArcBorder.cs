@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 弧线段边界
     /// </summary>
-    public struct ArcBorder : IMazeBorder
+    internal struct ArcBorder : IMazeBorder
     {
         public double CenterX { get; }
         public double CenterY { get; }

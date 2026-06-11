@@ -3,7 +3,7 @@
     /// <summary>
     /// 带弧形边的三角形
     /// </summary>
-    public struct CurvedTriangle
+    internal struct CurvedTriangle
     {
         public bool Upward;
         public double InnerRadius;

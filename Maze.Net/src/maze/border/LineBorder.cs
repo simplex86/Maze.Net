@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 直线段边界
     /// </summary>
-    public struct LineBorder : IMazeBorder
+    internal struct LineBorder : IMazeBorder
     {
         public double X1 { get; }
         public double Y1 { get; }

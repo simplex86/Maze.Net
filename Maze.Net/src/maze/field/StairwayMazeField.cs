@@ -75,7 +75,7 @@ namespace SimplexLab.Maze
             return row * (row + 1) / 2 + col;
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var row = 0;
             var remaining = vertex;

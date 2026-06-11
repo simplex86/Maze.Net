@@ -3,7 +3,7 @@
     /// <summary>
     /// 生成树的边
     /// </summary>
-    public struct SpanningTreeEdge
+    internal struct SpanningTreeEdge
     {
         public int U;
         public int V;

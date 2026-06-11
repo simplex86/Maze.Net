@@ -4,7 +4,7 @@ namespace SimplexLab.Maze
     /// 并查集 (Disjoint Set Union, DSU) 实现
     /// 支持路径压缩和按秩合并优化，用于高效管理和合并不相交的集合
     /// </summary>
-    public class DisjointSet
+    internal class DisjointSet
     {
         /// <summary>
         /// 父节点数组，parent[i]表示元素i的父节点

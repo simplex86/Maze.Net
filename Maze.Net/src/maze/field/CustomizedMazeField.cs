@@ -61,7 +61,7 @@ namespace SimplexLab.Maze
             return vertexMap[y, x];
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             // 从顶点索引反推 (x, y) 坐标
             for (int y = 0; y < Height; y++)

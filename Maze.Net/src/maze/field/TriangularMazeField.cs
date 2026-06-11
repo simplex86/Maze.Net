@@ -171,7 +171,7 @@ namespace SimplexLab.Maze
             return MakeLineBorder(tlX, tlY, trX, trY);
         }
 
-        public override CellShape GetCellShape(int vertex)
+        internal override CellShape GetCellShape(int vertex)
         {
             var row = 0;
             while ((row + 1) * (row + 1) <= vertex)

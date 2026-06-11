@@ -21,14 +21,14 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 邻接表（图）
         /// </summary>
-        public List<List<Adjacency>> Graph { get; protected set; }
+        internal List<List<Adjacency>> Graph { get; set; }
 
         private CoordinateBounds? bounds;
 
         /// <summary>
         /// 坐标范围（延迟计算）
         /// </summary>
-        public CoordinateBounds Bounds
+        internal CoordinateBounds Bounds
         {
             get
             {
@@ -48,7 +48,7 @@ namespace SimplexLab.Maze
         /// </summary>
         /// <param name="vertex">顶点索引</param>
         /// <returns>格子的几何形状</returns>
-        public virtual CellShape GetCellShape(int vertex)
+        internal virtual CellShape GetCellShape(int vertex)
         {
             return CellShape.Polygon(new Vertex[0]);
         }
