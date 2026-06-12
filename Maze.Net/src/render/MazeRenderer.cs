@@ -17,7 +17,15 @@ namespace SimplexLab.Maze
 
         public MazeRenderer SetThickness(int thickness)
         {
-            transform.Scale = thickness;
+            transform.ScaleX = thickness;
+            transform.ScaleY = thickness;
+            return this;
+        }
+
+        public MazeRenderer SetThickness(float scaleX, float scaleY)
+        {
+            transform.ScaleX = scaleX;
+            transform.ScaleY = scaleY;
             return this;
         }
 
@@ -76,7 +84,7 @@ namespace SimplexLab.Maze
                 {
                     var cx = transform.TransformX(arc.CenterX, bounds, offsetx);
                     var cy = transform.TransformY(arc.CenterY, bounds, offsety, flipy);
-                    var radius = arc.Radius * transform.Scale;
+                    var radius = arc.Radius * Math.Min(transform.ScaleX, transform.ScaleY);
                     if (radius <= 0) return;
 
                     double startAngleDeg, sweepAngleDeg;

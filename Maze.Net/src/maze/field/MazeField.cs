@@ -29,7 +29,7 @@ namespace SimplexLab.Maze
         /// <summary>
         /// 坐标范围（延迟计算）
         /// </summary>
-        internal CoordinateBounds Bounds
+        public CoordinateBounds Bounds
         {
             get
             {

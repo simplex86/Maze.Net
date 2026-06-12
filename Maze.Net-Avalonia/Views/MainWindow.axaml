@@ -3,7 +3,7 @@
         xmlns:vm="using:Maze.Avalonia.ViewModels"
         x:Class="Maze.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="SimplexLab-Maze v1.6.145"
+        Title="SimplexLab-Maze v1.6.147"
         Width="1184" Height="781"
         MinWidth="1080" MinHeight="780"
         WindowStartupLocation="CenterScreen">
@@ -49,10 +49,6 @@
                                         <TextBlock Grid.Column="0" Text="Height" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="1" x:Name="RectHeightInput" Minimum="0" Maximum="100" Value="{Binding RectHeight}"/>
                                     </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding RectThickness}"/>
-                                    </Grid>
                                 </StackPanel>
 
                                 <!-- Circular -->
@@ -65,10 +61,6 @@
                                         <TextBlock Grid.Column="0" Text="Sectors" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="1" Minimum="3" Maximum="360" Value="{Binding CircSectors}"/>
                                     </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="100" Value="{Binding CircThickness}"/>
-                                    </Grid>
                                 </StackPanel>
 
                                 <!-- Honeycomb -->
@@ -76,10 +68,6 @@
                                     <Grid ColumnDefinitions="80,*" Margin="0,6">
                                         <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HoneyLength}"/>
-                                    </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding HoneyThickness}"/>
                                     </Grid>
                                 </StackPanel>
 
@@ -98,10 +86,6 @@
                                             <ComboBoxItem Content="Downward"/>
                                         </ComboBox>
                                     </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="15" Maximum="50" Value="{Binding TriThickness}"/>
-                                    </Grid>
                                 </StackPanel>
 
                                 <!-- Hexagonal -->
@@ -109,10 +93,6 @@
                                     <Grid ColumnDefinitions="80,*" Margin="0,6">
                                         <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HexLength}"/>
-                                    </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding HexThickness}"/>
                                     </Grid>
                                 </StackPanel>
 
@@ -122,10 +102,6 @@
                                         <TextBlock Grid.Column="0" Text="Rings" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding CircHexRings}"/>
                                     </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding CircHexThickness}"/>
-                                    </Grid>
                                 </StackPanel>
 
                                 <!-- Stairway -->
@@ -134,22 +110,14 @@
                                         <TextBlock Grid.Column="0" Text="Length" VerticalAlignment="Center"/>
                                         <NumericUpDown Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding StairLength}"/>
                                     </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding StairThickness}"/>
-                                    </Grid>
                                 </StackPanel>
 
                                 <!-- Customized -->
                                 <StackPanel x:Name="CustomizedPanel" IsVisible="False">
                                     <Grid ColumnDefinitions="80,*,Auto" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Mask Path" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="0" Text="Mask" VerticalAlignment="Center"/>
                                         <TextBox Grid.Column="1" x:Name="CustomFileNameInput" IsReadOnly="True" Text="{Binding CustomFileName}"/>
                                         <Button Grid.Column="2" Content="..." Margin="4,0,0,0" Click="OnBrowseClick"/>
-                                    </Grid>
-                                    <Grid ColumnDefinitions="80,*" Margin="0,6">
-                                        <TextBlock Grid.Column="0" Text="Thickness" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="50" Value="{Binding CustomThickness}"/>
                                     </Grid>
                                 </StackPanel>
                             </StackPanel>

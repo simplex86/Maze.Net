@@ -54,9 +54,6 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private int _rectHeight = 0;
     public int RectHeight { get => _rectHeight; set => SetProperty(ref _rectHeight, value); }
 
-    private int _rectThickness = 30;
-    public int RectThickness { get => _rectThickness; set => SetProperty(ref _rectThickness, value); }
-
     // Circular
     private int _circRings = 0;
     public int CircRings { get => _circRings; set => SetProperty(ref _circRings, value); }
@@ -64,15 +61,9 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private int _circSectors = 100;
     public int CircSectors { get => _circSectors; set => SetProperty(ref _circSectors, value); }
 
-    private int _circThickness = 30;
-    public int CircThickness { get => _circThickness; set => SetProperty(ref _circThickness, value); }
-
     // Honeycomb
     private int _honeyLength = 0;
     public int HoneyLength { get => _honeyLength; set => SetProperty(ref _honeyLength, value); }
-
-    private int _honeyThickness = 30;
-    public int HoneyThickness { get => _honeyThickness; set => SetProperty(ref _honeyThickness, value); }
 
     // Triangular
     private int _triLength = 0;
@@ -81,36 +72,21 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private int _triOrientationIndex = 0;
     public int TriOrientationIndex { get => _triOrientationIndex; set => SetProperty(ref _triOrientationIndex, value); }
 
-    private int _triThickness = 20;
-    public int TriThickness { get => _triThickness; set => SetProperty(ref _triThickness, value); }
-
     // Hexagonal
     private int _hexLength = 0;
     public int HexLength { get => _hexLength; set => SetProperty(ref _hexLength, value); }
-
-    private int _hexThickness = 30;
-    public int HexThickness { get => _hexThickness; set => SetProperty(ref _hexThickness, value); }
 
     // CircularHexagon
     private int _circHexRings = 0;
     public int CircHexRings { get => _circHexRings; set => SetProperty(ref _circHexRings, value); }
 
-    private int _circHexThickness = 30;
-    public int CircHexThickness { get => _circHexThickness; set => SetProperty(ref _circHexThickness, value); }
-
     // Stairway
     private int _stairLength = 0;
     public int StairLength { get => _stairLength; set => SetProperty(ref _stairLength, value); }
 
-    private int _stairThickness = 30;
-    public int StairThickness { get => _stairThickness; set => SetProperty(ref _stairThickness, value); }
-
     // Customized
     private string _customFileName = "";
     public string CustomFileName { get => _customFileName; set => SetProperty(ref _customFileName, value); }
-
-    private int _customThickness = 9;
-    public int CustomThickness { get => _customThickness; set => SetProperty(ref _customThickness, value); }
 
     // Reconstruction
     private string _reconFileName = "";
@@ -188,14 +164,14 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
     private string GetParameterInfo(EMazeShape shape) => shape switch
     {
-        EMazeShape.Rectangular => $"Width={RectWidth}, Height={RectHeight}, Thickness={RectThickness}",
-        EMazeShape.Circular => $"Rings={CircRings}, Sectors={CircSectors}, Thickness={CircThickness}",
-        EMazeShape.Honeycomb => $"Length={HoneyLength}, Thickness={HoneyThickness}",
-        EMazeShape.Triangular => $"Length={TriLength}, Orientation={((ETriangleOrientation)(TriOrientationIndex + 1))}, Thickness={TriThickness}",
-        EMazeShape.Hexagonal => $"Length={HexLength}, Thickness={HexThickness}",
-        EMazeShape.CircularHexagon => $"Rings={CircHexRings}, Thickness={CircHexThickness}",
-        EMazeShape.Stairway => $"Length={StairLength}, Thickness={StairThickness}",
-        EMazeShape.Customized => $"FileName={CustomFileName}, Thickness={CustomThickness}",
+        EMazeShape.Rectangular => $"Width={RectWidth}, Height={RectHeight}",
+        EMazeShape.Circular => $"Rings={CircRings}, Sectors={CircSectors}",
+        EMazeShape.Honeycomb => $"Length={HoneyLength}",
+        EMazeShape.Triangular => $"Length={TriLength}, Orientation={((ETriangleOrientation)(TriOrientationIndex + 1))}",
+        EMazeShape.Hexagonal => $"Length={HexLength}",
+        EMazeShape.CircularHexagon => $"Rings={CircHexRings}",
+        EMazeShape.Stairway => $"Length={StairLength}",
+        EMazeShape.Customized => $"FileName={CustomFileName}",
         _ => ""
     };
 }

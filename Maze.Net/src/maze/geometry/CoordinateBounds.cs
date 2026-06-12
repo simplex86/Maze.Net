@@ -3,7 +3,7 @@ namespace SimplexLab.Maze
     /// <summary>
     /// 坐标范围，描述迷宫所有边界的几何包围盒
     /// </summary>
-    internal struct CoordinateBounds
+    public struct CoordinateBounds
     {
         public double MinX { get; }
         public double MinY { get; }

@@ -37,7 +37,15 @@ namespace SimplexLab.Maze
 
         public MazeSolutionRenderer SetThickness(int thickness)
         {
-            transform.Scale = thickness;
+            transform.ScaleX = thickness;
+            transform.ScaleY = thickness;
+            return this;
+        }
+
+        public MazeSolutionRenderer SetThickness(float scaleX, float scaleY)
+        {
+            transform.ScaleX = scaleX;
+            transform.ScaleY = scaleY;
             return this;
         }
 
@@ -72,7 +80,7 @@ namespace SimplexLab.Maze
 
             if (points.Count < 2) return;
 
-            var width = Math.Max(2f, Math.Min(transform.Scale, 2));
+            var width = Math.Max(2f, Math.Min(Math.Min(transform.ScaleX, transform.ScaleY), 2));
             for (int i = 1; i < points.Count; i++)
             {
                 context.DrawLine(points[i - 1], points[i], MazeColor.Red, width);

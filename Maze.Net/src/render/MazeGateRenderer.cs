@@ -18,7 +18,15 @@ namespace SimplexLab.Maze
 
         public MazeGateRenderer SetThickness(int thickness)
         {
-            transform.Scale = thickness;
+            transform.ScaleX = thickness;
+            transform.ScaleY = thickness;
+            return this;
+        }
+
+        public MazeGateRenderer SetThickness(float scaleX, float scaleY)
+        {
+            transform.ScaleX = scaleX;
+            transform.ScaleY = scaleY;
             return this;
         }
 
@@ -91,14 +99,15 @@ namespace SimplexLab.Maze
             cx /= vertices.Length;
             cy /= vertices.Length;
 
-            var shrink = 1.0 - 1.0 / transform.Scale;
-            if (shrink <= 0) return;
+            var shrinkX = 1.0 - 1.0 / transform.ScaleX;
+            var shrinkY = 1.0 - 1.0 / transform.ScaleY;
+            if (shrinkX <= 0 || shrinkY <= 0) return;
 
             var points = new List<MazePoint>();
             for (int i = 0; i < vertices.Length; i++)
             {
-                var vx = cx + (vertices[i].X - cx) * shrink;
-                var vy = cy + (vertices[i].Y - cy) * shrink;
+                var vx = cx + (vertices[i].X - cx) * shrinkX;
+                var vy = cy + (vertices[i].Y - cy) * shrinkY;
 
                 var xx = transform.TransformX(vx, bounds, offsetx);
                 var yy = transform.TransformY(vy, bounds, offsety, flipy);
@@ -115,12 +124,12 @@ namespace SimplexLab.Maze
             var centerx = transform.TransformX(0, bounds, offsetx);
             var centery = transform.TransformY(0, bounds, offsety, flipy);
 
-            var innerr = sector.InnerRadius > 0 ? (float)(sector.InnerRadius * transform.Scale) + 1 : 0;
-            var outerr = (float)(sector.OuterRadius * transform.Scale) - 1;
+            var innerr = sector.InnerRadius > 0 ? (float)(sector.InnerRadius * transform.ScaleX) + 1 : 0;
+            var outerr = (float)(sector.OuterRadius * transform.ScaleX) - 1;
 
             if (outerr <= 0) return;
 
-            var midr = (float)((sector.InnerRadius + sector.OuterRadius) / 2 * transform.Scale);
+            var midr = (float)((sector.InnerRadius + sector.OuterRadius) / 2 * transform.ScaleX);
             var angleShrink = midr > 0 ? 1.0f / midr : 0;
             var adjustedStartAngle = (float)(sector.StartAngle + angleShrink);
             var adjustedSweepAngle = (float)(sector.SweepAngle - 2 * angleShrink);
@@ -148,7 +157,7 @@ namespace SimplexLab.Maze
             var centerx = transform.TransformX(0, bounds, offsetx);
             var centery = transform.TransformY(0, bounds, offsety, flipy);
 
-            var arcr = (float)(ct.ArcRadius * transform.Scale) - 1;
+            var arcr = (float)(ct.ArcRadius * transform.ScaleX) - 1;
             if (arcr <= 0) return;
 
             var angleShrink = arcr > 0 ? 1.0f / arcr : 0;
@@ -170,7 +179,7 @@ namespace SimplexLab.Maze
 
             if (ct.Upward)
             {
-                var innerr = ct.InnerRadius > 0 ? (float)(ct.InnerRadius * transform.Scale) + 1 : 0;
+                var innerr = ct.InnerRadius > 0 ? (float)(ct.InnerRadius * transform.ScaleX) + 1 : 0;
 
                 if (innerr <= 0)
                 {
@@ -188,7 +197,7 @@ namespace SimplexLab.Maze
             }
             else
             {
-                var outerr = (float)(ct.OuterRadius * transform.Scale) - 1;
+                var outerr = (float)(ct.OuterRadius * transform.ScaleX) - 1;
                 if (outerr <= 0) return;
 
                 var angle = (float)ct.OuterAngle;
