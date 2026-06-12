@@ -36,6 +36,13 @@ namespace SimplexLab.Maze
             return this;
         }
 
+        public MazeRenderer SetPadding(int x, int y)
+        {
+            transform.PaddingX = x;
+            transform.PaddingY = y;
+            return this;
+        }
+
         public MazeRenderer SetField(MazeField field)
         {
             this.field = field;

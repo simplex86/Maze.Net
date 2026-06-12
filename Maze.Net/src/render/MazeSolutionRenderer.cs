@@ -56,6 +56,13 @@ namespace SimplexLab.Maze
             return this;
         }
 
+        public MazeSolutionRenderer SetPadding(int x, int y)
+        {
+            transform.PaddingX = x;
+            transform.PaddingY = y;
+            return this;
+        }
+
         public void Draw(IGraphicsContext context)
         {
             if (field == null || field.VertexCount == 0) return;

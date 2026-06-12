@@ -118,12 +118,14 @@ public partial class MainWindow : Window
         return _mazeGenerator.Generate(field, algorithm);
     }
 
+    private const int DefaultCellSize = 30;
+
     private MazeField CreateRectangularField(int canvasW, int canvasH)
     {
         var width = _vm.RectWidth;
         var height = _vm.RectHeight;
-        if (width < 3) width = 25;
-        if (height < 3) height = 25;
+        if (width < 3) width = Math.Max(3, canvasW / DefaultCellSize);
+        if (height < 3) height = Math.Max(3, canvasH / DefaultCellSize);
         return new RectangularMazeField(width, height);
     }
 
@@ -131,7 +133,7 @@ public partial class MainWindow : Window
     {
         var rings = _vm.CircRings;
         var sectors = _vm.CircSectors;
-        if (rings <= 0) rings = 12;
+        if (rings <= 0) rings = Math.Max(2, Math.Min(canvasW, canvasH) / (2 * DefaultCellSize));
         rings = Math.Max(rings, 2);
         return new CircularMazeField(rings, sectors);
     }
@@ -139,7 +141,7 @@ public partial class MainWindow : Window
     private MazeField CreateHoneycombField(int canvasW, int canvasH)
     {
         var length = _vm.HoneyLength;
-        if (length <= 0) length = 8;
+        if (length <= 0) length = Math.Max(2, Math.Min(canvasW, canvasH) / DefaultCellSize);
         length = Math.Max(length, 2);
         return new HoneycombMazeField(length);
     }
@@ -148,7 +150,7 @@ public partial class MainWindow : Window
     {
         var length = _vm.TriLength;
         var orientation = (ETriangleOrientation)(_vm.TriOrientationIndex + 1);
-        if (length <= 0) length = 25;
+        if (length <= 0) length = Math.Max(2, Math.Min(canvasW, canvasH) / DefaultCellSize);
         length = Math.Max(length, 2);
         return new TriangularMazeField(length, orientation);
     }
@@ -156,7 +158,7 @@ public partial class MainWindow : Window
     private MazeField CreateHexagonalField(int canvasW, int canvasH)
     {
         var length = _vm.HexLength;
-        if (length <= 0) length = 12;
+        if (length <= 0) length = Math.Max(2, Math.Min(canvasW, canvasH) / DefaultCellSize);
         length = Math.Max(length, 2);
         return new HexagonalMazeField(length);
     }
@@ -164,7 +166,7 @@ public partial class MainWindow : Window
     private MazeField CreateCircularHexagonField(int canvasW, int canvasH)
     {
         var rings = _vm.CircHexRings;
-        if (rings <= 0) rings = 8;
+        if (rings <= 0) rings = Math.Max(2, Math.Min(canvasW, canvasH) / (2 * DefaultCellSize));
         rings = Math.Max(rings, 2);
         return new CircularHexagonMazeField(rings);
     }
@@ -172,7 +174,7 @@ public partial class MainWindow : Window
     private MazeField CreateStairwayField(int canvasW, int canvasH)
     {
         var length = _vm.StairLength;
-        if (length <= 0) length = 20;
+        if (length <= 0) length = Math.Max(3, Math.Min(canvasW, canvasH) / DefaultCellSize);
         length = Math.Max(length, 3);
         return new StairwayMazeField(length);
     }
@@ -192,16 +194,11 @@ public partial class MainWindow : Window
         var scaleX = (float)(canvasW / bounds.Width);
         var scaleY = (float)(canvasH / bounds.Height);
 
-        if (field.Shape == EMazeShape.Rectangular)
-        {
-            // Rectangular maze: independent X/Y scaling to fill canvas
-            return (Math.Max(3f, scaleX), Math.Max(3f, scaleY));
-        }
-
-        // Other maze types: uniform scaling to maintain shape
         var scale = Math.Max(3f, Math.Min(scaleX, scaleY));
         return (scale, scale);
     }
+
+    private const int DefaultPadding = 2;
 
     private void RedrawCanvas()
     {
@@ -213,7 +210,9 @@ public partial class MainWindow : Window
         var canvasH = (int)MazeCanvas.Bounds.Height;
         if (canvasW <= 0 || canvasH <= 0) return;
 
-        var (scaleX, scaleY) = CalcAutoScale(_mazeField, canvasW, canvasH);
+        var paddingX = DefaultPadding;
+        var paddingY = DefaultPadding;
+        var (scaleX, scaleY) = CalcAutoScale(_mazeField, canvasW - 2 * paddingX, canvasH - 2 * paddingY);
 
         var drawingGroup = new DrawingGroup();
         using (var context = drawingGroup.Open())
@@ -225,6 +224,7 @@ public partial class MainWindow : Window
                 .SetSize(canvasW, canvasH)
                 .SetThickness(scaleX, scaleY)
                 .SetOffset(0, 0)
+                .SetPadding(paddingX, paddingY)
                 .SetField(_mazeField)
                 .SetGate(_vm.ShowGates ? _mazeGate : new MazeGate())
                 .Draw(gc);
@@ -236,6 +236,7 @@ public partial class MainWindow : Window
                     .SetSize(canvasW, canvasH)
                     .SetThickness(scaleX, scaleY)
                     .SetOffset(0, 0)
+                    .SetPadding(paddingX, paddingY)
                     .SetField(_mazeField)
                     .SetGate(_mazeGate)
                     .Draw(gc);
@@ -248,6 +249,7 @@ public partial class MainWindow : Window
                     .SetSize(canvasW, canvasH)
                     .SetThickness(scaleX, scaleY)
                     .SetOffset(0, 0)
+                    .SetPadding(paddingX, paddingY)
                     .SetField(_mazeField)
                     .SetSolution(_mazeSolution)
                     .SetGate(_mazeGate)
@@ -497,6 +499,8 @@ public partial class MainWindow : Window
         var canvasH = (int)ReconCanvas.Bounds.Height;
         if (canvasW <= 0 || canvasH <= 0) return;
 
+        var paddingX = DefaultPadding;
+        var paddingY = DefaultPadding;
         var (scaleX, scaleY) = CalcAutoScale(_reconField, canvasW, canvasH);
 
         var drawingGroup = new DrawingGroup();
@@ -507,6 +511,7 @@ public partial class MainWindow : Window
             new MazeRenderer()
                 .SetSize(canvasW, canvasH)
                 .SetThickness(scaleX, scaleY)
+                .SetPadding(paddingX, paddingY)
                 .SetOffset(0, 0)
                 .SetField(_reconField)
                 .SetGate(_vm.ReconShowGates ? _reconGate : new MazeGate())
@@ -517,6 +522,7 @@ public partial class MainWindow : Window
                 new MazeSolutionRenderer()
                     .SetSize(canvasW, canvasH)
                     .SetThickness(scaleX, scaleY)
+                    .SetPadding(paddingX, paddingY)
                     .SetOffset(0, 0)
                     .SetField(_reconField)
                     .SetSolution(_reconSolution)
