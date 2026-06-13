@@ -22,10 +22,12 @@ public partial class MainWindow : Window
     private MazeField? _mazeField;
     private MazeGate _mazeGate;
     private MazeSolution _mazeSolution;
+    private MazeScore _mazeScore;
 
     private MazeField? _reconField;
     private MazeGate _reconGate;
     private MazeSolution _reconSolution;
+    private MazeScore _reconScore;
 
     private readonly List<StackPanel> _reconPanels = new();
 
@@ -76,6 +78,7 @@ public partial class MainWindow : Window
         try
         {
             await GenerateMazeAsync();
+            await EvaluateMazeAsync();
             RedrawCanvas();
         }
         catch (Exception ex)
@@ -92,12 +95,48 @@ public partial class MainWindow : Window
         var shape = (EMazeShape)_vm.SelectedShapeIndex;
         var algorithm = (EMazeAlgorithm)(_vm.SelectedAlgorithmIndex + 1);
 
-        _mazeField = await Task.Run(() => CreateAndGenerateField(shape, algorithm));
+        _mazeField = await CreateAndGenerateFieldAsync(shape, algorithm);
         _mazeGate = await new MazeGateGenerator().GenerateAsync(_mazeField);
         _mazeSolution = await new MazeSolutionGenerator().GenerateAsync(_mazeField, _mazeGate);
     }
 
-    private MazeField CreateAndGenerateField(EMazeShape shape, EMazeAlgorithm algorithm)
+    private async Task EvaluateMazeAsync()
+    {
+        _mazeScore = await MazeScoreEvaluator.EvaluateAsync(_mazeField, _mazeGate, _mazeSolution);
+        UpdateGenScorePanel();
+    }
+
+    private void UpdateGenScorePanel()
+    {
+        GenPathEfficiencyScore.Text = FormatScore(_mazeScore.PathEfficiencyScore);
+        GenStructuralComplexityScore.Text = FormatScore(_mazeScore.StructuralComplexityScore);
+        GenExplorationDepthScore.Text = FormatScore(_mazeScore.ExplorationDepthScore);
+        GenDecisionDensityScore.Text = FormatScore(_mazeScore.DecisionDensityScore);
+        GenDeadEndReasonabilityScore.Text = FormatScore(_mazeScore.DeadEndReasonabilityScore);
+        GenSolutionConcealmentScore.Text = FormatScore(_mazeScore.SolutionConcealmentScore);
+        GenBranchBalanceScore.Text = FormatScore(_mazeScore.BranchBalanceScore);
+        GenDeadEndDiversityScore.Text = FormatScore(_mazeScore.DeadEndDiversityScore);
+        GenTotalScore.Text = FormatTotal(_mazeScore.TotalScore);
+    }
+
+    private void UpdateReconScorePanel()
+    {
+        ReconPathEfficiencyScore.Text = FormatScore(_reconScore.PathEfficiencyScore);
+        ReconStructuralComplexityScore.Text = FormatScore(_reconScore.StructuralComplexityScore);
+        ReconExplorationDepthScore.Text = FormatScore(_reconScore.ExplorationDepthScore);
+        ReconDecisionDensityScore.Text = FormatScore(_reconScore.DecisionDensityScore);
+        ReconDeadEndReasonabilityScore.Text = FormatScore(_reconScore.DeadEndReasonabilityScore);
+        ReconSolutionConcealmentScore.Text = FormatScore(_reconScore.SolutionConcealmentScore);
+        ReconBranchBalanceScore.Text = FormatScore(_reconScore.BranchBalanceScore);
+        ReconDeadEndDiversityScore.Text = FormatScore(_reconScore.DeadEndDiversityScore);
+        ReconTotalScore.Text = FormatTotal(_reconScore.TotalScore);
+    }
+
+    private static string FormatScore(double score) => score.ToString("F1");
+
+    private static string FormatTotal(double total) => total.ToString("F1");
+
+    private async Task<MazeField> CreateAndGenerateFieldAsync(EMazeShape shape, EMazeAlgorithm algorithm)
     {
         var canvasW = (int)MazeCanvas.Bounds.Width;
         var canvasH = (int)MazeCanvas.Bounds.Height;
@@ -115,7 +154,7 @@ public partial class MainWindow : Window
             _ => throw new ArgumentException($"Unknown shape: {shape}")
         };
 
-        return _mazeGenerator.Generate(field, algorithm);
+        return await _mazeGenerator.GenerateAsync(field, algorithm);
     }
 
     private const int DefaultCellSize = 30;
@@ -414,7 +453,12 @@ public partial class MainWindow : Window
                     if (hasGate)
                         _reconSolution = await new MazeSolutionGenerator().GenerateAsync(_reconField, _reconGate);
 
+                    _reconScore = hasGate
+                        ? await MazeScoreEvaluator.EvaluateAsync(_reconField, _reconGate, _reconSolution)
+                        : new MazeScore();
+
                     UpdateReconParams();
+                    UpdateReconScorePanel();
                     // Defer redraw to next layout pass so canvas has valid bounds
                     global::Avalonia.Threading.Dispatcher.UIThread.Post(() => RedrawReconCanvas());
                 }
@@ -501,7 +545,7 @@ public partial class MainWindow : Window
 
         var paddingX = DefaultPadding;
         var paddingY = DefaultPadding;
-        var (scaleX, scaleY) = CalcAutoScale(_reconField, canvasW, canvasH);
+        var (scaleX, scaleY) = CalcAutoScale(_reconField, canvasW - 2 * paddingX, canvasH - 2 * paddingY);
 
         var drawingGroup = new DrawingGroup();
         using (var context = drawingGroup.Open())

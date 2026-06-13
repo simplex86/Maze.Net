@@ -3,9 +3,9 @@
         xmlns:vm="using:Maze.Avalonia.ViewModels"
         x:Class="Maze.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="SimplexLab-Maze v1.6.147"
-        Width="1184" Height="781"
-        MinWidth="1080" MinHeight="780"
+        Title="SimplexLab-Maze v1.7.148"
+        Width="1400" Height="780"
+        MinWidth="1400" MinHeight="780"
         WindowStartupLocation="CenterScreen">
 
     <TabControl x:Name="MainTabControl" Padding="2">
@@ -138,8 +138,69 @@
                     </Grid>
                 </Border>
 
-                <!-- Right side content -->
-                <Grid Margin="290,0,0,0" RowDefinitions="*,Auto">
+                <!-- Right evaluation panel separator (Row 0 only, same height as canvas) -->
+                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1,0,0,0"
+                        HorizontalAlignment="Right" Width="290"/>
+
+                <!-- Right evaluation panel (Row 0 only, same height as canvas) -->
+                <Border Grid.Row="0" HorizontalAlignment="Right" Width="290" Padding="6">
+                    <StackPanel>
+                        <TextBlock Text="质量评估报告" FontSize="15" FontWeight="Bold"
+                                   Margin="0,0,0,12" HorizontalAlignment="Center"/>
+
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="结构复杂度" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenStructuralComplexityScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="探索深度" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenExplorationDepthScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="决策密度" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenDecisionDensityScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="路径效率" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenPathEfficiencyScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="路径合理性" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenDeadEndReasonabilityScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="路径多样性" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenDeadEndDiversityScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="岔路均衡度" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenBranchBalanceScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="解的隐蔽性" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenSolutionConcealmentScore" Text="0"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Border BorderBrush="LightGray" BorderThickness="0,1,0,0" Margin="0,8"/>
+
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                            <TextBlock Text="总得分" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="GenTotalScore" Text="0"
+                                       FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Middle content -->
+                <Grid Margin="290,0,290,0" RowDefinitions="*,Auto">
                     <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
                             ClipToBounds="True"/>
                     <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
@@ -168,10 +229,10 @@
 
         <!-- Reconstruction Tab -->
         <TabItem Header="Reconstruction">
-            <Grid RowDefinitions="Auto,*,Auto" Margin="4">
+            <Grid RowDefinitions="Auto,*" Margin="4">
                 <!-- Row 0: File selector -->
                 <Grid ColumnDefinitions="80,*,Auto" Margin="6,0,0,4">
-                    <TextBlock Grid.Column="0" Text="File" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Text="Selection" VerticalAlignment="Center"/>
                     <TextBox Grid.Column="1" x:Name="ReconFileNameInput" IsReadOnly="True"
                              Text="{Binding ReconFileName}"/>
                     <Button Grid.Column="2" x:Name="ReconBrowseButton" Content="..."
@@ -180,14 +241,14 @@
                             Click="OnReconBrowseClick"/>
                 </Grid>
 
-                <!-- Row 1: Left params panel + Right canvas -->
-                <Grid Grid.Row="1" ColumnDefinitions="290,*">
+                <!-- Row 1: Left params panel + Canvas + Right evaluation panel -->
+                <Grid Grid.Row="1" ColumnDefinitions="290,*,290" RowDefinitions="*,Auto">
                     <!-- Vertical separator spanning entire height -->
-                    <Border BorderBrush="LightGray" BorderThickness="0,0,1,0"
+                    <Border Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="0,0,1,0"
                             HorizontalAlignment="Left" Width="290"/>
 
                     <!-- Left: read-only maze parameters (mirrors Generation page layout) -->
-                    <Border HorizontalAlignment="Left" Width="290" Padding="6">
+                    <Border Grid.RowSpan="2" HorizontalAlignment="Left" Width="290" Padding="6">
                         <Grid RowDefinitions="Auto,*,Auto">
                             <!-- Shape selector (read-only) -->
                             <Grid Grid.Row="0" ColumnDefinitions="80,*" Margin="0,0,0,8">
@@ -291,20 +352,78 @@
                         </Grid>
                     </Border>
 
-                    <!-- Right: Canvas -->
-                    <Canvas Grid.Column="1" Background="White" x:Name="ReconCanvas"
+                    <!-- Middle: Canvas + Checkboxes -->
+                    <Canvas Grid.Column="1" Grid.Row="0" Background="White" x:Name="ReconCanvas"
                             ClipToBounds="True" SizeChanged="OnReconCanvasSizeChanged"/>
-                </Grid>
+                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="8,4" Spacing="24">
+                        <CheckBox x:Name="ReconShowGatesCheckBox" Content="Show the Entrance and Exit"
+                                  IsChecked="{Binding ReconShowGates}"
+                                  IsCheckedChanged="OnReconShowGatesChanged"/>
+                        <CheckBox x:Name="ReconShowSolutionCheckBox" Content="Show the Solution"
+                                  IsChecked="{Binding ReconShowSolution}"
+                                  IsCheckedChanged="OnReconShowSolutionChanged"/>
+                    </StackPanel>
 
-                <!-- Row 2: Checkboxes -->
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6,4,0,0" Spacing="24">
-                    <CheckBox x:Name="ReconShowGatesCheckBox" Content="Show the Entrance and Exit"
-                              IsChecked="{Binding ReconShowGates}"
-                              IsCheckedChanged="OnReconShowGatesChanged"/>
-                    <CheckBox x:Name="ReconShowSolutionCheckBox" Content="Show the Solution"
-                              IsChecked="{Binding ReconShowSolution}"
-                              IsCheckedChanged="OnReconShowSolutionChanged"/>
-                </StackPanel>
+                    <!-- Right evaluation panel separator (spanning canvas + checkbox area) -->
+                    <Border Grid.Column="2" Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="1,0,0,0"/>
+
+                    <!-- Right evaluation panel (spanning canvas + checkbox area) -->
+                    <Border Grid.Column="2" Grid.RowSpan="2" Padding="6">
+                        <StackPanel>
+                            <TextBlock Text="质量评估报告" FontSize="15" FontWeight="Bold"
+                                       Margin="0,0,0,12" HorizontalAlignment="Center"/>
+
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="结构复杂度" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconStructuralComplexityScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="探索深度" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconExplorationDepthScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="决策密度" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconDecisionDensityScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="路径效率" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconPathEfficiencyScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="路径合理性" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconDeadEndReasonabilityScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="路径多样性" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconDeadEndDiversityScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="岔路均衡度" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconBranchBalanceScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="解的隐蔽性" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconSolutionConcealmentScore" Text="0"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+
+                            <Border BorderBrush="LightGray" BorderThickness="0,1,0,0" Margin="0,8"/>
+
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4">
+                                <TextBlock Text="总得分" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" x:Name="ReconTotalScore" Text="0"
+                                           FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </Grid>
         </TabItem>
     </TabControl>
