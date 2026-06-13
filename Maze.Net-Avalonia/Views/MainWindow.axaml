@@ -11,7 +11,7 @@
     <TabControl x:Name="MainTabControl" Padding="2">
         <!-- Generation Tab -->
         <TabItem Header="Generation">
-            <Grid RowDefinitions="*,Auto">
+            <Grid ColumnDefinitions="290,*,290" RowDefinitions="*,Auto">
                 <!-- Vertical separator spanning entire height -->
                 <Border Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness="0,0,1,0"
                         HorizontalAlignment="Left" Width="290"/>
@@ -139,11 +139,10 @@
                 </Border>
 
                 <!-- Right evaluation panel separator (Row 0 only, same height as canvas) -->
-                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1,0,0,0"
-                        HorizontalAlignment="Right" Width="290"/>
+                <Border Grid.Row="0" Grid.Column="2" BorderBrush="LightGray" BorderThickness="1,0,0,0"/>
 
                 <!-- Right evaluation panel (Row 0 only, same height as canvas) -->
-                <Border Grid.Row="0" HorizontalAlignment="Right" Width="290" Padding="6">
+                <Border Grid.Row="0" Grid.Column="2" Padding="6">
                     <StackPanel>
                         <TextBlock Text="质量评估报告" FontSize="15" FontWeight="Bold"
                                    Margin="0,0,0,12" HorizontalAlignment="Center"/>
@@ -200,7 +199,7 @@
                 </Border>
 
                 <!-- Middle content -->
-                <Grid Margin="290,0,290,0" RowDefinitions="*,Auto">
+                <Grid Grid.Column="1" RowDefinitions="*,Auto">
                     <Canvas Grid.Row="0" Background="White" x:Name="MazeCanvas"
                             ClipToBounds="True"/>
                     <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
@@ -229,7 +228,7 @@
 
         <!-- Reconstruction Tab -->
         <TabItem Header="Reconstruction">
-            <Grid RowDefinitions="Auto,*" Margin="4">
+            <Grid RowDefinitions="Auto,*">
                 <!-- Row 0: File selector -->
                 <Grid ColumnDefinitions="80,*,Auto" Margin="6,0,0,4">
                     <TextBlock Grid.Column="0" Text="Selection" VerticalAlignment="Center"/>
