@@ -5,18 +5,52 @@
 - [迷宫生成器](#迷宫生成器)
 - [出入口生成器](#出入口生成器)
 - [解法生成器](#解法生成器)
+- [质量评估器](#质量评估器)
 
 ## 迷宫生成器
 
-提供多种形状的随机迷宫生成器
+提供多种形状的迷宫场的数据结构
 
-- [矩形迷宫生成器](./doc/reference/retangular/retangular_maze.md)
-- [圆形迷宫生成器](./doc/reference/circular/circular_maze.md)
-- [蜂窝迷宫生成器](./doc/reference/honeycomb/honeycomb_maze.md)
-- [三角形迷宫生成器](./doc/reference/triangular/triangular_maze.md)
-- [六边形迷宫生成器](./doc/reference/hexagonal/hexagonal_maze.md)
-- [圆三角格迷宫生成器](./doc/reference/circularhexagon/circularhexagon_maze.md)
-- [阶梯形迷宫生成器](./doc/reference/stairway/stairway_maze.md)
+- [矩形](./doc/reference/retangular_maze.md)
+- [圆形](./doc/reference/circular_maze.md)
+- [蜂窝](./doc/reference/honeycomb_maze.md)
+- [三角形](./doc/reference/triangular_maze.md)
+- [六边形](./doc/reference/hexagonal_maze.md)
+- [圆三角格](./doc/reference/circularhexagon_maze.md)
+- [阶梯形](./doc/reference/stairway_maze.md)
+- [自定义](./doc/reference/customized_maze.md)
+
+由（统一的）随机迷宫生成器生成不同的迷宫
+
+``` csharp
+public class MazeGenerator
+{
+    // 同步函数
+    public MazeField Generate(MazeField field, EMazeAlgorithm algorithm);
+    // 异步函数
+    public async Task<MazeField> GenerateAsync(MazeField field, EMazeAlgorithm algorithm)
+}
+```
+
+### 参数
+
+- **field** 迷宫场数据
+- **algorithm** 生成算法
+    - DFS
+    - BFS
+    - Prim
+    - Kruskal
+    - Wilson
+    - Eller
+    - Aldous-Broder
+    - Hunt and Kill
+
+### 示例
+
+``` csharp
+var field = new CircularMazeField(17, 100);
+var field = generator.Generate(field, MazeAlgorithm.Kruskal);
+```
 
 ![](./doc/images/maze.png)
 
@@ -43,13 +77,15 @@
 
 为各种形状的迷宫生成随机出入口
 
-- [矩形迷宫出入口生成器](./doc/reference/retangular/retangular_gate.md)
-- [圆形迷宫出入口生成器](./doc/reference/circular/circular_gate.md)
-- [蜂窝迷宫出入口生成器](./doc/reference/honeycomb/honeycomb_gate.md)
-- [三角形迷宫出入口生成器](./doc/reference/triangular/triangular_gate.md)
-- [六边形迷宫出入口生成器](./doc/reference/hexagonal/hexagonal_gate.md)
-- [圆三角格迷宫出入口生成器](./doc/reference/circularhexagon/circularhexagon_gate.md)
-- [阶梯形迷宫出入口生成器](./doc/reference/stairway/stairway_gate.md)
+``` csharp
+public class MazeGateGenerator
+{
+    // 创建迷宫出入口（同步）
+    public MazeGate Generate(MazeField field);
+    // 创建迷宫出入口（异步）
+    public async Task<MazeGate> GenerateAsync(MazeField field)
+}
+```
 
 ![](./doc/images/gate.png)
 
@@ -64,6 +100,7 @@
 > | 六边形迷宫 | 六边形的对边 |
 > | 圆三角格迷宫 | 同直径的两端 |
 > | 阶梯形迷宫 | 入口在直角点，出口在顶点 |
+> | 自定义迷宫 | 迷宫边缘 |
 
 ## 解法生成器
 
@@ -85,3 +122,17 @@ var solution = generator.Generate(field, gate);
 ```
 
 ![](./doc/images/solution.png)
+
+## 质量评估器
+
+根据迷宫、出入口、解法，评估迷宫的质量
+
+``` csharp
+public class MazeScoreEvaluator
+{
+    // 评估迷宫质量（同步）
+    public static MazeScore Evaluate(MazeField field, MazeGate gate, MazeSolution solution);
+    // 评估迷宫质量（异步）
+    public static async Task<MazeScore> EvaluateAsync(MazeField field, MazeGate gate, MazeSolution solution)
+}
+```
