@@ -96,6 +96,69 @@ namespace SimplexLab.Maze
 
         private Vertex ComputeCellCentroid(int vertex)
         {
+            var shape = field.GetCellShape(vertex);
+
+            switch (shape.Type)
+            {
+                case CellShapeType.AnnularSector:
+                    return ComputeAnnularSectorCentroid(shape.Sector);
+                case CellShapeType.CurvedTriangle:
+                    return ComputeCurvedTriangleCentroid(shape.CurvedTriangle);
+                default:
+                    return ComputePolygonCentroid(vertex);
+            }
+        }
+
+        private Vertex ComputeAnnularSectorCentroid(AnnularSector sector)
+        {
+            var r1 = sector.InnerRadius;
+            var r2 = sector.OuterRadius;
+            var theta = sector.SweepAngle;
+            var midAngle = sector.StartAngle + theta / 2.0;
+
+            double rBar;
+            if (r1 > 0)
+            {
+                // 环形扇区质心径向距离: r̄ = (2/3) * (r2³ - r1³) / (r2² - r1²) * sin(θ/2) / (θ/2)
+                rBar = (2.0 / 3.0) * (r2 * r2 * r2 - r1 * r1 * r1) / (r2 * r2 - r1 * r1)
+                     * Math.Sin(theta / 2.0) / (theta / 2.0);
+            }
+            else
+            {
+                // 扇形质心径向距离: r̄ = (2r2/3) * sin(θ/2) / (θ/2)
+                rBar = (2.0 * r2 / 3.0) * Math.Sin(theta / 2.0) / (theta / 2.0);
+            }
+
+            return new Vertex(rBar * Math.Cos(midAngle), rBar * Math.Sin(midAngle));
+        }
+
+        private Vertex ComputeCurvedTriangleCentroid(CurvedTriangle ct)
+        {
+            // 近似：使用弧线中点与对侧顶点的中间位置
+            var midAngle = ct.ArcStartAngle + ct.ArcSweepAngle / 2.0;
+            var midR = ct.ArcRadius * 2.0 / 3.0 * Math.Sin(ct.ArcSweepAngle / 2.0) / (ct.ArcSweepAngle / 2.0);
+            var arcMidX = midR * Math.Cos(midAngle);
+            var arcMidY = midR * Math.Sin(midAngle);
+
+            double tipX, tipY;
+            if (ct.Upward)
+            {
+                var innerAngle = ct.InnerAngle;
+                tipX = ct.InnerRadius * Math.Cos(innerAngle);
+                tipY = ct.InnerRadius * Math.Sin(innerAngle);
+            }
+            else
+            {
+                var outerAngle = ct.OuterAngle;
+                tipX = ct.OuterRadius * Math.Cos(outerAngle);
+                tipY = ct.OuterRadius * Math.Sin(outerAngle);
+            }
+
+            return new Vertex((arcMidX + tipX) / 2.0, (arcMidY + tipY) / 2.0);
+        }
+
+        private Vertex ComputePolygonCentroid(int vertex)
+        {
             double sumX = 0, sumY = 0;
             int count = 0;
 
@@ -105,17 +168,6 @@ namespace SimplexLab.Maze
                 {
                     sumX += line.X1 + line.X2;
                     sumY += line.Y1 + line.Y2;
-                    count += 2;
-                }
-                else if (edge.Border is ArcBorder arc)
-                {
-                    var startX = arc.CenterX + arc.Radius * Math.Cos(arc.StartAngle);
-                    var startY = arc.CenterY + arc.Radius * Math.Sin(arc.StartAngle);
-                    var endAngle = arc.StartAngle + arc.SweepAngle;
-                    var endX = arc.CenterX + arc.Radius * Math.Cos(endAngle);
-                    var endY = arc.CenterY + arc.Radius * Math.Sin(endAngle);
-                    sumX += startX + endX;
-                    sumY += startY + endY;
                     count += 2;
                 }
             }
