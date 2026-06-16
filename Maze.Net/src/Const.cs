@@ -6,27 +6,27 @@
     public enum EMazeShape
     {
         /// <summary>
-        /// 矩形的
+        /// 矩形
         /// </summary>
         Rectangular,
         /// <summary>
-        /// 圆形的
+        /// 圆形
         /// </summary>
         Circular,
         /// <summary>
-        /// 蜂窝状的
+        /// 蜂窝状
         /// </summary>
         Honeycomb,
         /// <summary>
-        /// 三角形的
+        /// 三角形
         /// </summary>
         Triangular,
         /// <summary>
-        /// 六边形的
+        /// 六边形
         /// </summary>
         Hexagonal,
         /// <summary>
-        /// 圆环-三角格
+        /// 圆三角格
         /// </summary>
         CircularHexagon,
         /// <summary>
