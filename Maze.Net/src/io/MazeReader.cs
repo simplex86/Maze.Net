@@ -114,27 +114,42 @@ namespace SimplexLab.Maze
         {
             var rings = stream.ReadByte();
             var sectors = stream.ReadByte();
-            if (rings <= 0 || sectors < 3) return false;
+            if (rings <= 0 || (sectors > 0 && sectors < 3)) return false;
 
             field.Rings = rings;
             field.Sectors = sectors;
 
             // 重新计算SectorsPerRing
             field.SectorsPerRing = new int[rings];
-            var normalizedMaxSectors = 3;
-            while (normalizedMaxSectors * 2 <= sectors)
-                normalizedMaxSectors *= 2;
-
             field.SectorsPerRing[0] = 3;
-            for (var r = 1; r < rings; r++)
+
+            if (sectors > 0)
             {
-                field.SectorsPerRing[r] = field.SectorsPerRing[r - 1];
-                var arcLength = (2 * Math.PI * (r + 1)) / field.SectorsPerRing[r - 1];
-                if (arcLength > 2.0 && field.SectorsPerRing[r] * 2 <= normalizedMaxSectors)
-                    field.SectorsPerRing[r] *= 2;
+                var normalizedMaxSectors = 3;
+                while (normalizedMaxSectors * 2 <= sectors)
+                    normalizedMaxSectors *= 2;
+
+                for (var r = 1; r < rings; r++)
+                {
+                    field.SectorsPerRing[r] = field.SectorsPerRing[r - 1];
+                    var arcLength = (2 * Math.PI * (r + 1)) / field.SectorsPerRing[r - 1];
+                    if (arcLength > 2.0 && field.SectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                        field.SectorsPerRing[r] *= 2;
+                }
+                if (field.SectorsPerRing[rings - 1] < normalizedMaxSectors)
+                    field.SectorsPerRing[rings - 1] = normalizedMaxSectors;
             }
-            if (field.SectorsPerRing[rings - 1] < normalizedMaxSectors)
-                field.SectorsPerRing[rings - 1] = normalizedMaxSectors;
+            else
+            {
+                // 不设上限，仅受弧长条件约束
+                for (var r = 1; r < rings; r++)
+                {
+                    field.SectorsPerRing[r] = field.SectorsPerRing[r - 1];
+                    var arcLength = (2 * Math.PI * (r + 1)) / field.SectorsPerRing[r - 1];
+                    if (arcLength > 2.0)
+                        field.SectorsPerRing[r] *= 2;
+                }
+            }
 
             field.VertexCount = 0;
             for (var r = 0; r < rings; r++)

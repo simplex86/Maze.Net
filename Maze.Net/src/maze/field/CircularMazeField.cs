@@ -23,25 +23,40 @@ namespace SimplexLab.Maze
             Shape = EMazeShape.Circular;
 
             Rings = Math.Max(1, rings);
-            Sectors = Math.Max(3, maxSectors);
+            Sectors = maxSectors; // <= 0 表示不设置分割数上限
 
             SectorsPerRing = new int[this.Rings];
 
-            var normalizedMaxSectors = 3;
-            while (normalizedMaxSectors * 2 <= this.Sectors)
-                normalizedMaxSectors *= 2;
-
             SectorsPerRing[0] = 3;
-            for (var r = 1; r < this.Rings; r++)
-            {
-                SectorsPerRing[r] = SectorsPerRing[r - 1];
-                var arcLength = (2 * Math.PI * (r + 1)) / SectorsPerRing[r - 1];
-                if (arcLength > 2.0 && SectorsPerRing[r] * 2 <= normalizedMaxSectors)
-                    SectorsPerRing[r] *= 2;
-            }
 
-            if (SectorsPerRing[this.Rings - 1] < normalizedMaxSectors)
-                SectorsPerRing[this.Rings - 1] = normalizedMaxSectors;
+            if (Sectors > 0)
+            {
+                var normalizedMaxSectors = 3;
+                while (normalizedMaxSectors * 2 <= this.Sectors)
+                    normalizedMaxSectors *= 2;
+
+                for (var r = 1; r < this.Rings; r++)
+                {
+                    SectorsPerRing[r] = SectorsPerRing[r - 1];
+                    var arcLength = (2 * Math.PI * (r + 1)) / SectorsPerRing[r - 1];
+                    if (arcLength > 2.0 && SectorsPerRing[r] * 2 <= normalizedMaxSectors)
+                        SectorsPerRing[r] *= 2;
+                }
+
+                if (SectorsPerRing[this.Rings - 1] < normalizedMaxSectors)
+                    SectorsPerRing[this.Rings - 1] = normalizedMaxSectors;
+            }
+            else
+            {
+                // 不设上限，仅受弧长条件约束
+                for (var r = 1; r < this.Rings; r++)
+                {
+                    SectorsPerRing[r] = SectorsPerRing[r - 1];
+                    var arcLength = (2 * Math.PI * (r + 1)) / SectorsPerRing[r - 1];
+                    if (arcLength > 2.0)
+                        SectorsPerRing[r] *= 2;
+                }
+            }
 
             VertexCount = 0;
             for (var r = 0; r < this.Rings; r++)

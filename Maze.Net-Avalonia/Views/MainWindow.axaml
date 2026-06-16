@@ -59,7 +59,7 @@
                                     </Grid>
                                     <Grid ColumnDefinitions="80,*" Margin="0,6">
                                         <TextBlock Grid.Column="0" Text="Sectors" VerticalAlignment="Center"/>
-                                        <NumericUpDown Grid.Column="1" Minimum="3" Maximum="360" Value="{Binding CircSectors}"/>
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="360" Value="{Binding CircSectors}"/>
                                     </Grid>
                                 </StackPanel>
 

@@ -66,7 +66,7 @@ namespace Maze.TApplication
             sectors.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             sectors.Location = new System.Drawing.Point(89, 27);
             sectors.Maximum = new decimal(new int[] { 360, 0, 0, 0 });
-            sectors.Minimum = new decimal(new int[] { 3, 0, 0, 0 });
+            sectors.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
             sectors.Name = "sectors";
             sectors.Size = new System.Drawing.Size(168, 23);
             sectors.TabIndex = 11;
