@@ -1,4 +1,4 @@
-﻿namespace Maze.TApplication
+namespace Maze.TApplication
 {
     partial class CustomizedMazeControl
     {
@@ -33,7 +33,10 @@
             label1 = new System.Windows.Forms.Label();
             filename = new System.Windows.Forms.TextBox();
             brower = new System.Windows.Forms.Button();
+            labelSamples = new System.Windows.Forms.Label();
+            samples = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)thickness).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)samples).BeginInit();
             SuspendLayout();
             // 
             // label10
@@ -58,6 +61,28 @@
             thickness.Size = new System.Drawing.Size(168, 23);
             thickness.TabIndex = 13;
             thickness.Value = new decimal(new int[] { 9, 0, 0, 0 });
+            // 
+            // labelSamples
+            // 
+            labelSamples.Location = new System.Drawing.Point(1, 58);
+            labelSamples.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            labelSamples.Name = "labelSamples";
+            labelSamples.Size = new System.Drawing.Size(74, 17);
+            labelSamples.TabIndex = 16;
+            labelSamples.Text = "Samples";
+            labelSamples.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // samples
+            // 
+            samples.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            samples.Location = new System.Drawing.Point(90, 56);
+            samples.Margin = new System.Windows.Forms.Padding(2);
+            samples.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            samples.Minimum = new decimal(new int[] { 0, 0, 0, 0 });
+            samples.Name = "samples";
+            samples.Size = new System.Drawing.Size(168, 23);
+            samples.TabIndex = 17;
+            samples.Value = new decimal(new int[] { 0, 0, 0, 0 });
             // 
             // label1
             // 
@@ -97,9 +122,12 @@
             Controls.Add(label10);
             Controls.Add(thickness);
             Controls.Add(label1);
+            Controls.Add(labelSamples);
+            Controls.Add(samples);
             Name = "CustomizedMazeControl";
-            Size = new System.Drawing.Size(258, 61);
+            Size = new System.Drawing.Size(258, 89);
             ((System.ComponentModel.ISupportInitialize)thickness).EndInit();
+            ((System.ComponentModel.ISupportInitialize)samples).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -110,5 +138,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox filename;
         private System.Windows.Forms.Button brower;
+        private System.Windows.Forms.Label labelSamples;
+        private System.Windows.Forms.NumericUpDown samples;
     }
 }

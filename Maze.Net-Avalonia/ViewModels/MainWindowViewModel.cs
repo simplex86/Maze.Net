@@ -88,6 +88,9 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private string _customFileName = "";
     public string CustomFileName { get => _customFileName; set => SetProperty(ref _customFileName, value); }
 
+    private int _customSamples = 0;
+    public int CustomSamples { get => _customSamples; set => SetProperty(ref _customSamples, value); }
+
     // Reconstruction
     private string _reconFileName = "";
     public string ReconFileName { get => _reconFileName; set => SetProperty(ref _reconFileName, value); }
@@ -171,7 +174,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         EMazeShape.Hexagonal => $"Length={HexLength}",
         EMazeShape.CircularHexagon => $"Rings={CircHexRings}",
         EMazeShape.Stairway => $"Length={StairLength}",
-        EMazeShape.Customized => $"FileName={CustomFileName}",
+        EMazeShape.Customized => $"FileName={CustomFileName}, Samples={CustomSamples}",
         _ => ""
     };
 }

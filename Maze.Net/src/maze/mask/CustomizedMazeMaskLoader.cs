@@ -38,15 +38,17 @@ namespace SimplexLab.Maze
         /// 从图片文件同步加载遮罩
         /// </summary>
         /// <param name="filename">图片文件路径</param>
+        /// <param name="samples">采样间隔（0=逐像素，1=每隔1像素，2=每隔2像素，以此类推）</param>
         /// <returns>加载后的遮罩对象</returns>
-        public static CustomizedMazeMask Load(string filename)
+        public static CustomizedMazeMask Load(string filename, int samples = 0)
         {
             using var image = Image.Load<Rgba32>(filename);
 
-            int width = image.Width;
-            int height = image.Height;
+            int step = samples + 1;
+            int width = (image.Width + step - 1) / step;
+            int height = (image.Height + step - 1) / step;
 
-            var cells = CreateCells(image, width, height);
+            var cells = CreateCells(image, width, height, step);
             FindRegions(cells, width, height);
             JoinRegions(cells, width, height);
             var mask = CreateMask(cells, width, height);
@@ -58,10 +60,11 @@ namespace SimplexLab.Maze
         /// 从图片文件异步加载遮罩
         /// </summary>
         /// <param name="filename">图片文件路径</param>
+        /// <param name="samples">采样间隔（0=逐像素，1=每隔1像素，2=每隔2像素，以此类推）</param>
         /// <returns>加载后的遮罩对象</returns>
-        public static async Task<CustomizedMazeMask> LoadAsync(string filename)
+        public static async Task<CustomizedMazeMask> LoadAsync(string filename, int samples = 0)
         {
-            return await Task.Run(() => Load(filename));
+            return await Task.Run(() => Load(filename, samples));
         }
 
         #region 像素转单元格
@@ -70,7 +73,11 @@ namespace SimplexLab.Maze
         /// 从图像像素数据创建辅助单元格数组。
         /// 判断白色条件：Alpha >= 128 且亮度（ITU-R BT.601）>= 128
         /// </summary>
-        private static MaskCell[][] CreateCells(Image<Rgba32> image, int width, int height)
+        /// <param name="image">源图像</param>
+        /// <param name="width">降采样后的宽度</param>
+        /// <param name="height">降采样后的高度</param>
+        /// <param name="step">采样步长（1=逐像素，2=每隔1像素，以此类推）</param>
+        private static MaskCell[][] CreateCells(Image<Rgba32> image, int width, int height, int step)
         {
             var cells = new MaskCell[height][];
 
@@ -80,7 +87,7 @@ namespace SimplexLab.Maze
 
                 for (int x = width - 1; x >= 0; --x)
                 {
-                    var pixel = image[x, y];
+                    var pixel = image[x * step, y * step];
                     var cell = new MaskCell(x, y);
                     cell.White = pixel.A >= 128 && 0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B >= 128;
                     cells[y][x] = cell;

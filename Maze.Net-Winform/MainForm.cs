@@ -387,7 +387,7 @@ namespace Maze.TApplication
                 return;
             }
 
-            var mask = CustomizedMazeMaskLoader.Load(customizedMazeControl.FileName);
+            var mask = CustomizedMazeMaskLoader.Load(customizedMazeControl.FileName, customizedMazeControl.Samples);
             var algm = (EMazeAlgorithm)(algorithm.SelectedIndex + 1);
 
             mazeField = new CustomizedMazeField(mask);

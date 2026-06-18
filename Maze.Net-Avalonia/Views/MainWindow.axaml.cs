@@ -223,7 +223,7 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(_vm.CustomFileName))
             throw new InvalidOperationException("The Mask Path Can Not Be Empty!");
 
-        var mask = CustomizedMazeMaskLoader.Load(_vm.CustomFileName);
+        var mask = CustomizedMazeMaskLoader.Load(_vm.CustomFileName, _vm.CustomSamples);
         return new CustomizedMazeField(mask);
     }
 
